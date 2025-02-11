@@ -1,0 +1,49 @@
+.bgOverlay::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: url("../assets/studio.png") no-repeat center center fixed;
+  background-size: cover;
+  pointer-events: none;
+  z-index: -1;
+  filter: brightness(50%) contrast(80%) blur(3px) sepia(10%);
+}
+.loginContainer {
+  width: 100%;
+  max-width: 350px;
+  background-color: rgba(250, 235, 215, 0.793);
+  border-radius: 20px;
+  padding: 20px;
+  margin: auto;
+}
+
+.formItem {
+  width: 100%;
+  margin-bottom: 5%;
+  color: aqua;
+}
+
+@media (max-width: 768px) {
+  .loginContainer {
+    width: 80%;
+    padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .loginContainer {
+    width: 95%;
+    padding: 10px;
+  }
+}
+
+.loginContainer h2 {
+  color: #2e2c29;
+}
+
+img {
+  width: 80%;
+}
