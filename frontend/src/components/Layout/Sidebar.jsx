@@ -8,6 +8,7 @@ import {
   PiCalendarDots,
   PiUserCircle,
   PiSignOut,
+  PiNotebook,
 } from "react-icons/pi";
 
 import style from "./Layout.module.css";
@@ -46,6 +47,14 @@ function Sidebar() {
         >
           <PiCalendarDots size={24} />
           Schedule
+        </NavLink>
+
+        <NavLink
+          to={"/enrollment"}
+          className={({ isActive }) => (isActive ? style.active : style.text)}
+        >
+          <PiNotebook size={24} />
+          Enrollment
         </NavLink>
 
         <NavLink
