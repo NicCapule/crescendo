@@ -3,14 +3,15 @@ import { Outlet } from "react-router-dom";
 
 import Sidebar from "./Sidebar";
 import Header from "./Header";
+import style from "./Layout.module.css";
 
 function Layout() {
   return (
     <>
-      <div className="layout">
+      <div className={style.layout}>
         <Sidebar />
         <Header />
-        <div className="content">
+        <div className={style.content}>
           <Outlet />
         </div>
       </div>

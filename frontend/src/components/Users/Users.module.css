@@ -1,0 +1,27 @@
+.formItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 10px;
+}
+
+input {
+  background-color: rgba(239, 239, 239, 0.205);
+  height: 40px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  width: 100%;
+  box-shadow: 0 5px 5px hsla(0, 0%, 1%, 0.282);
+  border: none;
+  padding: 10px;
+  font-family: Poppins;
+}
+
+/* button {
+  height: 100%;
+  background-color: #e8a92d;
+  box-shadow: 0 5px 5px hsla(0, 0%, 1%, 0.282);
+  color: white;
+  font-weight: 700;
+} */
