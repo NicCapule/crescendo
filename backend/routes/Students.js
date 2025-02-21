@@ -8,6 +8,11 @@ router.get("/", async (req, res) => {
   res.json(AllStudents);
 });
 
+router.get("/count", async (req, res) => {
+  const studentCount = await Student.count();
+  res.json(studentCount);
+});
+
 router.post("/", async (req, res) => {
   const student = req.body;
   await Student.create(student);

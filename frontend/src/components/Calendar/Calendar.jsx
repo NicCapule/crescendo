@@ -7,6 +7,7 @@ import { DateTime } from "luxon";
 import ordinal from "ordinal-js";
 
 import { BsChevronDoubleRight, BsChevronDoubleLeft } from "react-icons/bs";
+import { PiStudent, PiChalkboardTeacher, PiMusicNotes } from "react-icons/pi";
 import { getInstrumentColor } from "../../utils/InstrumentColors";
 
 import {
@@ -106,7 +107,6 @@ function Calendar() {
     );
   };
   //---------------------------------------------------------------------------//
-  // Handle selection of students
   const handleStudentSelection = (student) => {
     setSelectedStudents((prev) =>
       prev.includes(student)
@@ -246,19 +246,32 @@ function Calendar() {
                 }}
               >
                 <p>
-                  {session.session_numbers.length === 1
-                    ? `${ordinal.toOrdinal(session.session_numbers[0])} Session`
-                    : `${ordinal.toOrdinal(
-                        session.session_numbers[0]
-                      )} to ${ordinal.toOrdinal(
-                        session.session_numbers[
-                          session.session_numbers.length - 1
-                        ]
-                      )} Session`}
+                  <b>
+                    {session.session_numbers.length === 1
+                      ? `${ordinal.toOrdinal(
+                          session.session_numbers[0]
+                        )} Session`
+                      : `${ordinal.toOrdinal(
+                          session.session_numbers[0]
+                        )} to ${ordinal.toOrdinal(
+                          session.session_numbers[
+                            session.session_numbers.length - 1
+                          ]
+                        )} Session`}
+                  </b>
                 </p>
-                <p>{`${session.Student.student_last_name}, ${session.Student.student_first_name}`}</p>
-                <p>{`${session.Program.Teacher.teacher_last_name}, ${session.Program.Teacher.teacher_first_name}`}</p>
-                <p>{session.Program.Instrument.instrument_name}</p>
+                <p>
+                  <PiStudent />
+                  {`${session.Student.student_last_name}, ${session.Student.student_first_name}`}
+                </p>
+                <p>
+                  <PiChalkboardTeacher />
+                  {`${session.Program.Teacher.teacher_last_name}, ${session.Program.Teacher.teacher_first_name}`}
+                </p>
+                <p>
+                  <PiMusicNotes />
+                  {session.Program.Instrument.instrument_name}
+                </p>
               </div>
             );
           })}

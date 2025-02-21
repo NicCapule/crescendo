@@ -20,11 +20,14 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       session_number: { type: DataTypes.INTEGER, allowNull: false },
-      session_date: { type: DataTypes.DATE, allowNull: false },
+      session_date: { type: DataTypes.DATEONLY, allowNull: false },
       session_start: { type: DataTypes.TIME, allowNull: false },
       session_end: { type: DataTypes.TIME, allowNull: false },
-      attendance: DataTypes.STRING,
-      session_status: DataTypes.STRING,
+      attendance: DataTypes.ENUM("Present", "Absent", "Late"),
+      session_status: {
+        type: DataTypes.ENUM("Scheduled", "Completed", "Canceled", "Forfeited"),
+        defaultValue: "Scheduled",
+      },
     },
     {
       tableName: "Session",

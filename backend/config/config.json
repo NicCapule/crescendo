@@ -1,10 +1,17 @@
 {
   "development": {
-    "username": "root",
-    "password": null,
-    "database": "CrescendoDB",
-    "host": "localhost",
-    "dialect": "mysql"
+    "username": "avnadmin",
+    "password": "AVNS_usW6GsGWX_qbc6xq9zJ",
+    "database": "defaultdb",
+    "host": "crescendo-service-crescendo-admin-portal.l.aivencloud.com",
+    "port": 24922,
+    "dialect": "mysql",
+    "dialectOptions": {
+      "ssl": {
+        "require": true,
+        "rejectUnauthorized": false
+      }
+    }
   },
   "test": {
     "username": "root",

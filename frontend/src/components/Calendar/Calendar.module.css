@@ -115,6 +115,7 @@
   gap: 10px; /* Space between checkbox and label */
   cursor: pointer;
   padding: 5px;
+  color: black;
 }
 
 .dropdownItem input[type="checkbox"] {
@@ -204,4 +205,7 @@
 
 .sessionBlock p {
   margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }

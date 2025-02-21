@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       student_last_name: { type: DataTypes.STRING, allowNull: false },
       student_address: { type: DataTypes.STRING },
       student_age: { type: DataTypes.INTEGER },
-      student_email: { type: DataTypes.STRING, unique: true },
+      student_email: { type: DataTypes.STRING },
       student_phone: { type: DataTypes.STRING },
     },
     { tableName: "Student", timestamps: false }

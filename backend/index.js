@@ -21,8 +21,12 @@ const sessionRouter = require("./routes/Sessions");
 app.use("/sessions", sessionRouter);
 
 //============================================================//
-db.sequelize.sync().then(() => {
-  app.listen(3001, () => {
-    console.log("Server Running on PORT 3001!");
-  });
+// db.sequelize.sync().then(() => {
+//   app.listen(3001, () => {
+//     console.log("Server Running on PORT 3001!");
+//   });
+// });
+
+app.listen(3001, () => {
+  console.log("Server Running on PORT 3001!");
 });

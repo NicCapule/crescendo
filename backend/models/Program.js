@@ -15,7 +15,13 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      no_of_sessions: { type: DataTypes.INTEGER, allowNull: false },
+      no_of_sessions: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+          isIn: [[8, 15]],
+        },
+      },
     },
     { tableName: "Program", timestamps: false }
   );

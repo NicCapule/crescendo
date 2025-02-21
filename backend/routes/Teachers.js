@@ -10,6 +10,11 @@ router.get("/", async (req, res) => {
   res.json(AllTeachers);
 });
 
+router.get("/count", async (req, res) => {
+  const teacherCount = await Teacher.count();
+  res.json(teacherCount);
+});
+
 router.post("/", async (req, res) => {
   const teacher = req.body;
   await Teacher.create(teacher);
