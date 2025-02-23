@@ -60,7 +60,6 @@
   display: inline-block;
   margin: 5px;
   border-radius: 24px;
-  color: #ffffff;
   font-size: 14px;
   font-weight: bold;
   cursor: pointer;
@@ -68,12 +67,6 @@
   box-sizing: border-box;
   box-shadow: none;
   align-self: flex-start;
-  border: 2px solid #ffffff;
-}
-
-.instfilterButton:hover,
-.dropdownButton:hover {
-  border: 2px solid #ffffff;
 }
 
 .dropdownButton {

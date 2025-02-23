@@ -11,9 +11,8 @@ import { PiStudent, PiChalkboardTeacher, PiMusicNotes } from "react-icons/pi";
 import { getInstrumentColor } from "../../utils/InstrumentColors";
 
 import {
-  getSessionPosition,
   mergeConsecutiveSessions,
-  groupSessionsByStartTime,
+  getSessionPosition,
 } from "../../utils/SessionsLayout";
 
 const timeSlots = [
@@ -91,14 +90,10 @@ function Calendar() {
   );
   //---------------------------------------------------------------------------//
   const mergedSessions = mergeConsecutiveSessions(filteredSessions);
-  const groupedSessions = groupSessionsByStartTime(mergedSessions);
   //---------------------------------------------------------------------------//
-  // Toggle teacher dropdown
   const toggleTeacherDropdown = () => setTeacherDropdown(!teacherDropdown);
-  // Toggle student dropdown
   const toggleStudentDropdown = () => setStudentDropdown(!studentDropdown);
   //---------------------------------------------------------------------------//
-  // Handle selection of teachers
   const handleTeacherSelection = (teacher) => {
     setSelectedTeachers((prev) =>
       prev.includes(teacher)
@@ -231,7 +226,7 @@ function Calendar() {
 
         <div className={style.sessionColumn}>
           {mergedSessions.map((session, index) => {
-            const position = getSessionPosition(session, groupedSessions);
+            const position = getSessionPosition(session, mergedSessions);
             return (
               <div
                 key={index}

@@ -20,6 +20,9 @@ app.use("/teachers", teacherRouter);
 const sessionRouter = require("./routes/Sessions");
 app.use("/sessions", sessionRouter);
 
+const programRouter = require("./routes/Programs");
+app.use("/programs", programRouter);
+
 //============================================================//
 // db.sequelize.sync().then(() => {
 //   app.listen(3001, () => {

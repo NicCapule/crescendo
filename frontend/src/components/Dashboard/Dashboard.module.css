@@ -1,6 +1,6 @@
 .cardContainer {
   color: black;
-  background-color: #f2f0ef73;
+  background-color: #f2f0efe1;
   border-radius: 24px;
   min-width: 200px;
   padding: 20px;
@@ -31,9 +31,78 @@
 .countData {
   text-align: right;
 }
+
+/* Sessions Table ============================================================================== */
+
+/* Pending Payments ============================================================================== */
+
+.pendingPaymentsContainer {
+  color: black;
+  background-color: #f2f0efe1;
+  border-radius: 24px;
+}
+
+.pendingPaymentsContainer p {
+  margin: auto;
+}
+
 /* DASHBOARD PAGE ============================================================================== */
-.summaryCards {
-  display: flex;
+
+/* .dashboardHeader {
+  display: grid;
+  grid-template-columns: minmax(75%, auto) minmax(300px, 1fr);
   gap: 20px;
+  align-items: start;
+} */
+
+.rowContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.3fr;
+  column-gap: 20px;
+  row-gap: 20px;
+  grid-template-rows: auto;
+  grid-template-areas:
+    "summaryCards summaryCards pendingPayments"
+    "quickActions quickActions pendingPayments"
+    "upcomingSessions upcomingSessions pendingPayments";
+  text-align: left;
+}
+
+.rowContainer h2 {
+  margin: 0;
+  margin-bottom: 16px;
+}
+
+.summaryCards {
+  grid-area: summaryCards;
+  display: flex;
   flex-wrap: wrap;
+  gap: 20px;
+}
+
+.pendingPayments {
+  grid-area: pendingPayments;
+}
+
+.quickActions {
+  grid-area: quickActions;
+  display: flex;
+  flex-direction: column;
+  min-width: 300px;
+}
+
+.quickActionsButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.quickActions button {
+  font-size: 14px;
+}
+
+.upcomingSessions {
+  grid-area: upcomingSessions;
+  overflow: auto;
+  align-self: flex-start;
 }

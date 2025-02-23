@@ -1,22 +1,5 @@
 import { DateTime } from "luxon";
 
-export const getSessionPosition = (session, groupedSessions) => {
-  const startHour = DateTime.fromFormat(session.session_start, "HH:mm:ss").hour;
-  const endHour = DateTime.fromFormat(session.session_end, "HH:mm:ss").hour;
-
-  // Calculate top and height positions
-  const top = (startHour - 8) * 70;
-  const height = (endHour - startHour) * 70;
-
-  // Find how many sessions share the same timeslot
-  const sameTimeSessions = groupedSessions[session.session_start] || [];
-  const positionIndex = sameTimeSessions.indexOf(session);
-
-  // Adjust width and left position to prevent overlap
-  const width = 100 / 4;
-  const left = positionIndex * width;
-  return { top, height, left: `${left}%`, width: `${width}%` };
-};
 //=====================================================================================//
 export const mergeConsecutiveSessions = (sessions) => {
   if (!sessions.length) return [];
@@ -35,7 +18,14 @@ export const mergeConsecutiveSessions = (sessions) => {
   for (let i = 1; i < sortedSessions.length; i++) {
     const nextSession = sortedSessions[i];
 
-    if (currentSession.session_end === nextSession.session_start) {
+    // Ensure same program before merging
+    const isSameProgram =
+      currentSession.Program.program_id === nextSession.Program.program_id;
+
+    if (
+      isSameProgram &&
+      currentSession.session_end === nextSession.session_start
+    ) {
       // Extend current session's end time
       currentSession.session_end = nextSession.session_end;
       // Store session number for display
@@ -55,13 +45,26 @@ export const mergeConsecutiveSessions = (sessions) => {
   return mergedSessions;
 };
 //=====================================================================================//
-export const groupSessionsByStartTime = (sessions) => {
-  const grouped = {};
-  sessions.forEach((session) => {
-    if (!grouped[session.session_start]) {
-      grouped[session.session_start] = [];
-    }
-    grouped[session.session_start].push(session);
-  });
-  return grouped;
+export const getSessionPosition = (session, allSessions) => {
+  const startHour = DateTime.fromFormat(session.session_start, "HH:mm:ss").hour;
+  const endHour = DateTime.fromFormat(session.session_end, "HH:mm:ss").hour;
+
+  // Calculate top and height positions
+  const top = (startHour - 8) * 70;
+  const height = (endHour - startHour) * 70;
+
+  const overlappingSessions = allSessions.filter(
+    (s) =>
+      DateTime.fromFormat(s.session_start, "HH:mm:ss").hour < endHour &&
+      DateTime.fromFormat(s.session_end, "HH:mm:ss").hour > startHour
+  );
+
+  // Assign a column index to each session
+  const positionIndex = overlappingSessions.indexOf(session);
+  // const totalColumns = overlappingSessions.length;
+
+  // Adjust width and left position to prevent overlap
+  const width = 100 / 4;
+  const left = positionIndex * width;
+  return { top, height, left: `${left}%`, width: `${width}%` };
 };
