@@ -1,11 +1,11 @@
 import React from "react";
-import Calendar from "../components/Calendar/Calendar";
+import DayView from "../components/Calendar/DayView";
 
 function Schedule() {
   return (
     <>
       <h1 className="pageTitle">Schedule</h1>
-      <Calendar />
+      <DayView />
     </>
   );
 }

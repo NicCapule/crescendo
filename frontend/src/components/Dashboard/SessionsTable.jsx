@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { fetchSessions } from "../../services/sessionServices";
 import { getInstrumentColor } from "../../utils/InstrumentColors";
-import { mergeConsecutiveSessions } from "../../utils/SessionsLayout";
+import { mergeConsecutiveSessions } from "../../utils/CalendarLayout";
 import { DateTime } from "luxon";
 import { PiDotsThreeOutlineVerticalFill } from "react-icons/pi";
 

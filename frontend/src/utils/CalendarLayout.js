@@ -45,26 +45,29 @@ export const mergeConsecutiveSessions = (sessions) => {
   return mergedSessions;
 };
 //=====================================================================================//
-export const getSessionPosition = (session, allSessions) => {
+export const getSessionPosition = (session, allSessions, viewType = "day") => {
   const startHour = DateTime.fromFormat(session.session_start, "HH:mm:ss").hour;
   const endHour = DateTime.fromFormat(session.session_end, "HH:mm:ss").hour;
+  const gridRowStart = startHour - 8 + 1;
+  const gridRowSpan = endHour - startHour;
 
-  // Calculate top and height positions
-  const top = (startHour - 8) * 70;
-  const height = (endHour - startHour) * 70;
+  if (viewType === "week") {
+    const sessionDate = DateTime.fromISO(session.session_date);
+    const startOfWeek = sessionDate.startOf("week");
+    const gridColumnStart = sessionDate.diff(startOfWeek, "days").days + 1;
 
-  const overlappingSessions = allSessions.filter(
-    (s) =>
-      DateTime.fromFormat(s.session_start, "HH:mm:ss").hour < endHour &&
-      DateTime.fromFormat(s.session_end, "HH:mm:ss").hour > startHour
-  );
+    return { gridRowStart, gridRowSpan, gridColumnStart };
+  } else {
+    const overlappingSessions = allSessions.filter(
+      (s) =>
+        DateTime.fromFormat(s.session_start, "HH:mm:ss").hour < endHour &&
+        DateTime.fromFormat(s.session_end, "HH:mm:ss").hour > startHour
+    );
 
-  // Assign a column index to each session
-  const positionIndex = overlappingSessions.indexOf(session);
-  // const totalColumns = overlappingSessions.length;
+    const positionIndex = overlappingSessions.indexOf(session);
+    const gridColumnStart = positionIndex + 1;
 
-  // Adjust width and left position to prevent overlap
-  const width = 100 / 4;
-  const left = positionIndex * width;
-  return { top, height, left: `${left}%`, width: `${width}%` };
+    return { gridRowStart, gridRowSpan, gridColumnStart };
+  }
 };
+//=====================================================================================//

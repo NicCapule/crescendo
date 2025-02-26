@@ -10,7 +10,10 @@ import Teachers from "./pages/Teachers";
 import Schedule from "./pages/Schedule";
 import Enrollment from "./pages/Enrollment";
 import Users from "./pages/Users";
-
+//----------------------------------//
+import TeacherInfo from "./components/Teachers/TeacherInfo";
+import StudentInfo from "./components/Students/StudentInfo";
+//--------------------------------------------------------------//
 function App() {
   return (
     <>
@@ -19,8 +22,12 @@ function App() {
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route index element={<Dashboard />} />
-              <Route path="students" element={<Students />} />
-              <Route path="teachers" element={<Teachers />} />
+              <Route path="students" element={<Students />}>
+                <Route path=":id/:name" element={<StudentInfo />} />
+              </Route>
+              <Route path="teachers" element={<Teachers />}>
+                <Route path=":id/:name" element={<TeacherInfo />} />
+              </Route>
               <Route path="Schedule" element={<Schedule />} />
               <Route path="enrollment" element={<Enrollment />} />
               <Route path="users" element={<Users />} />

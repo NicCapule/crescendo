@@ -2,19 +2,18 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { fetchSessions } from "../../services/sessionServices";
 import style from "./Calendar.module.css";
-
-import { DateTime } from "luxon";
-import ordinal from "ordinal-js";
-
 import { BsChevronDoubleRight, BsChevronDoubleLeft } from "react-icons/bs";
 import { PiStudent, PiChalkboardTeacher, PiMusicNotes } from "react-icons/pi";
-import { getInstrumentColor } from "../../utils/InstrumentColors";
-
+//---------------------------------------------------------------------------//
+import { DateTime } from "luxon";
+import ordinal from "ordinal-js";
+//---------------------------------------------------------------------------//
 import {
   mergeConsecutiveSessions,
   getSessionPosition,
-} from "../../utils/SessionsLayout";
-
+} from "../../utils/CalendarLayout";
+import { getInstrumentColor } from "../../utils/InstrumentColors";
+//========================================================================================//
 const timeSlots = [
   "8AM - 9AM",
   "9AM - 10AM",
@@ -29,7 +28,7 @@ const timeSlots = [
   "6PM - 7PM",
   "7PM - 8PM",
 ];
-
+//---------------------------------------------------------------------------//
 const instrumentOptions = [
   { name: "Piano", colorClass: "pianoColor" },
   { name: "Guitar", colorClass: "guitarColor" },
@@ -38,24 +37,19 @@ const instrumentOptions = [
   { name: "Ukulele", colorClass: "ukuleleColor" },
   { name: "Voice", colorClass: "voiceColor" },
 ];
-
-//=====================================================================================//
-function Calendar() {
-  const [listOfSessions, setlistOfSessions] = useState([]);
-  const [selectedDate, setSelectedDate] = useState(DateTime.now().toISODate());
+//========================================================================================//
+function WeekView({ sessions }) {
+  const [listOfSessions, setListOfSessions] = useState(sessions || []);
+  const [selectedDate, setSelectedDate] = useState(DateTime.now());
   const [selectedInstruments, setSelectedInstruments] = useState([]);
   const [selectedTeachers, setSelectedTeachers] = useState([]);
-  const [selectedStudents, setSelectedStudents] = useState([]);
   const [teacherDropdown, setTeacherDropdown] = useState(false);
-  const [studentDropdown, setStudentDropdown] = useState(false);
   //---------------------------------------------------------------------------//
-  useEffect(() => {
-    fetchSessions()
-      .then(setlistOfSessions)
-      .catch(() => console.error("Failed to fetch sessions"));
-  }, []);
+  const startOfWeek = selectedDate.startOf("week");
+  const weekDays = Array.from({ length: 7 }, (_, i) =>
+    startOfWeek.plus({ days: i }).toFormat("EEE, MMM d")
+  );
   //---------------------------------------------------------------------------//
-  // Extract unique teachers & students
   const uniqueTeachers = [
     ...new Set(
       listOfSessions.map(
@@ -64,17 +58,11 @@ function Calendar() {
       )
     ),
   ];
-  const uniqueStudents = [
-    ...new Set(
-      listOfSessions.map(
-        (s) => `${s.Student.student_last_name}, ${s.Student.student_first_name}`
-      )
-    ),
-  ];
   //---------------------------------------------------------------------------//
   const filteredSessions = listOfSessions.filter(
     (session) =>
-      DateTime.fromISO(session.session_date).toISODate() === selectedDate &&
+      DateTime.fromISO(session.session_date) >= startOfWeek &&
+      DateTime.fromISO(session.session_date) < startOfWeek.plus({ days: 7 }) &&
       (selectedInstruments.length === 0 ||
         selectedInstruments.includes(
           session.Program.Instrument.instrument_name
@@ -82,31 +70,18 @@ function Calendar() {
       (selectedTeachers.length === 0 ||
         selectedTeachers.includes(
           `${session.Program.Teacher.teacher_last_name}, ${session.Program.Teacher.teacher_first_name}`
-        )) &&
-      (selectedStudents.length === 0 ||
-        selectedStudents.includes(
-          `${session.Student.student_last_name}, ${session.Student.student_first_name}`
         ))
   );
   //---------------------------------------------------------------------------//
   const mergedSessions = mergeConsecutiveSessions(filteredSessions);
   //---------------------------------------------------------------------------//
   const toggleTeacherDropdown = () => setTeacherDropdown(!teacherDropdown);
-  const toggleStudentDropdown = () => setStudentDropdown(!studentDropdown);
   //---------------------------------------------------------------------------//
   const handleTeacherSelection = (teacher) => {
     setSelectedTeachers((prev) =>
       prev.includes(teacher)
         ? prev.filter((t) => t !== teacher)
         : [...prev, teacher]
-    );
-  };
-  //---------------------------------------------------------------------------//
-  const handleStudentSelection = (student) => {
-    setSelectedStudents((prev) =>
-      prev.includes(student)
-        ? prev.filter((s) => s !== student)
-        : [...prev, student]
     );
   };
   //---------------------------------------------------------------------------//
@@ -118,35 +93,28 @@ function Calendar() {
           : [...prev, instrument] // Add if not selected
     );
   };
-  //---------------------------------------------------------------------------//
+  //========================================================================================//
   return (
     <div className="compContainer">
-      <div className={style.header}>
+      <div className={style.calendarHeader}>
         <div className={style.dateNav}>
           <button
-            id={style.calendarArrow}
-            onClick={() =>
-              setSelectedDate(
-                DateTime.fromISO(selectedDate).minus({ days: 1 }).toISODate()
-              )
-            }
+            className={style.calendarArrow}
+            onClick={() => setSelectedDate(selectedDate.minus({ weeks: 1 }))}
           >
             <BsChevronDoubleLeft />
           </button>
           <span>
-            {DateTime.fromISO(selectedDate).toFormat("EEEE, MMMM d, yyyy")}
+            {startOfWeek.toFormat("MMMM d")} -{" "}
+            {startOfWeek.plus({ days: 6 }).toFormat("MMMM d, yyyy")}
           </span>
           <button
-            onClick={() =>
-              setSelectedDate(
-                DateTime.fromISO(selectedDate).plus({ days: 1 }).toISODate()
-              )
-            }
+            className={style.calendarArrow}
+            onClick={() => setSelectedDate(selectedDate.plus({ weeks: 1 }))}
           >
             <BsChevronDoubleRight />
           </button>
         </div>
-
         <div className={style.filterContainer}>
           <div className={style.instFilters}>
             {instrumentOptions.map((instrument) => (
@@ -188,34 +156,10 @@ function Calendar() {
                 </div>
               )}
             </div>
-
-            <div className={style.filterDropdown}>
-              <button
-                onClick={toggleStudentDropdown}
-                className={style.dropdownButton}
-              >
-                Filter Students ⬇
-              </button>
-              {studentDropdown && (
-                <div className={style.dropdownMenu}>
-                  {uniqueStudents.map((student) => (
-                    <label key={student} className={style.dropdownItem}>
-                      <input
-                        type="checkbox"
-                        checked={selectedStudents.includes(student)}
-                        onChange={() => handleStudentSelection(student)}
-                      />
-                      {student}
-                    </label>
-                  ))}
-                </div>
-              )}
-            </div>
           </div>
         </div>
       </div>
-
-      <div className={style.schedule}>
+      <div className={style.weekGrid}>
         <div className={style.timeColumn}>
           {timeSlots.map((slot, index) => (
             <div key={index} className={style.timeSlot}>
@@ -223,21 +167,30 @@ function Calendar() {
             </div>
           ))}
         </div>
-
-        <div className={style.sessionColumn}>
+        <div className={style.weekDays}>
+          {weekDays.map((day, index) => (
+            <div key={index} className={style.dayHeader}>
+              {day}
+            </div>
+          ))}
+        </div>
+        <div className={style.weekSchedule}>
           {mergedSessions.map((session, index) => {
-            const position = getSessionPosition(session, mergedSessions);
+            const position = getSessionPosition(
+              session,
+              mergedSessions,
+              "week"
+            );
             return (
               <div
                 key={index}
-                className={`${style.sessionBlock} ${getInstrumentColor(
+                className={`${style.weekSessionBlock} ${getInstrumentColor(
                   session.Program.Instrument.instrument_name
                 )}`}
                 style={{
-                  top: `${position.top}px`,
-                  height: `${position.height}px`,
-                  left: position.left,
-                  width: position.width,
+                  gridRowStart: position.gridRowStart,
+                  gridColumnStart: position.gridColumnStart,
+                  gridRowEnd: position.gridRowStart + position.gridRowSpan,
                 }}
               >
                 <p>
@@ -275,4 +228,5 @@ function Calendar() {
     </div>
   );
 }
-export default Calendar;
+
+export default WeekView;
