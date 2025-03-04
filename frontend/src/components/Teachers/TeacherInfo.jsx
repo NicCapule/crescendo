@@ -38,13 +38,13 @@ function TeacherInfo() {
     <>
       <div className="compContainer">
         <h1>
-          Name: {teacher.teacher_first_name} {teacher.teacher_last_name}
+          Name: {teacher.User.user_first_name} {teacher.User.user_last_name}
         </h1>
         <p>Email: {teacher.User.email}</p>
         <p>Phone: {teacher.teacher_phone}</p>
         <div className={style.infoSection}>
           <h2>Schedule</h2>
-          <WeekView sessions={sessions} />
+          <WeekView sessions={sessions} hideTeacherFilters={true} />
         </div>
         <div className={style.infoSection}>
           <h2>Active Programs</h2>

@@ -24,14 +24,6 @@ function AllTeachers() {
     console.log(dropdownStates);
   };
   //---------------------------------------------------------------------------//
-  // const handleTeacherSelection = (teacher) => {
-  //   setSelectedTeachers((prev) =>
-  //     prev.includes(teacher)
-  //       ? prev.filter((t) => t !== teacher)
-  //       : [...prev, teacher]
-  //   );
-  // };
-  //---------------------------------------------------------------------------//
   useEffect(() => {
     fetchTeacherTable()
       .then(setlistOfTeachers)
@@ -57,7 +49,7 @@ function AllTeachers() {
               {listOfTeachers.map((value, key) => (
                 <tr key={key}>
                   <td>
-                    {value.teacher_last_name}, {value.teacher_first_name}
+                    {value.User.user_last_name}, {value.User.user_first_name}
                   </td>
                   <td>{value.User.email}</td>
                   <td>{value.teacher_phone}</td>
@@ -83,11 +75,10 @@ function AllTeachers() {
                     </button>
                     {dropdownStates[value.teacher_id] && (
                       <div className={style.dropdownMenu}>
-                        {/* <div className={style.dropdownItem}></div> */}
                         <button
                           onClick={() =>
                             navigate(
-                              `/teachers/${value.teacher_id}/${value.teacher_first_name}`
+                              `/teachers/${value.teacher_id}/${value.User.user_first_name}`
                             )
                           }
                         >

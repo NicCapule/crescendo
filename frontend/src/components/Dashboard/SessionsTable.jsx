@@ -50,10 +50,9 @@ function SessionsTable() {
                         value.session_numbers[value.session_numbers.length - 1]
                       } of ${value.Program.no_of_sessions}`}
                 </td>
-                <td>{value.Student.student_last_name}</td>
+                <td>{`${value.Student.student_first_name} ${value.Student.student_last_name}`}</td>
                 <td>
-                  {value.Program.Teacher.teacher_first_name}{" "}
-                  {value.Program.Teacher.teacher_last_name}
+                  {`${value.Program.Teacher.User.user_first_name} ${value.Program.Teacher.User.user_last_name}`}
                 </td>
                 <td>
                   {DateTime.fromFormat(

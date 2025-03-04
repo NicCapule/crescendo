@@ -1,18 +1,54 @@
 "use strict";
-
+const bcrypt = require("bcryptjs");
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
+    const salt = await bcrypt.genSalt(10);
     await queryInterface.bulkInsert("User", [
       {
         email: "admin@example.com",
-        password: "password",
+        user_first_name: "Michael",
+        user_last_name: "Scott",
+        password: await bcrypt.hash("password", salt),
         role: "Admin",
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
       {
         email: "jake@gmail.com",
-        password: "password",
+        user_first_name: "Jake",
+        user_last_name: "Peralta",
+        password: await bcrypt.hash("password", salt),
         role: "Teacher",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        email: "amy@gmail.com",
+        user_first_name: "Amy",
+        user_last_name: "Santiago",
+        password: await bcrypt.hash("password", salt),
+        role: "Teacher",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        email: "jim@gmail.com",
+        user_first_name: "Jim",
+        user_last_name: "Halpert",
+        password: await bcrypt.hash("password", salt),
+        role: "Teacher",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        email: "pam@gmail.com",
+        user_first_name: "Pam",
+        user_last_name: "Beesly",
+        password: await bcrypt.hash("password", salt),
+        role: "Teacher",
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
     ]);
 
@@ -30,7 +66,7 @@ module.exports = {
         instrument_name: "Drums",
       },
       {
-        instrument_name: "Ukelele",
+        instrument_name: "Ukulele",
       },
       {
         instrument_name: "Voice",
@@ -40,9 +76,27 @@ module.exports = {
     await queryInterface.bulkInsert("Teacher", [
       {
         user_id: 2,
-        teacher_first_name: "Jake",
-        teacher_last_name: "Peralta",
         teacher_phone: "123",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        user_id: 3,
+        teacher_phone: "123",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        user_id: 4,
+        teacher_phone: "123",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        user_id: 5,
+        teacher_phone: "123",
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
     ]);
 
@@ -50,6 +104,30 @@ module.exports = {
       {
         teacher_id: 1,
         instrument_id: 1,
+      },
+      {
+        teacher_id: 1,
+        instrument_id: 2,
+      },
+      {
+        teacher_id: 1,
+        instrument_id: 3,
+      },
+      {
+        teacher_id: 2,
+        instrument_id: 4,
+      },
+      {
+        teacher_id: 3,
+        instrument_id: 1,
+      },
+      {
+        teacher_id: 3,
+        instrument_id: 5,
+      },
+      {
+        teacher_id: 4,
+        instrument_id: 6,
       },
     ]);
 
@@ -61,6 +139,18 @@ module.exports = {
         student_age: 22,
         student_email: "russel@gmail.com",
         student_phone: "123",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        student_first_name: "Angelica",
+        student_last_name: "Babon",
+        student_address: "Marikina",
+        student_age: 22,
+        student_email: "angelica@gmail.com",
+        student_phone: "123",
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
     ]);
 
@@ -93,14 +183,26 @@ module.exports = {
         instrument_id: 1,
         no_of_sessions: 8,
       },
+      {
+        teacher_id: 2,
+        instrument_id: 4,
+        no_of_sessions: 16,
+      },
     ]);
 
     await queryInterface.bulkInsert("Enrollment", [
       {
         student_id: 1,
         program_id: 1,
-        enroll_date: "2025-02-21",
+        enroll_date: "2025-02-27",
         total_fee: 7000.0,
+        enrollment_status: "Active",
+      },
+      {
+        student_id: 2,
+        program_id: 2,
+        enroll_date: "2025-02-27",
+        total_fee: 12000.0,
         enrollment_status: "Active",
       },
     ]);
@@ -111,9 +213,69 @@ module.exports = {
         program_id: 1,
         room_id: 1,
         session_number: 1,
-        session_date: "2025-02-21",
+        session_date: "2025-02-27",
         session_start: "08:00:00",
         session_end: "09:00:00",
+        session_status: "Scheduled",
+      },
+      {
+        student_id: 1,
+        program_id: 1,
+        room_id: 1,
+        session_number: 2,
+        session_date: "2025-02-27",
+        session_start: "09:00:00",
+        session_end: "10:00:00",
+        session_status: "Scheduled",
+      },
+      {
+        student_id: 1,
+        program_id: 1,
+        room_id: 1,
+        session_number: 3,
+        session_date: "2025-02-27",
+        session_start: "10:00:00",
+        session_end: "11:00:00",
+        session_status: "Scheduled",
+      },
+      {
+        student_id: 2,
+        program_id: 2,
+        room_id: 2,
+        session_number: 1,
+        session_date: "2025-02-27",
+        session_start: "10:00:00",
+        session_end: "11:00:00",
+        session_status: "Scheduled",
+      },
+      {
+        student_id: 1,
+        program_id: 1,
+        room_id: 1,
+        session_number: 4,
+        session_date: "2025-02-27",
+        session_start: "12:00:00",
+        session_end: "13:00:00",
+        session_status: "Scheduled",
+      },
+      {
+        student_id: 2,
+        program_id: 2,
+        room_id: 2,
+        session_number: 2,
+        session_date: "2025-02-27",
+        session_start: "12:00:00",
+        session_end: "13:00:00",
+        session_status: "Scheduled",
+      },
+      {
+        student_id: 2,
+        program_id: 2,
+        room_id: 2,
+        session_number: 3,
+        session_date: "2025-02-28",
+        session_start: "12:00:00",
+        session_end: "13:00:00",
         session_status: "Scheduled",
       },
     ]);
@@ -121,6 +283,12 @@ module.exports = {
     await queryInterface.bulkInsert("StudentAvailability", [
       {
         student_id: 1,
+        day_of_week: "Monday",
+        start_time: "08:00:00",
+        end_time: "20:00:00",
+      },
+      {
+        student_id: 2,
         day_of_week: "Monday",
         start_time: "08:00:00",
         end_time: "20:00:00",
@@ -134,6 +302,24 @@ module.exports = {
         start_time: "08:00:00",
         end_time: "20:00:00",
       },
+      {
+        teacher_id: 2,
+        day_of_week: "Monday",
+        start_time: "08:00:00",
+        end_time: "20:00:00",
+      },
+      {
+        teacher_id: 3,
+        day_of_week: "Monday",
+        start_time: "08:00:00",
+        end_time: "20:00:00",
+      },
+      {
+        teacher_id: 4,
+        day_of_week: "Monday",
+        start_time: "08:00:00",
+        end_time: "20:00:00",
+      },
     ]);
 
     await queryInterface.bulkInsert("StudentPayment", [
@@ -141,13 +327,25 @@ module.exports = {
         enrollment_id: 1,
         amount_paid: 4000.0,
         payment_method: "Cash",
-        student_payment_date: new Date("2025-02-21"),
+        student_payment_date: new Date("2025-02-27"),
+      },
+      {
+        enrollment_id: 2,
+        amount_paid: 4000.0,
+        payment_method: "Cash",
+        student_payment_date: new Date("2025-02-27"),
       },
     ]);
 
     await queryInterface.bulkInsert("TeacherSalary", [
       {
         teacher_id: 1,
+        total_sessions: 2,
+        payment_date: new Date("2025-02-21"),
+        amount_paid: 1000.0,
+      },
+      {
+        teacher_id: 2,
         total_sessions: 2,
         payment_date: new Date("2025-02-21"),
         amount_paid: 1000.0,

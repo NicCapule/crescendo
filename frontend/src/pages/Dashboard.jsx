@@ -3,7 +3,7 @@ import style from "../components/Dashboard/Dashboard.module.css";
 import SummaryCard from "../components/Dashboard/SummaryCard";
 import SessionsTable from "../components/Dashboard/SessionsTable";
 import PendingPayments from "../components/Dashboard/PendingPayments";
-
+import useAuth from "../hooks/useAuth";
 import { fetchStudentCount } from "../services/studentServices";
 import { fetchTeacherCount } from "../services/teacherServices";
 import { fetchProgramCount } from "../services/programServices";
@@ -11,6 +11,7 @@ import { fetchProgramCount } from "../services/programServices";
 import { PiStudent, PiChalkboardTeacher, PiMusicNotes } from "react-icons/pi";
 
 function Dashboard() {
+  const { user } = useAuth();
   const [totalStudents, setTotalStudents] = useState([]);
   const [totalTeachers, setTotalTeachers] = useState([]);
   const [totalPrograms, setTotalPrograms] = useState([]);
@@ -57,10 +58,12 @@ function Dashboard() {
           />
         </div>
 
-        <div className={style.pendingPayments}>
-          <h2>Pending Payments</h2>
-          <PendingPayments />
-        </div>
+        {user?.role === "Admin" ? (
+          <div className={style.pendingPayments}>
+            <h2>Pending Payments</h2>
+            <PendingPayments />
+          </div>
+        ) : null}
 
         <div className={style.quickActions}>
           <h2>Quick actions</h2>
@@ -68,13 +71,19 @@ function Dashboard() {
             <button>Enroll Student</button>
             <button>Add Teacher</button>
             <button>Notify Student</button>
-            <button>Notify Student</button>
           </div>
         </div>
-        <div className={style.upcomingSessions}>
-          <h2>Upcoming Sessions</h2>
-          <SessionsTable />
-        </div>
+        {user?.role === "Admin" ? (
+          <div className={style.upcomingSessions}>
+            <h2>Upcoming Sessions</h2>
+            <SessionsTable />
+          </div>
+        ) : (
+          <div className={style.upcomingSessions}>
+            <h2>Your Sessions for Today</h2>
+            <SessionsTable />
+          </div>
+        )}
       </div>
     </div>
   );

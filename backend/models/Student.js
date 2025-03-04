@@ -7,14 +7,14 @@ module.exports = (sequelize, DataTypes) => {
         autoIncrement: true,
         primaryKey: true,
       },
-      student_first_name: { type: DataTypes.STRING, allowNull: false },
+      student_first_name: { type: DataTypes.STRING },
       student_last_name: { type: DataTypes.STRING, allowNull: false },
       student_address: { type: DataTypes.STRING },
       student_age: { type: DataTypes.INTEGER },
       student_email: { type: DataTypes.STRING },
       student_phone: { type: DataTypes.STRING },
     },
-    { tableName: "Student", timestamps: false }
+    { tableName: "Student" }
   );
 
   Student.associate = (models) => {

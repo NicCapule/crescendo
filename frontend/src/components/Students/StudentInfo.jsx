@@ -76,9 +76,9 @@ function StudentInfo() {
                         </div>
                       </td>
                       <td>
-                        {enrollment.Program.Teacher.teacher_first_name
-                          ? `${enrollment.Program.Teacher.teacher_first_name} ${enrollment.Program.Teacher.teacher_last_name}`
-                          : `${enrollment.Program.Teacher.teacher_last_name}`}
+                        {enrollment.Program.Teacher.User.user_first_name
+                          ? `${enrollment.Program.Teacher.User.user_first_name} ${enrollment.Program.Teacher.User.user_last_name}`
+                          : `${enrollment.Program.Teacher.User.user_last_name}`}
                       </td>
                       <td>{enrollment.Program.no_of_sessions}</td>
                       <td>

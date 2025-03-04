@@ -1,32 +1,14 @@
 const express = require("express");
 const router = express.Router();
 
-const { Session, Student, Program, Teacher, Instrument } = require("../models");
+const sessionController = require("../controllers/sessionController");
 
-router.get("/", async (req, res) => {
-  const AllSession = await Session.findAll({
-    include: [
-      Student,
-      {
-        model: Program,
-        include: [
-          {
-            model: Teacher,
-          },
-          {
-            model: Instrument,
-          },
-        ],
-      },
-    ],
-  });
-  res.json(AllSession);
-});
+router.get("/", sessionController.getAllSessions);
 
-router.post("/", async (req, res) => {
-  const session = req.body;
-  await Session.create(session);
-  res.json(session);
-});
+// router.post("/", async (req, res) => {
+//   const session = req.body;
+//   await Session.create(session);
+//   res.json(session);
+// });
 
 module.exports = router;

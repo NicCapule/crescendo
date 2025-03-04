@@ -59,7 +59,7 @@ function DayView() {
     ...new Set(
       listOfSessions.map(
         (s) =>
-          `${s.Program.Teacher.teacher_last_name}, ${s.Program.Teacher.teacher_first_name}`
+          `${s.Program.Teacher.User.user_last_name}, ${s.Program.Teacher.User.user_first_name}`
       )
     ),
   ];
@@ -80,7 +80,7 @@ function DayView() {
         )) &&
       (selectedTeachers.length === 0 ||
         selectedTeachers.includes(
-          `${session.Program.Teacher.teacher_last_name}, ${session.Program.Teacher.teacher_first_name}`
+          `${session.Program.Teacher.User.user_last_name}, ${session.Program.Teacher.User.user_first_name}`
         )) &&
       (selectedStudents.length === 0 ||
         selectedStudents.includes(
@@ -260,7 +260,7 @@ function DayView() {
                 </p>
                 <p>
                   <PiChalkboardTeacher />
-                  {`${session.Program.Teacher.teacher_last_name}, ${session.Program.Teacher.teacher_first_name}`}
+                  {`${session.Program.Teacher.User.user_last_name}, ${session.Program.Teacher.User.user_first_name}`}
                 </p>
                 <p>
                   <PiMusicNotes />

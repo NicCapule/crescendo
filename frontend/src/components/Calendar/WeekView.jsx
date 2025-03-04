@@ -38,7 +38,7 @@ const instrumentOptions = [
   { name: "Voice", colorClass: "voiceColor" },
 ];
 //========================================================================================//
-function WeekView({ sessions }) {
+function WeekView({ sessions, hideTeacherFilters, hideInstrumentFilters }) {
   const [listOfSessions, setListOfSessions] = useState(sessions || []);
   const [selectedDate, setSelectedDate] = useState(DateTime.now());
   const [selectedInstruments, setSelectedInstruments] = useState([]);
@@ -54,7 +54,7 @@ function WeekView({ sessions }) {
     ...new Set(
       listOfSessions.map(
         (s) =>
-          `${s.Program.Teacher.teacher_last_name}, ${s.Program.Teacher.teacher_first_name}`
+          `${s.Program.Teacher.User.user_last_name}, ${s.Program.Teacher.User.user_first_name}`
       )
     ),
   ];
@@ -69,7 +69,7 @@ function WeekView({ sessions }) {
         )) &&
       (selectedTeachers.length === 0 ||
         selectedTeachers.includes(
-          `${session.Program.Teacher.teacher_last_name}, ${session.Program.Teacher.teacher_first_name}`
+          `${session.Program.Teacher.User.user_last_name}, ${session.Program.Teacher.User.user_first_name}`
         ))
   );
   //---------------------------------------------------------------------------//
@@ -115,48 +115,52 @@ function WeekView({ sessions }) {
             <BsChevronDoubleRight />
           </button>
         </div>
-        <div className={style.filterContainer}>
-          <div className={style.instFilters}>
-            {instrumentOptions.map((instrument) => (
-              <button
-                key={instrument.name}
-                className={`${style.instfilterButton} ${
-                  selectedInstruments.includes(instrument.name)
-                    ? `${instrument.colorClass} ${style.selected}`
-                    : ""
-                }`}
-                onClick={() => handleInstrumentSelection(instrument.name)}
-              >
-                {instrument.name}
-              </button>
-            ))}
-          </div>
 
-          <div className={style.dropdownFilters}>
-            <div className={style.filterDropdown}>
-              <button
-                onClick={toggleTeacherDropdown}
-                className={style.dropdownButton}
-              >
-                Filter Teachers ⬇
-              </button>
-              {teacherDropdown && (
-                <div className={style.dropdownMenu}>
-                  {uniqueTeachers.map((teacher) => (
-                    <label key={teacher} className={style.dropdownItem}>
-                      <input
-                        type="checkbox"
-                        checked={selectedTeachers.includes(teacher)}
-                        onChange={() => handleTeacherSelection(teacher)}
-                      />
-                      <span className={style.checkbox}></span>
-                      {teacher}
-                    </label>
-                  ))}
-                </div>
-              )}
+        <div className={style.filterContainer}>
+          {!hideInstrumentFilters && (
+            <div className={style.instFilters}>
+              {instrumentOptions.map((instrument) => (
+                <button
+                  key={instrument.name}
+                  className={`${style.instfilterButton} ${
+                    selectedInstruments.includes(instrument.name)
+                      ? `${instrument.colorClass} ${style.selected}`
+                      : ""
+                  }`}
+                  onClick={() => handleInstrumentSelection(instrument.name)}
+                >
+                  {instrument.name}
+                </button>
+              ))}
             </div>
-          </div>
+          )}
+          {!hideTeacherFilters && (
+            <div className={style.dropdownFilters}>
+              <div className={style.filterDropdown}>
+                <button
+                  onClick={toggleTeacherDropdown}
+                  className={style.dropdownButton}
+                >
+                  Filter Teachers ⬇
+                </button>
+                {teacherDropdown && (
+                  <div className={style.dropdownMenu}>
+                    {uniqueTeachers.map((teacher) => (
+                      <label key={teacher} className={style.dropdownItem}>
+                        <input
+                          type="checkbox"
+                          checked={selectedTeachers.includes(teacher)}
+                          onChange={() => handleTeacherSelection(teacher)}
+                        />
+                        <span className={style.checkbox}></span>
+                        {teacher}
+                      </label>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </div>
       <div className={style.weekGrid}>
@@ -214,7 +218,7 @@ function WeekView({ sessions }) {
                 </p>
                 <p>
                   <PiChalkboardTeacher />
-                  {`${session.Program.Teacher.teacher_last_name}, ${session.Program.Teacher.teacher_first_name}`}
+                  {`${session.Program.Teacher.User.user_last_name}, ${session.Program.Teacher.User.user_first_name}`}
                 </p>
                 <p>
                   <PiMusicNotes />

@@ -1,6 +1,7 @@
 import React from "react";
 
 import { NavLink, Link } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
 import {
   PiSquaresFour,
   PiStudent,
@@ -14,6 +15,7 @@ import {
 import style from "./Layout.module.css";
 
 function Sidebar() {
+  const { user, logout } = useAuth();
   return (
     <div className={style.sideContainer}>
       <nav className={style.sideNav}>
@@ -33,13 +35,15 @@ function Sidebar() {
           Students
         </NavLink>
 
-        <NavLink
-          to={"/teachers"}
-          className={({ isActive }) => (isActive ? style.active : style.text)}
-        >
-          <PiChalkboardTeacher size={24} />
-          Teachers
-        </NavLink>
+        {user?.role === "Admin" && (
+          <NavLink
+            to={"/teachers"}
+            className={({ isActive }) => (isActive ? style.active : style.text)}
+          >
+            <PiChalkboardTeacher size={24} />
+            Teachers
+          </NavLink>
+        )}
 
         <NavLink
           to={"/schedule"}
@@ -49,6 +53,29 @@ function Sidebar() {
           Schedule
         </NavLink>
 
+        {/* {user?.role === "Admin" && (
+          <>
+            <NavLink
+              to={"/enrollment"}
+              className={({ isActive }) =>
+                isActive ? style.active : style.text
+              }
+            >
+              <PiNotebook size={24} />
+              Enrollment
+            </NavLink>
+
+            <NavLink
+              to={"/users"}
+              className={({ isActive }) =>
+                isActive ? style.active : style.text
+              }
+            >
+              <PiUserCircle size={24} />
+              Users
+            </NavLink>
+          </>
+        )} */}
         <NavLink
           to={"/enrollment"}
           className={({ isActive }) => (isActive ? style.active : style.text)}
@@ -65,13 +92,10 @@ function Sidebar() {
           Users
         </NavLink>
 
-        <NavLink
-          to={"/login"}
-          className={({ isActive }) => (isActive ? style.active : style.text)}
-        >
+        <button onClick={logout} className={style.text}>
           <PiSignOut size={24} />
           Logout
-        </NavLink>
+        </button>
       </nav>
     </div>
   );

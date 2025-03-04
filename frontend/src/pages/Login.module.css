@@ -41,9 +41,22 @@
 }
 
 .loginContainer h2 {
-  color: #2e2c29;
+  color: #242424;
+  margin-block: 20px;
 }
 
 img {
   width: 80%;
+}
+
+.loginButton {
+  color: #242424;
+  border-color: #242424;
+  transition: all 0.3s ease-in-out;
+}
+
+.loginButton:hover {
+  color: #ffffff;
+  border-color: #ffffff;
+  background-color: chocolate;
 }

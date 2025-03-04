@@ -11,14 +11,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      teacher_first_name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      teacher_last_name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
       teacher_phone: {
         type: DataTypes.STRING,
         allowNull: true,
@@ -26,7 +18,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       tableName: "Teacher",
-      timestamps: false,
     }
   );
 
