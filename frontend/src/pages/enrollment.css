@@ -1,0 +1,109 @@
+/* General Page Styling */
+.enrollment-container {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 30px;
+    background: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  .pageTitle {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  /* Toggle Buttons */
+  .toggle-buttons {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .toggle-btn {
+    padding: 12px 25px;
+    margin: 0 5px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #e0e0e0;
+    color: #333;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+  }
+  
+  .toggle-btn.active {
+    background-color: #007bff;
+    color: white;
+    transform: scale(1.05);
+    box-shadow: 0 3px 6px rgba(0, 123, 255, 0.3);
+  }
+  
+  .toggle-btn:hover {
+    background-color: #0056b3;
+    color: white;
+  }
+  
+  /* Form Styling */
+  .enrollment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .enrollment-form input,
+  .enrollment-form select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+  }
+  
+  .enrollment-form input:focus,
+  .enrollment-form select:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+  }
+  
+  /* Submit Button */
+  .enroll-btn {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: white;
+    border: none;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .enroll-btn:hover {
+    background: linear-gradient(135deg, #0056b3, #003d80);
+    transform: scale(1.05);
+  }
+  
+  @media (max-width: 600px) {
+    .enrollment-container {
+      width: 90%;
+      padding: 20px;
+    }
+  
+    .toggle-btn {
+      padding: 10px 18px;
+      font-size: 14px;
+    }
+  
+    .enroll-btn {
+      font-size: 16px;
+    }
+  }
+  
