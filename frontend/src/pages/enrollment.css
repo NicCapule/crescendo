@@ -37,7 +37,7 @@
   }
   
   .toggle-btn.active {
-    background-color: #007bff;
+    background-color: #FFAA88;
     color: white;
     transform: scale(1.05);
     box-shadow: 0 3px 6px rgba(0, 123, 255, 0.3);
@@ -76,7 +76,7 @@
   .enroll-btn {
     width: 100%;
     padding: 12px;
-    background: linear-gradient(135deg, #007bff, #0056b3);
+    background: linear-gradient(135deg, #FF7744, #DD5533);
     color: white;
     border: none;
     font-size: 18px;
@@ -84,12 +84,13 @@
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.3s ease;
-  }
-  
-  .enroll-btn:hover {
-    background: linear-gradient(135deg, #0056b3, #003d80);
+}
+
+.enroll-btn:hover {
+    background: linear-gradient(135deg, #DD5533, #BB3322);
     transform: scale(1.05);
-  }
+}
+
   
   @media (max-width: 600px) {
     .enrollment-container {
