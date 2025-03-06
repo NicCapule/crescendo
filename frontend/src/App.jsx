@@ -12,6 +12,7 @@ import Schedule from "./pages/Schedule";
 import Enrollment from "./pages/Enrollment";
 import Users from "./pages/Users";
 import CreateUser from "./components/Users/CreateUser";
+import Payment from "./pages/Payment";
 //----------------------------------//
 import TeacherInfo from "./components/Teachers/TeacherInfo";
 import StudentInfo from "./components/Students/StudentInfo";
@@ -54,6 +55,7 @@ function App() {
               <Route path="enrollment" element={<Enrollment />} />
               <Route path="users" element={<Users />} />
               <Route path="users/create/:role" element={<CreateUser />} />
+              <Route path="payment" element={<Payment />} />
             </Route>
           </Route>
         </Routes>

@@ -10,6 +10,7 @@ import {
   PiUserCircle,
   PiSignOut,
   PiNotebook,
+  PiMoney,
 } from "react-icons/pi";
 
 import style from "./Layout.module.css";
@@ -90,6 +91,14 @@ function Sidebar() {
         >
           <PiUserCircle size={24} />
           Users
+        </NavLink>
+
+        <NavLink
+          to={"/payment"}
+          className={({ isActive }) => (isActive ? style.active : style.text)}
+        >
+          <PiMoney size={24} />
+          Payment
         </NavLink>
 
         <button onClick={logout} className={style.text}>
