@@ -1,8 +1,6 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
 import style from "./Forms.module.css";
-import axios from "axios";
 import * as Yup from "yup";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { DateTime } from "luxon";
@@ -151,7 +149,7 @@ function CreateTeacherForm() {
   }, []);
   //====================================================================================//
   return (
-    <div className={style.createContainer}>
+    <div className={style.formParentContainer}>
       <h1>Create a Teacher Account</h1>
       <Formik
         initialValues={initialValues}
@@ -159,7 +157,7 @@ function CreateTeacherForm() {
         validationSchema={validationSchema}
       >
         {({ values, setFieldValue, errors, touched }) => (
-          <Form className={style.formContainer}>
+          <Form className={style.teacherFormContainer}>
             <div className={style.formSection}>
               <div className={style.formItem}>
                 <div className={style.itemHeader}>

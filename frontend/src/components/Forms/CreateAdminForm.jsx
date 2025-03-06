@@ -33,7 +33,7 @@ function CreateAdminForm() {
   };
   //===================================================================================//
   return (
-    <div className={style.createContainer}>
+    <div className={style.formParentContainer}>
       <h1>Create an Administrator Account</h1>
       <Formik
         initialValues={initialValues}

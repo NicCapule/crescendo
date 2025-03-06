@@ -1,5 +1,4 @@
 import React from "react";
-import axios from "axios";
 import style from "./Students.module.css";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";

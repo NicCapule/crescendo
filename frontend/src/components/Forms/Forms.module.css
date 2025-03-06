@@ -1,21 +1,20 @@
-.createContainer {
-  background-color: rgba(0, 0, 0, 0.664);
+.formParentContainer {
   padding: 20px;
   border-radius: 24px;
   min-width: fit-content;
 }
 
-.formContainer {
+.teacherFormContainer {
   display: flex;
   gap: 24px;
   flex-wrap: wrap;
   padding: 20px;
   box-sizing: border-box;
 }
-.formContainer hr {
+.teacherFormContainer hr {
   margin: 0;
 }
-.formContainer > :first-child {
+.teacherFormContainer > :first-child {
   flex: 0 0 30%;
   min-width: 300px;
 }
@@ -81,7 +80,7 @@ select::-ms-expand {
   vertical-align: middle;
 }
 
-input {
+.formItem input {
   background-color: white;
   height: 40px;
   box-sizing: border-box;
@@ -135,5 +134,73 @@ label {
 .adminFormContainer > .formSection {
   flex: 1 0;
   max-width: 50%;
+  min-width: 300px;
+}
+
+/* Enrollment Form =================================================================================================== */
+/* .enrollFormContainer {
+  
+} */
+.tabButtonsContainer {
+  display: flex;
+  justify-self: center;
+  gap: 20px;
+  border: 2px solid white;
+  padding: 5px;
+  border-radius: 34px;
+  margin-bottom: 20px;
+}
+.tabButton {
+  border: none;
+  box-shadow: none;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.tabButton:hover {
+  outline: 2px solid white;
+}
+
+.activeTab {
+  background-color: rgba(192, 90, 12, 1);
+  font-weight: bold;
+  box-shadow: 0 5px 5px hsla(0, 0%, 1%, 0.282);
+}
+
+.formSection {
+  padding-inline: 100px;
+  margin-bottom: 1em;
+  min-width: 300px;
+}
+
+.formSection > .newStudentForm {
+  display: flex;
+  max-width: 100%;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.formSection > h3 {
+  text-align: left;
+}
+
+.firstNameItem,
+.lastNameItem {
+  flex: 0 0 calc(50% - 5px);
+  min-width: 300px;
+}
+
+.ageItem {
+  flex: 0 0 calc(20% - 5px);
+  min-width: 120px;
+}
+.addressItem {
+  flex: 0 0 calc(80% - 5px);
+  min-width: 430px;
+}
+
+.phoneItem,
+.emailItem {
+  flex: 0 0 calc(50% - 5px);
   min-width: 300px;
 }

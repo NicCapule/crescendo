@@ -26,6 +26,18 @@
   color: aqua;
 }
 
+.formItem input {
+  background-color: white;
+  height: 40px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  width: 100%;
+  box-shadow: 0 5px 5px hsla(0, 0%, 1%, 0.282);
+  border: none;
+  padding: 10px;
+  font-family: Poppins;
+}
+
 @media (max-width: 768px) {
   .loginContainer {
     width: 80%;
