@@ -1,3 +1,4 @@
+const { Sequelize } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   const StudentPayment = sequelize.define(
     "StudentPayment",

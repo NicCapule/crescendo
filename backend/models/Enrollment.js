@@ -15,11 +15,16 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      enroll_date: { type: DataTypes.DATE, allowNull: false },
+      enroll_date: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+        allowNull: false,
+      },
       total_fee: { type: DataTypes.DECIMAL(10, 2), allowNull: false },
       enrollment_status: {
         type: DataTypes.ENUM("Active", "Completed"),
         defaultValue: "Active",
+        allowNull: false,
       },
     },
     { tableName: "Enrollment", timestamps: false }

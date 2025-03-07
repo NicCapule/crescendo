@@ -7,30 +7,26 @@ import { DateTime } from "luxon";
 import { fetchInstruments } from "../../services/instrumentServices";
 import { getInstrumentColor } from "../../utils/InstrumentColors";
 import StudentSelection from "../Students/StudentSelection";
-import { PiTrashFill } from "react-icons/pi";
+import TeacherSelection from "../Teachers/TeacherSelection";
+import ScheduleAvailability from "./ScheduleAvailability";
+import SessionSchedules from "./SessionSchedules";
+import Select from "react-select";
+import { customStyles } from "../../utils/SelectCustomStyles";
+import { enrollValidationSchema } from "../validations/enrollValidationSchema";
+import {
+  enrollNewStudent,
+  enrollExistingStudent,
+} from "../../services/enrollServices";
 
 function EnrollmentForm() {
-  const times = [
-    "8AM",
-    "9AM",
-    "10AM",
-    "11AM",
-    "12PM",
-    "1PM",
-    "2PM",
-    "3PM",
-    "4PM",
-    "5PM",
-    "6PM",
-    "7PM",
-    "8PM",
-  ];
   //-----------------------------------------------//
   const [instruments, setInstruments] = useState([]);
   const [selectedStudentID, setSelectedStudentID] = useState(null);
+  const [selectedTeacherID, setSelectedTeacherID] = useState(null);
   const [activeTab, setActiveTab] = useState("select");
   //-----------------------------------------------//
   const initialValues = {
+    isNewStudent: false,
     student_id: null,
     student_first_name: "",
     student_last_name: "",
@@ -39,12 +35,36 @@ function EnrollmentForm() {
     student_email: "",
     student_phone: "",
     instrument: null,
+    teacher_id: null,
     availability: [],
+    noOfSessions: null,
+    sessionSchedules: Array.from({ length: 8 }, () => ({
+      session_date: "",
+      session_start_time: "",
+      session_end_time: "",
+    })),
   };
 
   //-----------------------------------------------//
   const onSubmit = async (data) => {
-    console.log("selectedStudentID: ", selectedStudentID);
+    let requestData = { ...data };
+    if (data.isNewStudent) {
+      // Enrolling a new student
+      delete requestData.student_id;
+      console.log("New Student Data: ", requestData);
+      await enrollNewStudent(requestData);
+    } else {
+      // Selecting an existing student
+      delete requestData.student_first_name;
+      delete requestData.student_last_name;
+      delete requestData.student_address;
+      delete requestData.student_age;
+      delete requestData.student_email;
+      delete requestData.student_phone;
+      delete requestData.availability;
+      console.log("Select Data: ", requestData);
+      await enrollExistingStudent(requestData);
+    }
   };
   //-----------------------------------------------//
   useEffect(() => {
@@ -58,291 +78,207 @@ function EnrollmentForm() {
       <Formik
         initialValues={initialValues}
         onSubmit={onSubmit}
-        // validationSchema={validationSchema}
+        validationSchema={enrollValidationSchema}
       >
         {({ values, setFieldValue, errors, touched }) => (
           <Form className={style.enrollFormContainer}>
             <div className={style.tabButtonsContainer}>
               <button
+                type="button"
                 className={`${style.tabButton} ${
                   activeTab === "select" ? style.activeTab : ""
                 }`}
-                onClick={() => setActiveTab("select")}
+                onClick={() => {
+                  setActiveTab("select");
+                  setFieldValue("isNewStudent", false);
+                  setFieldValue("student_first_name", "");
+                  setFieldValue("student_last_name", "");
+                  setFieldValue("student_address", "");
+                  setFieldValue("student_age", "");
+                  setFieldValue("student_email", "");
+                  setFieldValue("student_phone", "");
+                  setFieldValue("availability", []);
+                }}
               >
                 Select Student
               </button>
               <button
+                type="button"
                 className={`${style.tabButton} ${
                   activeTab === "enroll" ? style.activeTab : ""
                 }`}
-                onClick={() => setActiveTab("enroll")}
+                onClick={() => {
+                  setActiveTab("enroll");
+                  setFieldValue("isNewStudent", true);
+                  setFieldValue("student_id", null);
+                }}
               >
                 Enroll New Student
               </button>
             </div>
             <div className={style.tabContent}>
               {activeTab === "select" && (
-                <div
-                  className={`${style.formSection} ${style.studentSelection}`}
-                >
-                  <h3>Select Student</h3>
+                <>
                   <hr />
-                  <StudentSelection
-                    setSelectedStudentID={setSelectedStudentID}
-                  />
-                </div>
+                  <div
+                    className={`${style.formSection} ${style.studentSelection}`}
+                  >
+                    <h3>Select Student</h3>
+                    <StudentSelection setFieldValue={setFieldValue} />
+
+                    <ErrorMessage
+                      name="student_id"
+                      component="span"
+                      className={style.errorMessage}
+                    />
+                  </div>
+                </>
               )}
+              {/* ========================================================================================================= */}
               {activeTab === "enroll" && (
-                <div className={style.formSection}>
-                  <h3>Add New Student</h3>
+                <>
                   <hr />
-                  <div className={style.newStudentForm}>
-                    <div className={`${style.formItem} ${style.firstNameItem}`}>
-                      <div className={style.itemHeader}>
-                        <label htmlFor="">First Name</label>
-                        <ErrorMessage
-                          name="student_first_name"
-                          component="span"
-                          className={style.errorMessage}
-                        />
-                      </div>
-                      <Field name="student_first_name" />
-                    </div>
-                    {/* --------------------------------------- */}
-                    <div className={`${style.formItem} ${style.lastNameItem}`}>
-                      <div className={style.itemHeader}>
-                        <label htmlFor="">Last Name</label>
-                        <ErrorMessage
-                          name="student_last_name"
-                          component="span"
-                          className={style.errorMessage}
-                        />
-                      </div>
-                      <Field name="student_last_name" />
-                    </div>
-                    {/* --------------------------------------- */}
-                    <div className={`${style.formItem} ${style.ageItem}`}>
-                      <div className={style.itemHeader}>
-                        <label htmlFor="">Age</label>
-                        <ErrorMessage
-                          name="student_age"
-                          component="span"
-                          className={style.errorMessage}
-                        />
-                      </div>
-                      <Field name="student_address" />
-                    </div>
-                    {/* --------------------------------------- */}
-                    <div className={`${style.formItem} ${style.addressItem}`}>
-                      <div className={style.itemHeader}>
-                        <label htmlFor="">Address</label>
-                        <ErrorMessage
-                          name="student_address"
-                          component="span"
-                          className={style.errorMessage}
-                        />
-                      </div>
-                      <Field name="student_last_name" />
-                    </div>
-                    {/* --------------------------------------- */}
-                    <div className={`${style.formItem} ${style.phoneItem}`}>
-                      <div className={style.itemHeader}>
-                        <label htmlFor="">Phone</label>
-                        <ErrorMessage
-                          name="student_phone"
-                          component="span"
-                          className={style.errorMessage}
-                        />
-                      </div>
-                      <Field name="student_phone">
-                        {({ field, form }) => (
-                          <input
-                            {...field}
-                            type="text"
-                            placeholder="e.g., 09123456789"
-                            value={field.value}
-                            onChange={(e) => {
-                              let value = e.target.value.replace(/[^0-9]/g, "");
-                              if (value.startsWith("9")) {
-                                value = `0${value}`;
-                              }
-                              form.setFieldValue("student_phone", value);
-                            }}
-                          />
-                        )}
-                      </Field>
-                    </div>
-                    {/* --------------------------------------- */}
-                    <div className={`${style.formItem} ${style.emailItem}`}>
-                      <div className={style.itemHeader}>
-                        <label htmlFor="">Email</label>
-                        <ErrorMessage
-                          name="student_email"
-                          component="span"
-                          className={style.errorMessage}
-                        />
-                      </div>
-                      <Field name="student_email" />
-                    </div>
-                  </div>
-                  <hr />
-                  <div className={style.formItem}>
-                    <div className={style.itemHeader}>
-                      <label>Select Schedule Availability:</label>
-                      {errors.availability &&
-                        typeof errors.availability === "string" &&
-                        touched.availability && (
-                          <span className={style.errorMessage}>
-                            {errors.availability}
-                          </span>
-                        )}
-                    </div>
-                    <div className={style.availabilityTableContainer}>
-                      <table>
-                        <thead>
-                          <tr>
-                            <th>Day of the Week</th>
-                            <th>Start Time</th>
-                            <th>End Time</th>
-                            <th />
-                          </tr>
-                        </thead>
-
-                        {values.availability.map((_, index) => {
-                          return (
-                            <tbody>
-                              <tr key={index}>
-                                <td>
-                                  <div className={style.selectContainer}>
-                                    <Field
-                                      as="select"
-                                      name={`availability.${index}.day_of_week`}
-                                    >
-                                      <option value="" disabled>
-                                        Select Day
-                                      </option>
-                                      <option value="Monday">Monday</option>
-                                      <option value="Tuesday">Tuesday</option>
-                                      <option value="Wednesday">
-                                        Wednesday
-                                      </option>
-                                      <option value="Thursday">Thursday</option>
-                                      <option value="Friday">Friday</option>
-                                      <option value="Saturday">Saturday</option>
-                                      <option value="Sunday">Sunday</option>
-                                    </Field>
-                                    <ErrorMessage
-                                      name={`availability.${index}.day_of_week`}
-                                      component="span"
-                                      className={style.errorMessage}
-                                    />
-                                  </div>
-                                </td>
-
-                                <td>
-                                  <div>
-                                    <Field
-                                      as="select"
-                                      name={`availability.${index}.start_time`}
-                                    >
-                                      <option value="" disabled>
-                                        Select Start Time
-                                      </option>
-                                      {times.map((time, key) => (
-                                        <option
-                                          key={key}
-                                          value={DateTime.fromFormat(
-                                            time,
-                                            "ha"
-                                          ).toFormat("HH:mm:ss")}
-                                        >
-                                          {time}
-                                        </option>
-                                      ))}
-                                    </Field>
-                                    <ErrorMessage
-                                      name={`availability.${index}.start_time`}
-                                      component="span"
-                                      className={style.errorMessage}
-                                    />
-                                  </div>
-                                </td>
-                                <td>
-                                  <div>
-                                    <Field
-                                      as="select"
-                                      name={`availability.${index}.end_time`}
-                                    >
-                                      <option value="" disabled>
-                                        Select Start Time
-                                      </option>
-                                      {times.map((time, key) => (
-                                        <option
-                                          key={key}
-                                          value={DateTime.fromFormat(
-                                            time,
-                                            "ha"
-                                          ).toFormat("HH:mm:ss")}
-                                        >
-                                          {time}
-                                        </option>
-                                      ))}
-                                    </Field>
-                                    <ErrorMessage
-                                      name={`availability.${index}.end_time`}
-                                      component="span"
-                                      className={style.errorMessage}
-                                    />
-                                  </div>
-                                </td>
-
-                                <td>
-                                  <button
-                                    type="button"
-                                    className={style.removeButton}
-                                    onClick={() => {
-                                      const updatedAvailability =
-                                        values.availability.filter(
-                                          (_, i) => i !== index
-                                        );
-                                      setFieldValue(
-                                        "availability",
-                                        updatedAvailability
-                                      );
-                                    }}
-                                  >
-                                    <PiTrashFill />
-                                  </button>
-                                </td>
-                              </tr>
-                            </tbody>
-                          );
-                        })}
-                      </table>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setFieldValue("availability", [
-                            ...values.availability,
-                            { day_of_week: "", start_time: "", end_time: "" },
-                          ]);
-                        }}
-                        className={style.addAvailabilityButton}
+                  <div className={style.formSection}>
+                    <h3>Enroll New Student</h3>
+                    <hr />
+                    <div className={style.newStudentForm}>
+                      <div
+                        className={`${style.formItem} ${style.firstNameItem}`}
                       >
-                        Add Availability
-                      </button>
+                        <div className={style.itemHeader}>
+                          <label htmlFor="">First Name</label>
+                          <ErrorMessage
+                            name="student_first_name"
+                            component="span"
+                            className={style.errorMessage}
+                          />
+                        </div>
+                        <Field name="student_first_name" />
+                      </div>
+                      {/* --------------------------------------- */}
+                      <div
+                        className={`${style.formItem} ${style.lastNameItem}`}
+                      >
+                        <div className={style.itemHeader}>
+                          <label htmlFor="">Last Name</label>
+                          <ErrorMessage
+                            name="student_last_name"
+                            component="span"
+                            className={style.errorMessage}
+                          />
+                        </div>
+                        <Field name="student_last_name" />
+                      </div>
+                      {/* --------------------------------------- */}
+                      <div className={`${style.formItem} ${style.ageItem}`}>
+                        <div className={style.itemHeader}>
+                          <label htmlFor="">Age</label>
+                          <ErrorMessage
+                            name="student_age"
+                            component="span"
+                            className={style.errorMessage}
+                          />
+                        </div>
+                        <Field name="student_age" />
+                      </div>
+                      {/* --------------------------------------- */}
+                      <div className={`${style.formItem} ${style.addressItem}`}>
+                        <div className={style.itemHeader}>
+                          <label htmlFor="">Address</label>
+                          <ErrorMessage
+                            name="student_address"
+                            component="span"
+                            className={style.errorMessage}
+                          />
+                        </div>
+                        <Field name="student_address" />
+                      </div>
+                      {/* --------------------------------------- */}
+                      <div className={`${style.formItem} ${style.phoneItem}`}>
+                        <div className={style.itemHeader}>
+                          <label htmlFor="">Phone</label>
+                          <ErrorMessage
+                            name="student_phone"
+                            component="span"
+                            className={style.errorMessage}
+                          />
+                        </div>
+                        <Field name="student_phone">
+                          {({ field, form }) => (
+                            <input
+                              {...field}
+                              type="text"
+                              placeholder="e.g., 09123456789"
+                              value={field.value}
+                              onChange={(e) => {
+                                let value = e.target.value.replace(
+                                  /[^0-9]/g,
+                                  ""
+                                );
+                                if (value.startsWith("9")) {
+                                  value = `0${value}`;
+                                }
+                                form.setFieldValue("student_phone", value);
+                              }}
+                            />
+                          )}
+                        </Field>
+                      </div>
+                      {/* --------------------------------------- */}
+                      <div className={`${style.formItem} ${style.emailItem}`}>
+                        <div className={style.itemHeader}>
+                          <label htmlFor="">Email</label>
+                          <ErrorMessage
+                            name="student_email"
+                            component="span"
+                            className={style.errorMessage}
+                          />
+                        </div>
+                        <Field name="student_email" />
+                      </div>
+                    </div>
+
+                    <hr />
+                  </div>
+                  <div className={style.formSection}>
+                    <div
+                      className={`${style.formItem} ${style.availabilityItem}`}
+                    >
+                      <div className={style.itemHeader}>
+                        <label>Select Schedule Availability:</label>
+                        {errors.availability &&
+                          typeof errors.availability === "string" &&
+                          touched.availability && (
+                            <span className={style.errorMessage}>
+                              {errors.availability}
+                            </span>
+                          )}
+                      </div>
+                      <ScheduleAvailability
+                        values={values}
+                        setFieldValue={setFieldValue}
+                        errors={errors}
+                        touched={touched}
+                      />
                     </div>
                   </div>
-                </div>
+                </>
               )}
             </div>
+            <hr />
             {/*----------------------------------------------------------------------------*/}
-            <div className={style.formSection}>
-              <div className={style.formItem}>
+
+            <div className={`${style.formSection} ${style.programSection}`}>
+              <div>
+                <h3>Program</h3>
+                <hr />
+              </div>
+
+              <div className={`${style.formItem} ${style.instrumentItem}`}>
                 <div className={style.itemHeader}>
                   <label>Select Instrument:</label>
                   <ErrorMessage
-                    name="instruments"
+                    name="instrument"
                     component="span"
                     className={style.errorMessage}
                   />
@@ -363,6 +299,7 @@ function EnrollmentForm() {
                             ? null
                             : i.instrument_id;
                         setFieldValue("instrument", selectedInstrument);
+                        setFieldValue("teacher_id", null);
                       }}
                     >
                       {i.instrument_name}
@@ -370,10 +307,84 @@ function EnrollmentForm() {
                   ))}
                 </div>
               </div>
-
               {/*----------------------------------------------------------------------------*/}
-              <button type="submit">Enroll</button>
+
+              <div className={`${style.formItem} ${style.noOfSessionsItem}`}>
+                <div className={style.itemHeader}>
+                  <label>Number of Sessions</label>
+                  <ErrorMessage
+                    name="noOfSessions"
+                    component="span"
+                    className={style.errorMessage}
+                  />
+                </div>
+                <Select
+                  isSearchable={false}
+                  styles={customStyles}
+                  placeholder="8 or 16"
+                  options={[
+                    { value: 8, label: "8" },
+                    { value: 16, label: "16" },
+                  ]}
+                  value={
+                    values.noOfSessions
+                      ? {
+                          value: values.noOfSessions,
+                          label: values.noOfSessions.toString(),
+                        }
+                      : null
+                  }
+                  onChange={(selectedOption) =>
+                    setFieldValue("noOfSessions", selectedOption.value)
+                  }
+                />
+              </div>
+              {values.instrument && (
+                <div className={`${style.formItem} ${style.teacherItem}`}>
+                  <div className={style.itemHeader}>
+                    <label>Select Teacher</label>
+                    <ErrorMessage
+                      name="teacher_id"
+                      component="span"
+                      className={style.errorMessage}
+                    />
+                  </div>
+                  <TeacherSelection
+                    setFieldValue={setFieldValue}
+                    selectedInstrument={values.instrument}
+                    values={values}
+                    name="teacher_id"
+                  />
+                </div>
+              )}
             </div>
+            {values.noOfSessions && (
+              <div className={style.formSection}>
+                <div
+                  className={`${style.formItem} ${style.sessionScheduleItem}`}
+                >
+                  <div className={style.itemHeader}>
+                    <label>Session Schedules</label>
+                    {errors.sessionSchedules &&
+                      typeof errors.sessionSchedules === "string" &&
+                      touched.sessionSchedules && (
+                        <span className={style.errorMessage}>
+                          {errors.sessionSchedules}
+                        </span>
+                      )}
+                  </div>
+                  <SessionSchedules
+                    values={values}
+                    setFieldValue={setFieldValue}
+                    errors={errors}
+                    touched={touched}
+                  />
+                </div>
+              </div>
+            )}
+
+            <button type="submit">Enroll</button>
+            <button type="Reset">Reset</button>
           </Form>
         )}
       </Formik>

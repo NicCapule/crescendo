@@ -194,14 +194,14 @@ module.exports = {
       {
         student_id: 1,
         program_id: 1,
-        enroll_date: "2025-02-27",
+        enroll_date: new Date(),
         total_fee: 7000.0,
         enrollment_status: "Active",
       },
       {
         student_id: 2,
         program_id: 2,
-        enroll_date: "2025-02-27",
+        enroll_date: new Date(),
         total_fee: 12000.0,
         enrollment_status: "Active",
       },
@@ -327,13 +327,13 @@ module.exports = {
         enrollment_id: 1,
         amount_paid: 4000.0,
         payment_method: "Cash",
-        student_payment_date: new Date("2025-02-27"),
+        student_payment_date: new Date(),
       },
       {
         enrollment_id: 2,
         amount_paid: 4000.0,
         payment_method: "Cash",
-        student_payment_date: new Date("2025-02-27"),
+        student_payment_date: new Date(),
       },
     ]);
 
@@ -341,13 +341,13 @@ module.exports = {
       {
         teacher_id: 1,
         total_sessions: 2,
-        payment_date: new Date("2025-02-21"),
+        payment_date: new Date(),
         amount_paid: 1000.0,
       },
       {
         teacher_id: 2,
         total_sessions: 2,
-        payment_date: new Date("2025-02-21"),
+        payment_date: new Date(),
         amount_paid: 1000.0,
       },
     ]);

@@ -15,7 +15,7 @@ const db = require("./models");
 //============================================================ Routers
 const loginRouter = require("./routes/Login");
 app.use("/login", loginRouter);
-
+//--------------------------------------------------//
 const userRouter = require("./routes/Users");
 app.use(
   "/users",
@@ -23,7 +23,7 @@ app.use(
   authorizeRole(["Admin", "Teacher"]),
   userRouter
 );
-
+//--------------------------------------------------//
 const studentRouter = require("./routes/Students");
 app.use(
   "/students",
@@ -31,10 +31,10 @@ app.use(
   authorizeRole(["Admin", "Teacher"]),
   studentRouter
 );
-
+//--------------------------------------------------//
 const teacherRouter = require("./routes/Teachers");
 app.use("/teachers", authenticateUser, teacherRouter);
-
+//--------------------------------------------------//
 const sessionRouter = require("./routes/Sessions");
 app.use(
   "/sessions",
@@ -42,7 +42,7 @@ app.use(
   authorizeRole(["Admin", "Teacher"]),
   sessionRouter
 );
-
+//--------------------------------------------------//
 const programRouter = require("./routes/Programs");
 app.use(
   "/programs",
@@ -50,13 +50,21 @@ app.use(
   authorizeRole(["Admin", "Teacher"]),
   programRouter
 );
-
+//--------------------------------------------------//
 const instrumentRouter = require("./routes/Instruments");
 app.use(
   "/instruments",
   authenticateUser,
   authorizeRole(["Admin", "Teacher"]),
   instrumentRouter
+);
+//--------------------------------------------------//
+const enrollmentRouter = require("./routes/Enrollment");
+app.use(
+  "/enroll",
+  authenticateUser,
+  authorizeRole(["Admin"]),
+  enrollmentRouter
 );
 
 //============================================================//

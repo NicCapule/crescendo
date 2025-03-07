@@ -26,10 +26,20 @@
   gap: 8px;
 }
 
+.availabilityTableContainer {
+  max-width: max-content;
+  background-color: white;
+  color: #242424;
+  border-radius: 24px;
+  padding: 10px;
+  box-shadow: 0 5px 5px hsla(0, 0%, 1%, 0.282);
+}
+
 .formItem table th,
 .formItem table td {
-  color: white;
+  color: #242424;
 }
+
 .formItem table td {
   vertical-align: top;
 }
@@ -66,12 +76,31 @@
 select::-ms-expand {
   display: none;
 }
+.buttonRow {
+  display: flex;
+  justify-content: end;
+  box-sizing: border-box;
+  width: 100%;
+  padding-inline: 20px;
+}
+.addAvailabilityButton {
+  color: #242424;
+  border: 2px solid #242424;
+  display: flex;
+  gap: 10px;
+}
 
+.addAvailabilityButton > svg {
+  width: 24px;
+  height: auto;
+  vertical-align: middle;
+}
 .removeButton {
   color: crimson;
   border: none;
   padding: 0px;
   height: auto;
+  box-shadow: none;
 }
 
 .removeButton > svg {
@@ -90,6 +119,10 @@ select::-ms-expand {
   border: none;
   padding: 10px;
   font-family: Poppins;
+}
+.formItem.teacherItem input,
+.formItem.noOfSessionsItem input {
+  box-shadow: none;
 }
 
 label {
@@ -170,7 +203,7 @@ label {
 .formSection {
   padding-inline: 100px;
   margin-bottom: 1em;
-  min-width: 300px;
+  min-width: fit-content;
 }
 
 .formSection > .newStudentForm {
@@ -180,7 +213,7 @@ label {
   gap: 10px;
 }
 
-.formSection > h3 {
+.formSection h3 {
   text-align: left;
 }
 
@@ -203,4 +236,61 @@ label {
 .emailItem {
   flex: 0 0 calc(50% - 5px);
   min-width: 300px;
+}
+
+.programSection {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.programSection > :first-child {
+  flex: 0 0 100%;
+  min-width: 100px;
+}
+
+.programSection > .formItem.instrumentItem {
+  flex: 0 0 calc(60% - 5px);
+  min-width: 100px;
+}
+
+.programSection > .noOfSessionsItem {
+  flex: 0 0 calc(40% - 5px);
+}
+
+.programSection > .noOfSessionsItem > div:nth-of-type(2) {
+  max-width: 150px;
+}
+
+.programSection > .teacherItem {
+  flex: 0 0 77%;
+}
+
+/* Session Schedules Form =================================================================================================== */
+
+.sessionSchedulesTableContainer tr > th {
+  color: white;
+}
+.sessionSchedulesTableContainer tr > td > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sessionSchedulesTableContainer tr > td:last-of-type {
+  vertical-align: top;
+}
+
+.sessionSchedulesTableContainer h2 {
+  text-align: center;
+}
+
+.sessionSchedulesTableContainer button {
+  box-shadow: none;
+}
+.sessionSchedulesTableContainer p {
+  color: white;
+  font-weight: bold;
+  margin: 8px;
+  vertical-align: middle;
 }

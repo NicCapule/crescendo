@@ -3,6 +3,7 @@ import * as Yup from "yup";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import style from "./Forms.module.css";
 import { createAdmin } from "../../services/userServices";
+import { adminValidationSchema } from "../validations/adminValidationSchema";
 //===================================================================================//
 function CreateAdminForm() {
   const initialValues = {
@@ -11,15 +12,6 @@ function CreateAdminForm() {
     email: "",
     password: "",
   };
-  //-----------------------------------------------//
-  const validationSchema = Yup.object().shape({
-    email: Yup.string()
-      .email("Invalid email format")
-      .required("Email is a required field."),
-    user_first_name: Yup.string(),
-    user_last_name: Yup.string().required("Last name is a required field."),
-    password: Yup.string().required("Password is a required field."),
-  });
   //-----------------------------------------------//
   const onSubmit = async (data) => {
     // try {
@@ -38,7 +30,7 @@ function CreateAdminForm() {
       <Formik
         initialValues={initialValues}
         onSubmit={onSubmit}
-        validationSchema={validationSchema}
+        validationSchema={adminValidationSchema}
       >
         <Form className={style.adminFormContainer}>
           <div className={style.formSection}>
