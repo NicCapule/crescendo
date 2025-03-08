@@ -43,6 +43,8 @@ function EnrollmentForm() {
       session_start_time: "",
       session_end_time: "",
     })),
+    payment_method: "",
+    amount_paid: null,
   };
 
   //-----------------------------------------------//
@@ -51,7 +53,7 @@ function EnrollmentForm() {
     if (data.isNewStudent) {
       // Enrolling a new student
       delete requestData.student_id;
-      console.log("New Student Data: ", requestData);
+      // console.log("New Student Data: ", requestData);
       await enrollNewStudent(requestData);
     } else {
       // Selecting an existing student
@@ -62,7 +64,7 @@ function EnrollmentForm() {
       delete requestData.student_email;
       delete requestData.student_phone;
       delete requestData.availability;
-      console.log("Select Data: ", requestData);
+      // console.log("Select Data: ", requestData);
       await enrollExistingStudent(requestData);
     }
   };
@@ -267,7 +269,6 @@ function EnrollmentForm() {
             </div>
             <hr />
             {/*----------------------------------------------------------------------------*/}
-
             <div className={`${style.formSection} ${style.programSection}`}>
               <div>
                 <h3>Program</h3>
@@ -308,7 +309,6 @@ function EnrollmentForm() {
                 </div>
               </div>
               {/*----------------------------------------------------------------------------*/}
-
               <div className={`${style.formItem} ${style.noOfSessionsItem}`}>
                 <div className={style.itemHeader}>
                   <label>Number of Sessions</label>
@@ -358,6 +358,7 @@ function EnrollmentForm() {
                 </div>
               )}
             </div>
+            {/*----------------------------------------------------------------------------*/}
             {values.noOfSessions && (
               <div className={style.formSection}>
                 <div
@@ -382,9 +383,95 @@ function EnrollmentForm() {
                 </div>
               </div>
             )}
-
-            <button type="submit">Enroll</button>
-            <button type="Reset">Reset</button>
+            <hr />
+            <div className={`${style.formSection} ${style.paymentSection}`}>
+              <div>
+                <h3>Payment</h3>
+                {values.noOfSessions && (
+                  <p>
+                    Total:
+                    <b>
+                      {values.noOfSessions === 8
+                        ? " PHP 7,000.00"
+                        : " PHP 12,000.00"}
+                    </b>
+                  </p>
+                )}
+              </div>
+              <hr />
+              <div className={style.paymentRow}>
+                <div className={`${style.formItem} ${style.paymentMethodItem}`}>
+                  <div className={style.itemHeader}>
+                    <label>Select Payment Method:</label>
+                    <ErrorMessage
+                      name="payment_method"
+                      component="span"
+                      className={style.errorMessage}
+                    />
+                  </div>
+                  <div className={style.paymentMethodButtons}>
+                    {["Cash", "GCash", "Bank Transfer"].map((method) => (
+                      <button
+                        key={method}
+                        type="button"
+                        className={
+                          values.payment_method === method
+                            ? style.activePaymentMethodButton
+                            : ""
+                        }
+                        onClick={() => {
+                          setFieldValue("payment_method", method);
+                        }}
+                      >
+                        {method}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div className={`${style.formItem} ${style.amountPaidItem}`}>
+                  <div className={style.itemHeader}>
+                    <label htmlFor="">Amount Paid</label>
+                    <ErrorMessage
+                      name="amount_paid"
+                      component="span"
+                      className={style.errorMessage}
+                    />
+                  </div>
+                  <Field name="amount_paid">
+                    {({ field, form }) => (
+                      <input
+                        {...field}
+                        placeholder="PHP"
+                        value={field.value ? `PHP ${field.value}` : ""}
+                        onChange={(e) => {
+                          const numericValue = e.target.value.replace(
+                            /[^\d]/g,
+                            ""
+                          );
+                          form.setFieldValue("amount_paid", numericValue || "");
+                        }}
+                        onFocus={(e) => {
+                          if (field.value === "0") {
+                            form.setFieldValue("amount_paid", "");
+                          }
+                        }}
+                        onBlur={() => {
+                          if (!field.value) {
+                            form.setFieldValue("amount_paid", "0");
+                            form.setFieldValue("payment_method", "");
+                          }
+                        }}
+                      />
+                    )}
+                  </Field>
+                </div>
+              </div>
+            </div>
+            <hr />
+            <div className={style.submissionButtons}>
+              <button type="submit">Enroll</button>
+              <button type="Reset">Reset</button>
+            </div>
           </Form>
         )}
       </Formik>

@@ -148,8 +148,7 @@ label {
 .formSection hr {
   margin-bottom: 20px;
 }
-
-.instrumentButtons {
+paymentMethodButtons .instrumentButtons {
   display: flex;
   font-size: 0.9rem;
   flex-wrap: wrap;
@@ -264,6 +263,36 @@ label {
 
 .programSection > .teacherItem {
   flex: 0 0 77%;
+}
+
+.paymentSection > div:first-child {
+  display: flex;
+  justify-content: space-between;
+}
+.paymentSection .paymentRow {
+  display: flex;
+  justify-content: space-between;
+}
+.paymentMethodButtons {
+  display: flex;
+  font-size: 0.9rem;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.activePaymentMethodButton {
+  color: #242424;
+  font-weight: bold;
+  background-color: white;
+}
+
+.submissionButtons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  max-width: 100%;
+  padding-inline: 100px;
 }
 
 /* Session Schedules Form =================================================================================================== */

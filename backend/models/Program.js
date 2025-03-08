@@ -22,6 +22,11 @@ module.exports = (sequelize, DataTypes) => {
           isIn: [[8, 15]],
         },
       },
+      program_status: {
+        type: DataTypes.ENUM("Active", "Completed"),
+        defaultValue: "Active",
+        allowNull: false,
+      },
     },
     { tableName: "Program", timestamps: false }
   );

@@ -182,11 +182,13 @@ module.exports = {
         teacher_id: 1,
         instrument_id: 1,
         no_of_sessions: 8,
+        program_status: "Active",
       },
       {
         teacher_id: 2,
         instrument_id: 4,
         no_of_sessions: 16,
+        program_status: "Active",
       },
     ]);
 
@@ -196,14 +198,14 @@ module.exports = {
         program_id: 1,
         enroll_date: new Date(),
         total_fee: 7000.0,
-        enrollment_status: "Active",
+        payment_status: "Unsettled",
       },
       {
         student_id: 2,
         program_id: 2,
         enroll_date: new Date(),
         total_fee: 12000.0,
-        enrollment_status: "Active",
+        payment_status: "Unsettled",
       },
     ]);
 

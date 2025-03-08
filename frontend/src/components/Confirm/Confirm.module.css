@@ -1,0 +1,30 @@
+.confirmContainer {
+  text-align: center;
+  background-color: white;
+  border-radius: 24px;
+  padding: 50px;
+}
+.confirmButtons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+.confirmButtons button {
+  color: black;
+  border: 2px solid black;
+  min-width: 100px;
+}
+
+.confirmButtons .yesButton:hover {
+  color: white;
+  font-weight: bold;
+  border: 2px solid rgb(54, 83, 134);
+  background-color: rgb(54, 83, 134);
+}
+
+.confirmButtons .noButton:hover {
+  color: white;
+  font-weight: bold;
+  border: 2px solid rgb(134, 54, 54);
+  background-color: rgb(134, 54, 54);
+}

@@ -21,7 +21,6 @@ export const enrollValidationSchema = Yup.object().shape({
         .email("Invalid email format"),
     otherwise: (schema) => schema.notRequired(),
   }),
-
   student_phone: Yup.string().when("isNewStudent", {
     is: true,
     then: (schema) =>
@@ -40,6 +39,12 @@ export const enrollValidationSchema = Yup.object().shape({
   noOfSessions: Yup.number()
     .oneOf([8, 16], "Number of sessions must be either 8 or 16.")
     .required("Number of sessions is required."),
+  amount_paid: Yup.number(),
+  payment_method: Yup.string().when("amount_paid", {
+    is: (value) => value > 0,
+    then: (schema) => schema.required("Please select a payment method."),
+    otherwise: (schema) => schema.notRequired(),
+  }),
   availability: Yup.array().when("isNewStudent", {
     is: true,
     then: (schema) =>

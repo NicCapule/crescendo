@@ -21,9 +21,8 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       total_fee: { type: DataTypes.DECIMAL(10, 2), allowNull: false },
-      enrollment_status: {
-        type: DataTypes.ENUM("Active", "Completed"),
-        defaultValue: "Active",
+      payment_status: {
+        type: DataTypes.ENUM("Settled", "Unsettled"),
         allowNull: false,
       },
     },

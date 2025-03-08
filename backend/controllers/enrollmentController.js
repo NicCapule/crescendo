@@ -5,6 +5,7 @@ const {
   Student,
   Program,
   StudentAvailability,
+  StudentPayment,
 } = require("../models");
 
 exports.enrollNewStudent = async (req, res) => {
@@ -21,6 +22,8 @@ exports.enrollNewStudent = async (req, res) => {
       teacher_id,
       noOfSessions,
       sessionSchedules,
+      payment_method,
+      amount_paid,
     } = req.body;
 
     //--------------------------------------------------//
@@ -49,6 +52,7 @@ exports.enrollNewStudent = async (req, res) => {
       teacher_id,
       instrument_id: instrument,
       no_of_sessions: noOfSessions,
+      program_status: "Active",
     });
     //--------------------------------------------------//
     const newEnrollment = await Enrollment.create({
@@ -56,8 +60,16 @@ exports.enrollNewStudent = async (req, res) => {
       program_id: newProgram.program_id,
       no_of_sessions: noOfSessions,
       total_fee: noOfSessions === 8 ? 7000 : 120000,
-      enrollment_status: "Active",
+      payment_status: "Unsettled",
     });
+    //--------------------------------------------------//
+    if (amount_paid > 0) {
+      const newPayment = await StudentPayment.create({
+        enrollment_id: newEnrollment.enrollment_id,
+        amount_paid,
+        payment_method,
+      });
+    }
     //--------------------------------------------------//
     if (sessionSchedules && sessionSchedules.length > 0) {
       const sessionRecords = sessionSchedules.map(
@@ -91,6 +103,8 @@ exports.enrollExistingStudent = async (req, res) => {
       instrument,
       teacher_id,
       noOfSessions,
+      payment_method,
+      amount_paid,
       sessionSchedules,
     } = req.body;
 
@@ -104,15 +118,25 @@ exports.enrollExistingStudent = async (req, res) => {
       teacher_id,
       instrument_id: instrument,
       no_of_sessions: noOfSessions,
+      program_status: "Active",
     });
     //--------------------------------------------------//
+
     const newEnrollment = await Enrollment.create({
       student_id: student.student_id,
       program_id: newProgram.program_id,
       no_of_sessions: noOfSessions,
       total_fee: noOfSessions === 8 ? 7000 : 120000,
-      enrollment_status: "Active",
+      payment_status: "Unsettled",
     });
+    //--------------------------------------------------//
+    if (amount_paid > 0) {
+      const newPayment = await StudentPayment.create({
+        enrollment_id: newEnrollment.enrollment_id,
+        amount_paid,
+        payment_method,
+      });
+    }
     //--------------------------------------------------//
     if (sessionSchedules && sessionSchedules.length > 0) {
       const sessionRecords = sessionSchedules.map(
@@ -128,10 +152,12 @@ exports.enrollExistingStudent = async (req, res) => {
       );
       await Session.bulkCreate(sessionRecords);
     }
+    const responseData = {
+      message: "Existing student enrolled successfully",
+      newEnrollment,
+    };
 
-    return res
-      .status(200)
-      .json({ message: "Existing student enrolled successfully" });
+    res.status(201).json(responseData);
   } catch (error) {
     console.error("Error enrolling existing student:", error);
     return res.status(500).json({ error: "Failed to enroll existing student" });

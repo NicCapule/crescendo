@@ -1,5 +1,4 @@
 import React from "react";
-
 import { NavLink, Link } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import {
@@ -12,11 +11,20 @@ import {
   PiNotebook,
   PiMoney,
 } from "react-icons/pi";
-
+import LogoutConfirm from "../Confirm/LogoutConfirm";
 import style from "./Layout.module.css";
 
 function Sidebar() {
   const { user, logout } = useAuth();
+  //------------------------------------//
+  const handleLogout = () => {
+    LogoutConfirm({
+      title: "Confirm Logout?",
+      message: "Are you sure you want to log out?",
+      onConfirm: logout,
+    });
+  };
+  //================================================================================//
   return (
     <div className={style.sideContainer}>
       <nav className={style.sideNav}>
@@ -101,7 +109,7 @@ function Sidebar() {
           Payment
         </NavLink>
 
-        <button onClick={logout} className={style.text}>
+        <button onClick={handleLogout} className={style.text}>
           <PiSignOut size={24} />
           Logout
         </button>

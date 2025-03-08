@@ -66,6 +66,14 @@ app.use(
   authorizeRole(["Admin"]),
   enrollmentRouter
 );
+//--------------------------------------------------//
+const studentPaymentRouter = require("./routes/StudentPayments");
+app.use(
+  "/payments",
+  authenticateUser,
+  authorizeRole(["Admin"]),
+  studentPaymentRouter
+);
 
 //============================================================//
 // db.sequelize.sync().then(() => {

@@ -189,3 +189,10 @@ table tbody tr {
 .defaultColor {
   background-color: lightgray;
 }
+/* ===================================================================================== */
+.react-confirm-alert {
+  color: #242424;
+}
+.react-confirm-alert-overlay {
+  background: rgba(0, 0, 0, 0.7) !important;
+}
