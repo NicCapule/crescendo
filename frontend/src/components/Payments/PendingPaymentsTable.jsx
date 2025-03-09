@@ -4,9 +4,21 @@ import { DateTime } from "luxon";
 import { useNavigate } from "react-router-dom";
 import { PiDotsThreeOutlineVerticalFill } from "react-icons/pi";
 import { fetchPendingPayments } from "../../services/studentPaymentServices";
+import style from "./Payments.module.css";
 
 function PendingPaymentsTable() {
   const [pendingPayments, setPendingPayments] = useState([]);
+  const [dropdownStates, setDropdownStates] = useState({});
+  const navigate = useNavigate();
+  //---------------------------------------------------------------------------//
+  const toggleItemDropdown = (enrollmentId) => {
+    setDropdownStates((prevState) => {
+      if (prevState[enrollmentId]) {
+        return {};
+      }
+      return { [enrollmentId]: true };
+    });
+  };
   //---------------------------------------------------------------------------//
   useEffect(() => {
     fetchPendingPayments()
@@ -22,8 +34,8 @@ function PendingPaymentsTable() {
             <thead>
               <tr>
                 <th>Due</th>
-                <th>Program</th>
                 <th>Student</th>
+                <th>Program</th>
                 <th>Total Paid</th>
                 <th>Remaining Balance</th>
                 <th />
@@ -37,33 +49,35 @@ function PendingPaymentsTable() {
                       "MMM d, yyyy "
                     )}
                   </td>
-                  <td>{payment.Program.Instrument.instrument_name}</td>
                   <td>
                     {`${payment.Student.student_first_name} ${payment.Student.student_last_name}`}
                   </td>
+                  <td>
+                    {`${payment.Program.Instrument.instrument_name} - ${payment.Program.no_of_sessions} Sessions`}
+                  </td>
                   <td>₱{payment.total_paid}</td>
                   <td>₱{payment.remaining_balance}</td>
-                  {/* <td>
+                  <td>
                     <button
-                      onClick={() => toggleItemDropdown(student.student_id)}
+                      onClick={() => toggleItemDropdown(payment.enrollment_id)}
                     >
                       <PiDotsThreeOutlineVerticalFill />
                     </button>
-                    {dropdownStates[student.student_id] && (
+                    {dropdownStates[payment.enrollment_id] && (
                       <div className={style.dropdownMenu}>
                         <button
-                          onClick={() =>
-                            navigate(
-                              `/students/${student.student_id}/${student.student_first_name}`
-                            )
-                          }
+                        // onClick={() =>
+                        //   // navigate(
+                        //   //   `/students/${student.student_id}/${student.student_first_name}`
+                        //   // )
+                        // }
                         >
-                          View
+                          Add Payment
                         </button>
-                        <button>Delete</button>
+                        <button>Forfeit Program</button>
                       </div>
                     )}
-                  </td> */}
+                  </td>
                 </tr>
               ))}
             </tbody>

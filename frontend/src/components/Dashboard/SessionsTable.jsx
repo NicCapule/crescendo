@@ -2,21 +2,40 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { fetchSessions } from "../../services/sessionServices";
 import { getInstrumentColor } from "../../utils/InstrumentColors";
-import { mergeConsecutiveSessions } from "../../utils/CalendarLayout";
+import {
+  mergeConsecutiveSessions,
+  groupSessionsByDate,
+} from "../../utils/CalendarLayout";
 import { DateTime } from "luxon";
 import { PiDotsThreeOutlineVerticalFill } from "react-icons/pi";
+import { BsChevronDoubleRight, BsChevronDoubleLeft } from "react-icons/bs";
 
 import style from "./Dashboard.module.css";
 
 function SessionsTable() {
   const [listOfSessions, setListOfSessions] = useState([]);
-  const mergedSessions = mergeConsecutiveSessions(listOfSessions);
+  const [groupedSessions, setGroupedSessions] = useState([]);
 
   useEffect(() => {
     fetchSessions()
-      .then(setListOfSessions)
+      .then((sessions) => {
+        setListOfSessions(sessions);
+      })
       .catch(() => console.error("Failed to fetch sessions"));
   }, []);
+
+  //---------------------------------------------------------------------------//
+  useEffect(() => {
+    if (!listOfSessions.length) return;
+
+    const merged = mergeConsecutiveSessions(listOfSessions);
+    const grouped = groupSessionsByDate(merged);
+
+    setGroupedSessions(grouped);
+    // console.log("Merged Sessions:", merged);
+  }, [listOfSessions]);
+
+  // console.log("Grouped Sessions:", groupedSessions);
 
   return (
     <>
@@ -29,48 +48,65 @@ function SessionsTable() {
               <th>Student</th>
               <th>Teacher</th>
               <th>Period</th>
+              <th />
             </tr>
           </thead>
           <tbody>
-            {mergedSessions.map((value, key) => (
-              <tr key={key}>
-                <td>
-                  <div
-                    className={`instContainer ${getInstrumentColor(
-                      value.Program.Instrument.instrument_name
-                    )}`}
-                  >
-                    {value.Program.Instrument.instrument_name}
-                  </div>
-                </td>
-                <td>
-                  {value.session_numbers.length === 1
-                    ? `${value.session_numbers[0]} of ${value.Program.no_of_sessions}`
-                    : `${value.session_numbers[0]} - ${
-                        value.session_numbers[value.session_numbers.length - 1]
-                      } of ${value.Program.no_of_sessions}`}
-                </td>
-                <td>{`${value.Student.student_first_name} ${value.Student.student_last_name}`}</td>
-                <td>
-                  {`${value.Program.Teacher.User.user_first_name} ${value.Program.Teacher.User.user_last_name}`}
-                </td>
-                <td>
-                  {DateTime.fromFormat(
-                    value.session_start,
-                    "HH:mm:ss"
-                  ).toFormat("h:mma")}{" "}
-                  -{" "}
-                  {DateTime.fromFormat(value.session_end, "HH:mm:ss").toFormat(
-                    "h:mma"
-                  )}
-                </td>
+            {groupedSessions.map(({ date, sessions }) => (
+              <React.Fragment key={date}>
+                {/* Row for session date */}
+                <tr className={style.dateRow}>
+                  <td colSpan="6">
+                    <div className={style.dateContainer}>
+                      {DateTime.fromISO(date).toFormat("MMMM d, yyyy")}
+                    </div>
+                  </td>
+                </tr>
 
-                <td>
-                  <button>
-                    <PiDotsThreeOutlineVerticalFill />
-                  </button>
-                </td>
-              </tr>
+                {/* Rows for each session */}
+                {sessions.map((session) => (
+                  <tr key={session.session_id}>
+                    <td>
+                      <div
+                        className={`instContainer ${getInstrumentColor(
+                          session.Program.Instrument.instrument_name
+                        )}`}
+                      >
+                        {session.Program.Instrument.instrument_name}
+                      </div>
+                    </td>
+                    <td>
+                      {session.session_numbers.length === 1
+                        ? `${session.session_numbers[0]} of ${session.Program.no_of_sessions}`
+                        : `${session.session_numbers[0]} - ${
+                            session.session_numbers[
+                              session.session_numbers.length - 1
+                            ]
+                          } of ${session.Program.no_of_sessions}`}
+                    </td>
+                    <td>{`${session.Student.student_first_name} ${session.Student.student_last_name}`}</td>
+                    <td>
+                      {`${session.Program.Teacher.User.user_first_name} ${session.Program.Teacher.User.user_last_name}`}
+                    </td>
+                    <td>
+                      {DateTime.fromFormat(
+                        session.session_start,
+                        "HH:mm:ss"
+                      ).toFormat("h:mma")}{" "}
+                      -{" "}
+                      {DateTime.fromFormat(
+                        session.session_end,
+                        "HH:mm:ss"
+                      ).toFormat("h:mma")}
+                    </td>
+                    <td>
+                      <button>
+                        <PiDotsThreeOutlineVerticalFill />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </React.Fragment>
             ))}
           </tbody>
         </table>

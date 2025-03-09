@@ -105,10 +105,11 @@ button:active {
 /* TABLES ================================================================= */
 
 .tableContainer {
-  background-color: #f2f0efe1;
+  background-color: #e9dcde;
   border-radius: 24px;
+  max-height: 500px;
   overflow: auto;
-  width: max-content;
+  /* width: max-content; */
 }
 
 .tableContainer button {
@@ -138,6 +139,13 @@ table {
   border-spacing: 0 5px;
   padding: 20px;
   white-space: nowrap;
+}
+
+table thead {
+  position: sticky;
+  top: 0;
+  background-color: #e9dcde;
+  z-index: 2;
 }
 
 table th,

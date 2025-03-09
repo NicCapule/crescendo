@@ -272,7 +272,7 @@ function EnrollmentForm() {
             <div className={`${style.formSection} ${style.programSection}`}>
               <div>
                 <h3>Program</h3>
-                <hr />
+                {/* <hr /> */}
               </div>
 
               <div className={`${style.formItem} ${style.instrumentItem}`}>
@@ -398,7 +398,7 @@ function EnrollmentForm() {
                   </p>
                 )}
               </div>
-              <hr />
+              {/* <hr /> */}
               <div className={style.paymentRow}>
                 <div className={`${style.formItem} ${style.paymentMethodItem}`}>
                   <div className={style.itemHeader}>

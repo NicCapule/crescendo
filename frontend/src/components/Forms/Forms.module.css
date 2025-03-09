@@ -148,7 +148,7 @@ label {
 .formSection hr {
   margin-bottom: 20px;
 }
-paymentMethodButtons .instrumentButtons {
+.paymentMethodButtons {
   display: flex;
   font-size: 0.9rem;
   flex-wrap: wrap;
@@ -241,20 +241,12 @@ paymentMethodButtons .instrumentButtons {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
+  justify-content: space-between;
 }
 
 .programSection > :first-child {
   flex: 0 0 100%;
   min-width: 100px;
-}
-
-.programSection > .formItem.instrumentItem {
-  flex: 0 0 calc(60% - 5px);
-  min-width: 100px;
-}
-
-.programSection > .noOfSessionsItem {
-  flex: 0 0 calc(40% - 5px);
 }
 
 .programSection > .noOfSessionsItem > div:nth-of-type(2) {
@@ -263,6 +255,15 @@ paymentMethodButtons .instrumentButtons {
 
 .programSection > .teacherItem {
   flex: 0 0 77%;
+}
+.instrumentButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.instrumentButtons button {
+  font-size: 0.9rem;
 }
 
 .paymentSection > div:first-child {

@@ -5,8 +5,10 @@ export const mergeConsecutiveSessions = (sessions) => {
   if (!sessions.length) return [];
 
   // Sort by session_start time
-  const sortedSessions = [...sessions].sort((a, b) =>
-    a.session_start.localeCompare(b.session_start)
+  const sortedSessions = [...sessions].sort(
+    (a, b) =>
+      a.session_date.localeCompare(b.session_date) ||
+      a.session_start.localeCompare(b.session_start)
   );
 
   const mergedSessions = [];
@@ -18,17 +20,15 @@ export const mergeConsecutiveSessions = (sessions) => {
   for (let i = 1; i < sortedSessions.length; i++) {
     const nextSession = sortedSessions[i];
 
-    // Ensure same program before merging
     const isSameProgram =
       currentSession.Program.program_id === nextSession.Program.program_id;
+    const isSameDate = currentSession.session_date === nextSession.session_date;
+    const isConsecutive =
+      currentSession.session_end === nextSession.session_start;
 
-    if (
-      isSameProgram &&
-      currentSession.session_end === nextSession.session_start
-    ) {
-      // Extend current session's end time
+    if (isSameProgram && isSameDate && isConsecutive) {
+      // Merge consecutive sessions
       currentSession.session_end = nextSession.session_end;
-      // Store session number for display
       currentSession.session_numbers.push(nextSession.session_number);
     } else {
       // Push current session and start a new one
@@ -71,3 +71,18 @@ export const getSessionPosition = (session, allSessions, viewType = "day") => {
   }
 };
 //=====================================================================================//
+export const groupSessionsByDate = (sessions) => {
+  const grouped = sessions.reduce((acc, session) => {
+    if (!acc[session.session_date]) {
+      acc[session.session_date] = [];
+    }
+    acc[session.session_date].push(session);
+    return acc;
+  }, {});
+
+  // Convert object into an array
+  return Object.entries(grouped).map(([date, sessions]) => ({
+    date,
+    sessions,
+  }));
+};

@@ -15,6 +15,8 @@ exports.getPendingPayments = async (req, res) => {
     const pendingPayments = await Enrollment.findAll({
       where: { payment_status: "Unsettled" },
       attributes: [
+        "enrollment_id",
+        "total_fee",
         [
           Sequelize.fn(
             "COALESCE",
@@ -51,7 +53,7 @@ exports.getPendingPayments = async (req, res) => {
         },
         {
           model: Program,
-          attributes: ["program_id"],
+          attributes: ["program_id", "no_of_sessions"],
           include: [
             { model: Instrument, attributes: ["instrument_name"] },
             {

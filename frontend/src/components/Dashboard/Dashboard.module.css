@@ -34,16 +34,73 @@
 
 /* Sessions Table ============================================================================== */
 
+.dateContainer {
+  color: rgb(62, 58, 58);
+  font-weight: bold;
+  background-color: rgba(168, 165, 165, 0.423);
+  border-radius: 24px;
+  font-size: 0.9rem;
+  padding: 8px;
+  padding-inline: 20px;
+  max-width: max-content;
+  /* box-shadow: 0 5px 5px hsla(0, 0%, 1%, 0.282); */
+}
 /* Pending Payments ============================================================================== */
 
 .pendingPaymentsContainer {
-  color: black;
-  background-color: #f2f0efe1;
-  border-radius: 24px;
+  color: #242424;
+  /* background-color: #f2f0efe1; */
 }
 
 .pendingPaymentsContainer p {
+  font-size: 0.9rem;
   margin: auto;
+}
+
+.pendingPaymentItem {
+  background-color: #f2f0efe1;
+  border-radius: 24px;
+  display: flex;
+  padding: 20px;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.pendingPaymentItem > div:last-child {
+  text-align: right;
+}
+
+.pendingPaymentItem .dateContainer {
+  color: black;
+  background-color: rgb(204, 130, 32);
+  border-radius: 24px;
+  font-weight: bold;
+  padding: 0px;
+  padding-inline: 10px;
+  max-width: max-content;
+  margin-bottom: 10px;
+}
+
+.pendingPaymentItem > div:last-child p {
+  font-size: 0.8rem;
+}
+
+.paymentItemButtons {
+  display: flex;
+  flex-direction: column;
+  max-width: max-content;
+  justify-self: end;
+  gap: 5px;
+}
+
+.paymentItemButtons button {
+  color: black;
+  border: 2px solid black;
+  font-size: 0.7rem;
+  padding: 0;
+  padding-inline: 10px;
+  box-shadow: none;
 }
 
 /* DASHBOARD PAGE ============================================================================== */
