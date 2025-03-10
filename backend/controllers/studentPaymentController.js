@@ -53,6 +53,7 @@ exports.getPendingPayments = async (req, res) => {
         },
         {
           model: Program,
+          where: { program_status: "Active" },
           attributes: ["program_id", "no_of_sessions"],
           include: [
             { model: Instrument, attributes: ["instrument_name"] },

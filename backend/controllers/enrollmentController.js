@@ -4,8 +4,11 @@ const {
   Session,
   Student,
   Program,
+  Teacher,
+  Instrument,
   StudentAvailability,
   StudentPayment,
+  User,
 } = require("../models");
 
 exports.enrollNewStudent = async (req, res) => {
@@ -55,9 +58,31 @@ exports.enrollNewStudent = async (req, res) => {
       program_status: "Active",
     });
     //--------------------------------------------------//
+    const program = await Program.findOne({
+      where: { program_id: newProgram.program_id },
+      attributes: ["program_id"],
+      include: {
+        model: Instrument,
+        attributes: ["instrument_name"],
+      },
+    });
+    //--------------------------------------------------//
+    const teacher = await Teacher.findOne({
+      where: { teacher_id },
+      attributes: ["teacher_id"],
+      include: {
+        model: User,
+        attributes: ["user_first_name", "user_last_name"],
+      },
+    });
+    //--------------------------------------------------//
+
     const newEnrollment = await Enrollment.create({
       student_id: newStudent.student_id,
       program_id: newProgram.program_id,
+      student_name: `${newStudent.student_first_name} ${newStudent.student_last_name}`,
+      teacher_name: `${teacher.User.user_first_name} ${teacher.User.user_last_name}`,
+      instrument: program.Instrument.instrument_name,
       no_of_sessions: noOfSessions,
       total_fee: noOfSessions === 8 ? 7000 : 120000,
       payment_status: "Unsettled",
@@ -66,6 +91,7 @@ exports.enrollNewStudent = async (req, res) => {
     if (amount_paid > 0) {
       const newPayment = await StudentPayment.create({
         enrollment_id: newEnrollment.enrollment_id,
+        student_name: `${newStudent.student_first_name} ${newStudent.student_last_name}`,
         amount_paid,
         payment_method,
       });
@@ -121,10 +147,31 @@ exports.enrollExistingStudent = async (req, res) => {
       program_status: "Active",
     });
     //--------------------------------------------------//
-
+    const program = await Program.findOne({
+      where: { program_id: newProgram.program_id },
+      attributes: ["program_id"],
+      include: {
+        model: Instrument,
+        attributes: ["instrument_name"],
+      },
+    });
+    //--------------------------------------------------//
+    const teacher = await Teacher.findOne({
+      where: { teacher_id },
+      attributes: ["teacher_id"],
+      include: {
+        model: User,
+        attributes: ["user_first_name", "user_last_name"],
+      },
+    });
+    //--------------------------------------------------//
+    //--------------------------------------------------//
     const newEnrollment = await Enrollment.create({
       student_id: student.student_id,
       program_id: newProgram.program_id,
+      student_name: `${student.student_first_name} ${student.student_last_name}`,
+      teacher_name: `${teacher.User.user_first_name} ${teacher.User.user_last_name}`,
+      instrument: program.Instrument.instrument_name,
       no_of_sessions: noOfSessions,
       total_fee: noOfSessions === 8 ? 7000 : 120000,
       payment_status: "Unsettled",

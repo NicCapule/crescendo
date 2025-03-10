@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       program_status: {
-        type: DataTypes.ENUM("Active", "Completed"),
+        type: DataTypes.ENUM("Active", "Completed", "Forfeited"),
         defaultValue: "Active",
         allowNull: false,
       },
@@ -32,10 +32,22 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   Program.associate = (models) => {
-    Program.belongsTo(models.Instrument, { foreignKey: "instrument_id" });
-    Program.belongsTo(models.Teacher, { foreignKey: "teacher_id" });
-    Program.hasMany(models.Enrollment, { foreignKey: "program_id" });
-    Program.hasMany(models.Session, { foreignKey: "program_id" });
+    Program.belongsTo(models.Instrument, {
+      foreignKey: "instrument_id",
+      onDelete: "CASCADE",
+    });
+    Program.belongsTo(models.Teacher, {
+      foreignKey: "teacher_id",
+      onDelete: "CASCADE",
+    });
+    Program.hasMany(models.Enrollment, {
+      foreignKey: "program_id",
+      onDelete: "SET NULL",
+    });
+    Program.hasMany(models.Session, {
+      foreignKey: "program_id",
+      onDelete: "CASCADE",
+    });
   };
 
   return Program;

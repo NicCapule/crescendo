@@ -196,6 +196,9 @@ module.exports = {
       {
         student_id: 1,
         program_id: 1,
+        student_name: "Russel Segador",
+        teacher_name: "Jake Peralta",
+        instrument: "Piano",
         enroll_date: new Date(),
         total_fee: 7000.0,
         payment_status: "Unsettled",
@@ -203,6 +206,9 @@ module.exports = {
       {
         student_id: 2,
         program_id: 2,
+        student_name: "Angelica Babon",
+        teacher_name: "Amy Santiago",
+        instrument: "Drums",
         enroll_date: new Date(),
         total_fee: 12000.0,
         payment_status: "Unsettled",
@@ -475,12 +481,14 @@ module.exports = {
     await queryInterface.bulkInsert("StudentPayment", [
       {
         enrollment_id: 1,
+        student_name: `Russel Segador`,
         amount_paid: 4000.0,
         payment_method: "Cash",
         student_payment_date: new Date(),
       },
       {
         enrollment_id: 2,
+        student_name: `Russel Segador`,
         amount_paid: 4000.0,
         payment_method: "Cash",
         student_payment_date: new Date(),
@@ -490,12 +498,14 @@ module.exports = {
     await queryInterface.bulkInsert("TeacherSalary", [
       {
         teacher_id: 1,
+        teacher_name: "Jake Peralta",
         total_sessions: 2,
         payment_date: new Date(),
         amount_paid: 1000.0,
       },
       {
         teacher_id: 2,
+        teacher_name: "Amy Santiago",
         total_sessions: 2,
         payment_date: new Date(),
         amount_paid: 1000.0,

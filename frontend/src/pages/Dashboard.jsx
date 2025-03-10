@@ -53,7 +53,7 @@ function Dashboard() {
 
           <SummaryCard
             icon={PiMusicNotes}
-            title="Total Programs"
+            title="Active Programs"
             count={totalPrograms}
           />
         </div>

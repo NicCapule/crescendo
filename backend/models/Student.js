@@ -18,9 +18,18 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   Student.associate = (models) => {
-    Student.hasMany(models.Enrollment, { foreignKey: "student_id" });
-    Student.hasMany(models.StudentAvailability, { foreignKey: "student_id" });
-    Student.hasMany(models.Session, { foreignKey: "student_id" });
+    Student.hasMany(models.Enrollment, {
+      foreignKey: "student_id",
+      onDelete: "SET NULL",
+    });
+    Student.hasMany(models.StudentAvailability, {
+      foreignKey: "student_id",
+      onDelete: "CASCADE",
+    });
+    Student.hasMany(models.Session, {
+      foreignKey: "student_id",
+      onDelete: "CASCADE",
+    });
   };
 
   return Student;

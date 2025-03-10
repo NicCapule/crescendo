@@ -9,5 +9,6 @@ router.get("/info/:id", studentController.getStudentInfo);
 router.get("/sessions/:id", studentController.getStudentSessions);
 router.get("/count", studentController.getStudentCount);
 router.post("/", studentController.createStudent);
+router.delete("/:id", studentController.deleteStudent);
 
 module.exports = router;

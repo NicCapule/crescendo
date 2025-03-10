@@ -9,10 +9,22 @@ module.exports = (sequelize, DataTypes) => {
       },
       student_id: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
       program_id: {
         type: DataTypes.INTEGER,
+        allowNull: true,
+      },
+      student_name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      teacher_name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      instrument: {
+        type: DataTypes.STRING,
         allowNull: false,
       },
       enroll_date: {
@@ -30,8 +42,14 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   Enrollment.associate = (models) => {
-    Enrollment.belongsTo(models.Student, { foreignKey: "student_id" });
-    Enrollment.belongsTo(models.Program, { foreignKey: "program_id" });
+    Enrollment.belongsTo(models.Student, {
+      foreignKey: "student_id",
+      onDelete: "SET NULL",
+    });
+    Enrollment.belongsTo(models.Program, {
+      foreignKey: "program_id",
+      onDelete: "SET NULL",
+    });
     Enrollment.hasMany(models.StudentPayment, { foreignKey: "enrollment_id" });
   };
 

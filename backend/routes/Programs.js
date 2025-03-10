@@ -1,22 +1,9 @@
 const express = require("express");
 const router = express.Router();
 
-const { Program } = require("../models");
+const programController = require("../controllers/programController");
 
-router.get("/", async (req, res) => {
-  const AllPrograms = await Program.findAll();
-  res.json(AllPrograms);
-});
-
-router.get("/count", async (req, res) => {
-  const ProgramCount = await Program.count();
-  res.json(ProgramCount);
-});
-
-router.post("/", async (req, res) => {
-  const program = req.body;
-  await Program.create(program);
-  res.json(program);
-});
+router.get("/", programController.getAllPrograms);
+router.get("/active/count", programController.getActiveProgramCount);
 
 module.exports = router;

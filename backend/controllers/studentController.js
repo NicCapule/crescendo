@@ -126,3 +126,44 @@ exports.createStudent = async (req, res) => {
     res.status(500).json({ message: "Error creating student", error });
   }
 };
+//----------------------------------------------------------------------------------------//
+exports.deleteStudent = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const student = await Student.findOne({
+      where: { student_id: id },
+      attributes: ["student_id", "student_first_name", "student_last_name"],
+    });
+
+    if (!student) {
+      return res.status(404).json({ error: "Student not found" });
+    }
+
+    const activeProgramCount = await Program.count({
+      include: [
+        {
+          model: Enrollment,
+          where: { student_id: student.student_id },
+        },
+      ],
+      where: { program_status: "Active" },
+    });
+
+    if (activeProgramCount > 0) {
+      return res.status(400).json({
+        error: "Cannot delete student!",
+        details: `${student.student_first_name} ${student.student_last_name} is currently enrolled in one or more active programs.`,
+      });
+    }
+
+    await student.destroy();
+
+    res.json({
+      message: `Student "${student.student_first_name} ${student.student_last_name}" deleted successfully.`,
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "Error deleting student", details: error.message });
+  }
+};

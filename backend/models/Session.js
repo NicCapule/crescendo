@@ -88,8 +88,14 @@ module.exports = (sequelize, DataTypes) => {
   }
   //------------------------------------------------------------------------//
   Session.associate = (models) => {
-    Session.belongsTo(models.Student, { foreignKey: "student_id" });
-    Session.belongsTo(models.Program, { foreignKey: "program_id" });
+    Session.belongsTo(models.Student, {
+      foreignKey: "student_id",
+      onDelete: "CASCADE",
+    });
+    Session.belongsTo(models.Program, {
+      foreignKey: "program_id",
+      onDelete: "CASCADE",
+    });
   };
 
   return Session;
