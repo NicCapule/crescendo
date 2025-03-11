@@ -1,5 +1,6 @@
 const { Session, TeacherSalary, Program, User, Teacher } = require("../models");
-const { Op, sequelize } = require("sequelize");
+const { Op } = require("sequelize");
+const { sequelize } = require("../models");
 
 const perSessionRate = 400;
 
@@ -34,14 +35,14 @@ const updateExpiredSessions = async () => {
       where: {
         session_status: "Completed",
         [Op.or]: [
-          { session_date: formattedDate }, // Sessions just marked as completed today
+          { session_date: formattedDate },
           {
-            session_date: { [Op.lt]: formattedDate }, // Past completed sessions
-            id: {
+            session_date: { [Op.lt]: formattedDate },
+            "$Program.teacher_id$": {
               [Op.notIn]: sequelize.literal(
-                "(SELECT session_id FROM TeacherSalary)"
+                `(SELECT teacher_id FROM TeacherSalary WHERE TeacherSalary.salary_date = '${formattedDate}')`
               ),
-            }, // Exclude sessions already processed in TeacherSalary
+            },
           },
         ],
       },

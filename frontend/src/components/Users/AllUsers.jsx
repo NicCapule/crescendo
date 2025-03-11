@@ -20,7 +20,7 @@ function AllUsers() {
           Add Teacher
         </button>
         <button onClick={() => navigate("/users/create/admin")}>
-          Add Admin
+          Add Administrator
         </button>
 
         <div className="tableContainer">

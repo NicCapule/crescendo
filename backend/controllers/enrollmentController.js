@@ -76,11 +76,11 @@ exports.enrollNewStudent = async (req, res) => {
       },
     });
     //--------------------------------------------------//
-
     const newEnrollment = await Enrollment.create({
       student_id: newStudent.student_id,
       program_id: newProgram.program_id,
       student_name: `${newStudent.student_first_name} ${newStudent.student_last_name}`,
+      student_email: newStudent.student_email,
       teacher_name: `${teacher.User.user_first_name} ${teacher.User.user_last_name}`,
       instrument: program.Instrument.instrument_name,
       no_of_sessions: noOfSessions,
@@ -170,6 +170,7 @@ exports.enrollExistingStudent = async (req, res) => {
       student_id: student.student_id,
       program_id: newProgram.program_id,
       student_name: `${student.student_first_name} ${student.student_last_name}`,
+      student_email: student.student_email,
       teacher_name: `${teacher.User.user_first_name} ${teacher.User.user_last_name}`,
       instrument: program.Instrument.instrument_name,
       no_of_sessions: noOfSessions,

@@ -105,7 +105,7 @@ button:active {
 /* TABLES ================================================================= */
 
 .tableContainer {
-  background-color: #e9dcde;
+  background-color: white;
   border-radius: 24px;
   max-height: 500px;
   overflow: auto;
@@ -144,7 +144,7 @@ table {
 table thead {
   position: sticky;
   top: 0;
-  background-color: #e9dcde;
+  background-color: white;
   z-index: 2;
 }
 

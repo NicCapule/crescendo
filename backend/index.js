@@ -11,7 +11,17 @@ const {
 } = require("./middlewares/authMiddleware");
 
 const db = require("./models");
+//============================================================//
+const cron = require("node-cron");
+const { updateExpiredSessions } = require("./jobs/sessionCron");
 
+const startSessionUpdater = () => {
+  console.log("Session updater cron job started...");
+  cron.schedule("0 8-20 * * *", async () => {
+    console.log("Running scheduled session update...");
+    await updateExpiredSessions();
+  });
+};
 //============================================================ Routers
 const loginRouter = require("./routes/Login");
 app.use("/login", loginRouter);
@@ -76,22 +86,24 @@ app.use(
 );
 
 //============================================================//
-db.sequelize.sync().then(() => {
-  app.listen(3001, () => {
-    console.log("Server Running on PORT 3001!");
-  });
+// db.sequelize.sync().then(() => {
+//   app.listen(3001, () => {
+//     console.log("Server Running on PORT 3001!");
+//   });
+// });
+
+app.listen(3001, () => {
+  console.log("Server Running on PORT 3001!");
 });
 
-// app.listen(3001, () => {
-//   console.log("Server Running on PORT 3001!");
-// });
+startSessionUpdater();
 
 //============================================================//
 
-const cron = require("node-cron");
-const checkAndSendReminders = require("./services/reminderJob");
+// const cron = require("node-cron");
+// const checkAndSendReminders = require("./services/reminderJob");
 
-cron.schedule("0 7 * * *", () => {
-  console.log("Running payment reminder job...");
-  checkAndSendReminders();
-});
+// cron.schedule("0 7 * * *", () => {
+//   console.log("Running payment reminder job...");
+//   checkAndSendReminders();
+// });
