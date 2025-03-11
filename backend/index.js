@@ -85,3 +85,13 @@ db.sequelize.sync().then(() => {
 // app.listen(3001, () => {
 //   console.log("Server Running on PORT 3001!");
 // });
+
+//============================================================//
+
+const cron = require("node-cron");
+const checkAndSendReminders = require("./jobs/reminderJob");
+
+cron.schedule("0 7 * * *", () => {
+  console.log("Running payment reminder job...");
+  checkAndSendReminders();
+});
