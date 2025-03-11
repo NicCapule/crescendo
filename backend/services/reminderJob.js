@@ -2,6 +2,9 @@ const { Op } = require("sequelize");
 const { Student, StudentPayment } = require("../models");
 const sendEmail = require("../services/emailService");
 
+async function checkAndSendReminders() {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
   const nextWeek = new Date(today);
   nextWeek.setDate(today.getDate() + 7);
@@ -38,6 +41,10 @@ const sendEmail = require("../services/emailService");
     }
   } catch (error) {
     console.error("Error fetching payments:", error);
-  };
+  }
+}
+
+// Call the function
+checkAndSendReminders();
 
 module.exports = checkAndSendReminders;
