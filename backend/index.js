@@ -93,5 +93,5 @@ const checkAndSendReminders = require("./services/reminderJob");
 
 cron.schedule("0 7 * * *", () => {
   console.log("Running payment reminder job...");
-  reminderJob();
+  checkAndSendReminders();
 });
