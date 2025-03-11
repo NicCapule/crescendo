@@ -89,7 +89,7 @@ db.sequelize.sync().then(() => {
 //============================================================//
 
 const cron = require("node-cron");
-const checkAndSendReminders = require("./jobs/reminderJob");
+const checkAndSendReminders = require("./services/reminderJob");
 
 cron.schedule("0 7 * * *", () => {
   console.log("Running payment reminder job...");

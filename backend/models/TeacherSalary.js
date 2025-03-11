@@ -19,12 +19,12 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      payment_date: {
+      salary_date: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
         allowNull: false,
       },
-      amount_paid: {
+      amount: {
         type: DataTypes.DECIMAL(10, 2),
         allowNull: false,
       },
