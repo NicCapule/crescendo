@@ -100,10 +100,9 @@ startSessionUpdater();
 
 //============================================================//
 
-// const cron = require("node-cron");
-// const checkAndSendReminders = require("./services/reminderJob");
+const checkAndSendReminders = require("./services/reminderJob");
 
-// cron.schedule("0 7 * * *", () => {
-//   console.log("Running payment reminder job...");
-//   checkAndSendReminders();
-// });
+cron.schedule("0 7 * * *", () => {
+  console.log("Running payment reminder job...");
+  checkAndSendReminders();
+});

@@ -40,7 +40,7 @@ const updateExpiredSessions = async () => {
             session_date: { [Op.lt]: formattedDate },
             "$Program.teacher_id$": {
               [Op.notIn]: sequelize.literal(
-                `(SELECT teacher_id FROM TeacherSalary WHERE TeacherSalary.salary_date = '${formattedDate}')`
+                `(SELECT teacher_id FROM TeacherSalary WHERE TeacherSalary.salary_date = Session.session_date)`
               ),
             },
           },
@@ -48,16 +48,24 @@ const updateExpiredSessions = async () => {
       },
       include: [{ model: Program, attributes: ["teacher_id"] }],
     });
-    //-----------------------------------------------------------------------//
     const teacherSessions = {};
-
+    //-----------------------------------------------------------------------//
     for (const session of updatedSessions) {
-      const teacherId = session.Program.teacher_id;
-      teacherSessions[teacherId] = (teacherSessions[teacherId] || 0) + 1;
+      const teacherId = session.Program?.teacher_id ?? null;
+      const sessionDate = session.session_date;
+
+      if (!teacherSessions[teacherId]) {
+        teacherSessions[teacherId] = {};
+      }
+
+      teacherSessions[teacherId][sessionDate] =
+        (teacherSessions[teacherId][sessionDate] || 0) + 1;
     }
 
-    for (const [teacherId, sessionCount] of Object.entries(teacherSessions)) {
-      await updateTeacherSalary(teacherId, formattedDate, sessionCount);
+    for (const [teacherId, sessions] of Object.entries(teacherSessions)) {
+      for (const [sessionDate, sessionCount] of Object.entries(sessions)) {
+        await updateTeacherSalary(teacherId, sessionDate, sessionCount);
+      }
     }
     //-----------------------------------------------------------------------//
     console.log(
