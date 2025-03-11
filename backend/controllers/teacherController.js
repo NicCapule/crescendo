@@ -172,3 +172,66 @@ exports.getTeacherCount = async (req, res) => {
   const TeacherCount = await Teacher.count();
   res.json(TeacherCount);
 };
+//----------------------------------------------------------------------------------------//
+exports.getTeacherSalaryByDay = async (req, res) => {
+  try {
+    const { teacher_id, date } = req.params;
+
+    const selectedDate = new Date(date);
+    selectedDate.setUTCHours(0, 0, 0, 0);
+
+    const totalSessions = await Session.count({
+      where: {
+        session_date: selectedDate,
+      },
+      include: [
+        {
+          model: Teacher,
+          where: { teacher_id },
+          attributes: ["teacher_id"],
+        },
+      ],
+    });
+
+    if (totalSessions === 0) {
+      return res
+        .status(404)
+        .json({ message: "No sessions found for this date." });
+    }
+
+    // Define the per-session rate (adjust as needed)
+    const perSessionRate = 400; // Example rate
+
+    // Calculate total salary
+    const amountPaid = totalSessions * perSessionRate;
+
+    // Get teacher's name
+    const teacher = await Teacher.findByPk(teacher_id, {
+      include: [
+        { model: User, attributes: ["user_first_name", "user_last_name"] },
+      ],
+    });
+
+    if (!teacher) {
+      return res.status(404).json({ message: "Teacher not found." });
+    }
+
+    const teacherName = `${teacher.User.user_first_name} ${teacher.User.user_last_name}`;
+
+    // Store salary record
+    const newSalaryRecord = await TeacherSalary.create({
+      teacher_id,
+      teacher_name: teacherName,
+      total_sessions: totalSessions,
+      payment_date: selectedDate,
+      amount_paid: amountPaid,
+    });
+
+    return res.status(200).json(newSalaryRecord);
+  } catch (error) {
+    console.error("Error fetching teacher salary:", error);
+    return res
+      .status(500)
+      .json({ error: "Failed to retrieve teacher salary." });
+  }
+};
