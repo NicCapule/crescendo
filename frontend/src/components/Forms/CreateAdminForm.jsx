@@ -15,9 +15,8 @@ function CreateAdminForm() {
   //-----------------------------------------------//
   const onSubmit = async (data) => {
     // try {
-    console.log("Data: ", data);
     await createAdmin(data);
-    alert("Teacher created successfully!"); // Handle success feedback
+    alert("Admin created successfully!"); // Handle success feedback
     // } catch (error) {
     //   console.error("Error creating teacher:", error);
     //   alert("Failed to create teacher. Please try again.");

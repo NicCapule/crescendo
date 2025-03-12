@@ -1,3 +1,4 @@
+const { where } = require("sequelize");
 const {
   Sequelize,
   Enrollment,
@@ -9,6 +10,32 @@ const {
   User,
   Session,
 } = require("../models");
+//----------------------------------------------------------------------------------------//
+exports.getPaymentsByStudentId = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const studentPayments = await StudentPayment.findAll({
+      include: [
+        {
+          model: Enrollment,
+          attributes: [],
+          where: { student_id: id },
+        },
+      ],
+      attributes: [
+        "student_name",
+        "amount_paid",
+        "payment_method",
+        "student_payment_date",
+      ],
+    });
+    res.json(studentPayments);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error fetching student's payment history", error });
+  }
+};
 //----------------------------------------------------------------------------------------//
 exports.getPendingPayments = async (req, res) => {
   try {

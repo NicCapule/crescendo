@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import style from "../components/Dashboard/Dashboard.module.css";
 import SummaryCard from "../components/Dashboard/SummaryCard";
 import SessionsTable from "../components/Dashboard/SessionsTable";
@@ -15,6 +16,7 @@ function Dashboard() {
   const [totalStudents, setTotalStudents] = useState([]);
   const [totalTeachers, setTotalTeachers] = useState([]);
   const [totalPrograms, setTotalPrograms] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchStudentCount()
@@ -68,9 +70,13 @@ function Dashboard() {
         <div className={style.quickActions}>
           <h2>Quick actions</h2>
           <div className={style.quickActionsButtons}>
-            <button>Enroll Student</button>
-            <button>Add Teacher</button>
-            <button>Notify Student</button>
+            <button onClick={() => navigate("/enrollment")}>
+              Enroll Student
+            </button>
+            <button onClick={() => navigate("/users/create/teacher")}>
+              Add Teacher
+            </button>
+            {/* <button>Notify Student</button> */}
           </div>
         </div>
         {user?.role === "Admin" ? (

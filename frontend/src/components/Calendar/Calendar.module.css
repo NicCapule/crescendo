@@ -12,14 +12,94 @@
   gap: 10px;
   font-size: 18px;
 }
+.dateRow {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.dayViewHeader .dateRow > :first-child {
+  flex: 0 0 50%;
+}
+
+.dayViewHeader .dateRow > :last-child {
+  flex: 1;
+  display: flex;
+  max-width: 300px;
+  justify-content: center;
+}
+
+.dateRow > .datePickerContainer button {
+  box-shadow: none;
+}
+
+.dateRow > .datePickerContainer h2 {
+  text-align: center;
+}
+
+.dateRow input {
+  background-color: white;
+  height: 40px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  width: 100%;
+  box-shadow: 0 5px 5px hsla(0, 0%, 1%, 0.282);
+  border: none;
+  padding: 10px;
+  font-family: Poppins;
+  cursor: pointer;
+}
 
 .dateNav {
   display: flex;
   flex-wrap: nowrap;
-  max-width: max-content;
-  flex: 0 1 auto;
-  color: #ffffff;
   align-items: center;
+  justify-content: space-between;
+  background-color: #a8a9ab8f;
+  padding: 10px;
+  border-radius: 24px;
+  font-weight: bold;
+  gap: 20px;
+  min-width: max-content;
+}
+
+.dateNav button {
+  padding: 5px 10px;
+}
+
+.dateNav > :first-child,
+.dateNav > :last-child {
+  flex: 0 0 30%;
+  justify-self: start;
+}
+
+.dateNav > :nth-child(2) {
+  flex: 0 0 60%;
+  text-align: center;
+  color: white;
+  min-width: max-content;
+}
+
+.dateNav .calendarArrow {
+  box-shadow: none;
+  display: flex;
+  align-content: center;
+  border: 2px solid white;
+  height: fit-content;
+  max-width: max-content;
+}
+
+.weekViewHeader .dateRow {
+  justify-content: center;
+}
+
+.weekViewHeader .dateRow > .dateNav {
+  flex: 0 0 50%;
+}
+
+.calendarArrow > svg {
+  height: auto;
 }
 
 .filterContainer {
@@ -202,19 +282,6 @@
   gap: 10px;
 }
 
-.calendarArrow {
-  border: none;
-  padding: 5px 10px;
-  box-shadow: none;
-  display: flex;
-  align-content: center;
-  color: #ffffff;
-  height: fit-content;
-}
-
-.calendarArrow > svg {
-  height: auto;
-}
 /* Week View ====================================================================================== */
 
 .weekGrid {

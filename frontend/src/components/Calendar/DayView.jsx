@@ -2,12 +2,17 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { fetchSessions } from "../../services/sessionServices";
 import style from "./Calendar.module.css";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 //---------------------------------------------------------------------------//
 import { DateTime } from "luxon";
 import ordinal from "ordinal-js";
 //---------------------------------------------------------------------------//
-import { BsChevronDoubleRight, BsChevronDoubleLeft } from "react-icons/bs";
 import { PiStudent, PiChalkboardTeacher, PiMusicNotes } from "react-icons/pi";
+import {
+  MdOutlineArrowForwardIos,
+  MdOutlineArrowBackIos,
+} from "react-icons/md";
 import { getInstrumentColor } from "../../utils/InstrumentColors";
 //---------------------------------------------------------------------------//
 import {
@@ -120,31 +125,47 @@ function DayView() {
   //=============================================================================================//
   return (
     <div className="compContainer">
-      <div className={style.calendarHeader}>
-        <div className={style.dateNav}>
-          <button
-            className={style.calendarArrow}
-            onClick={() =>
-              setSelectedDate(
-                DateTime.fromISO(selectedDate).minus({ days: 1 }).toISODate()
-              )
-            }
-          >
-            <BsChevronDoubleLeft />
-          </button>
-          <span>
-            {DateTime.fromISO(selectedDate).toFormat("EEEE, MMMM d, yyyy")}
-          </span>
-          <button
-            className={style.calendarArrow}
-            onClick={() =>
-              setSelectedDate(
-                DateTime.fromISO(selectedDate).plus({ days: 1 }).toISODate()
-              )
-            }
-          >
-            <BsChevronDoubleRight />
-          </button>
+      <div className={`${style.calendarHeader} ${style.dayViewHeader}`}>
+        <div className={style.dateRow}>
+          <div className={style.dateNav}>
+            <button
+              className={style.calendarArrow}
+              onClick={() =>
+                setSelectedDate(
+                  DateTime.fromISO(selectedDate).minus({ days: 1 }).toISODate()
+                )
+              }
+            >
+              <MdOutlineArrowBackIos />
+            </button>
+            <div className={style.dateContainer}>
+              <span>
+                {DateTime.fromISO(selectedDate).toFormat("EEEE, MMMM d, yyyy")}
+              </span>
+            </div>
+
+            <button
+              className={style.calendarArrow}
+              onClick={() =>
+                setSelectedDate(
+                  DateTime.fromISO(selectedDate).plus({ days: 1 }).toISODate()
+                )
+              }
+            >
+              <MdOutlineArrowForwardIos />
+            </button>
+          </div>
+          <div className={style.datePickerContainer}>
+            <DatePicker
+              selected={DateTime.fromISO(selectedDate).toJSDate()}
+              onChange={(date) =>
+                setSelectedDate(DateTime.fromJSDate(date).toISODate())
+              }
+              dateFormat="MMMM d, yyyy"
+              className={style.datePicker}
+              placeholderText="Select Date"
+            />
+          </div>
         </div>
 
         <div className={style.filterContainer}>

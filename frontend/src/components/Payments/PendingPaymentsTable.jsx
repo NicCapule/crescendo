@@ -46,7 +46,7 @@ function PendingPaymentsTable() {
                 <tr key={key}>
                   <td>
                     {DateTime.fromISO(payment.due_date).toFormat(
-                      "MMM d, yyyy "
+                      "MMMM d, yyyy "
                     )}
                   </td>
                   <td>
@@ -66,11 +66,11 @@ function PendingPaymentsTable() {
                     {dropdownStates[payment.enrollment_id] && (
                       <div className={style.dropdownMenu}>
                         <button
-                        // onClick={() =>
-                        //   // navigate(
-                        //   //   `/students/${student.student_id}/${student.student_first_name}`
-                        //   // )
-                        // }
+                          onClick={() =>
+                            navigate("/payment/add", {
+                              state: { paymentDetails: payment },
+                            })
+                          }
                         >
                           Add Payment
                         </button>

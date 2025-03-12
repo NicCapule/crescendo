@@ -490,9 +490,9 @@ module.exports = {
       },
       {
         enrollment_id: 2,
-        student_name: `Russel Segador`,
-        amount_paid: 4000.0,
-        payment_method: "Cash",
+        student_name: `Angelica Babon`,
+        amount_paid: 8000.0,
+        payment_method: "GCash",
         student_payment_date: new Date(),
       },
     ]);

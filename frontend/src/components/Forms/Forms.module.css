@@ -131,6 +131,7 @@ select::-ms-expand {
   border: none;
   padding: 10px;
   font-family: Poppins;
+  cursor: pointer;
 }
 .formItem.teacherItem input,
 .formItem.noOfSessionsItem input {
@@ -345,4 +346,56 @@ label {
   font-weight: bold;
   margin: 8px;
   vertical-align: middle;
+}
+
+.paymentParentContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.paymentParentContainer hr {
+  margin: 0;
+  align-self: stretch;
+  width: 2px;
+  background-color: white;
+  border: none;
+}
+
+.programDetails {
+  text-align: left;
+}
+
+/* .paymentFormSection {
+  display: flex;
+  gap: 20px;
+  align-items: top;
+  justify-content: center;
+} */
+
+.paymentButtons {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+}
+
+.paymentFormSection select {
+  font-family: "Poppins";
+  align-self: flex-start;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  border: none;
+  padding: 10px;
+  padding-right: 30px;
+  cursor: pointer;
+  background-color: white;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black"><path d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 5px center;
+  background-size: 24px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
 }

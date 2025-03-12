@@ -4,7 +4,7 @@ import { fetchStudentTable } from "../../services/studentServices";
 import Select from "react-select";
 import { customStyles } from "../../utils/SelectCustomStyles";
 //===========================================================================================//
-function StudentSelection({ setFieldValue }) {
+function StudentSelection({ onChange, setFieldValue, isClearable = false }) {
   const [students, setStudents] = useState([]);
   const options = students.map((student) => ({
     value: student.student_id,
@@ -16,6 +16,16 @@ function StudentSelection({ setFieldValue }) {
       .then(setStudents)
       .catch(() => console.error("Failed to fetch students"));
   }, []);
+  //-------------------------------------------------------------------//
+  const handleChange = (selectedOption) => {
+    if (setFieldValue) {
+      setFieldValue("student_id", selectedOption ? selectedOption.value : "");
+    }
+    if (onChange) {
+      onChange(selectedOption);
+    }
+  };
+
   //===========================================================================================//
   return (
     <div>
@@ -24,9 +34,8 @@ function StudentSelection({ setFieldValue }) {
         placeholder="Select a student"
         options={options}
         styles={customStyles}
-        onChange={(selectedOption) =>
-          setFieldValue("student_id", selectedOption.value)
-        }
+        onChange={handleChange}
+        isClearable={isClearable}
       />
     </div>
   );

@@ -16,12 +16,14 @@ function AllUsers() {
   return (
     <>
       <div className="compContainer">
-        <button onClick={() => navigate("/users/create/teacher")}>
-          Add Teacher
-        </button>
-        <button onClick={() => navigate("/users/create/admin")}>
-          Add Administrator
-        </button>
+        <div className={style.userButtons}>
+          <button onClick={() => navigate("/users/create/teacher")}>
+            Add Teacher
+          </button>
+          <button onClick={() => navigate("/users/create/admin")}>
+            Add Administrator
+          </button>
+        </div>
 
         <div className="tableContainer">
           <table className="userTable">

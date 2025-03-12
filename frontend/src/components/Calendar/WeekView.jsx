@@ -2,7 +2,10 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { fetchSessions } from "../../services/sessionServices";
 import style from "./Calendar.module.css";
-import { BsChevronDoubleRight, BsChevronDoubleLeft } from "react-icons/bs";
+import {
+  MdOutlineArrowForwardIos,
+  MdOutlineArrowBackIos,
+} from "react-icons/md";
 import { PiStudent, PiChalkboardTeacher, PiMusicNotes } from "react-icons/pi";
 //---------------------------------------------------------------------------//
 import { DateTime } from "luxon";
@@ -96,24 +99,26 @@ function WeekView({ sessions, hideTeacherFilters, hideInstrumentFilters }) {
   //========================================================================================//
   return (
     <div className="compContainer">
-      <div className={style.calendarHeader}>
-        <div className={style.dateNav}>
-          <button
-            className={style.calendarArrow}
-            onClick={() => setSelectedDate(selectedDate.minus({ weeks: 1 }))}
-          >
-            <BsChevronDoubleLeft />
-          </button>
-          <span>
-            {startOfWeek.toFormat("MMMM d")} -{" "}
-            {startOfWeek.plus({ days: 6 }).toFormat("MMMM d, yyyy")}
-          </span>
-          <button
-            className={style.calendarArrow}
-            onClick={() => setSelectedDate(selectedDate.plus({ weeks: 1 }))}
-          >
-            <BsChevronDoubleRight />
-          </button>
+      <div className={`${style.calendarHeader} ${style.weekViewHeader}`}>
+        <div className={style.dateRow}>
+          <div className={style.dateNav}>
+            <button
+              className={style.calendarArrow}
+              onClick={() => setSelectedDate(selectedDate.minus({ weeks: 1 }))}
+            >
+              <MdOutlineArrowBackIos />
+            </button>
+            <span>
+              {startOfWeek.toFormat("MMMM d")} -{" "}
+              {startOfWeek.plus({ days: 6 }).toFormat("MMMM d, yyyy")}
+            </span>
+            <button
+              className={style.calendarArrow}
+              onClick={() => setSelectedDate(selectedDate.plus({ weeks: 1 }))}
+            >
+              <MdOutlineArrowForwardIos />
+            </button>
+          </div>
         </div>
 
         <div className={style.filterContainer}>

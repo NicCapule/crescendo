@@ -38,7 +38,7 @@ function TeacherInfo() {
     <>
       <div className="compContainer">
         <h1>
-          Name: {teacher.User.user_first_name} {teacher.User.user_last_name}
+          {teacher.User.user_first_name} {teacher.User.user_last_name}
         </h1>
         <p>Email: {teacher.User.email}</p>
         <p>Phone: {teacher.teacher_phone}</p>

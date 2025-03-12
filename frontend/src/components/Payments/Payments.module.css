@@ -27,3 +27,30 @@
   background-color: rgb(215, 215, 215);
   display: block;
 }
+
+/* PaymentHistory Component ================================================================================== */
+
+.paymentHistoryHeader {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.paymentHistoryHeader > :first-child {
+  flex: 1;
+  min-width: max-content;
+}
+
+.paymentHistoryHeader > :last-child {
+  flex: 0 1 60%;
+  min-width: 300px;
+}
+
+.paymentHistoryBody {
+  margin-block: 20px;
+}
+
+.paymentHistoryBody > .tableContainer {
+  max-width: max-content;
+}
