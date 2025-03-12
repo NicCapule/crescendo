@@ -102,8 +102,3 @@ module.exports = (sequelize, DataTypes) => {
 };
 
 //------------------------------------------------------------------------//
-
-Session.afterCreate(async (session, options) => {
-  await optimizeNewSession(session);
-});
-
