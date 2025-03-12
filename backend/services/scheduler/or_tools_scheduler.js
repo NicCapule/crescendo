@@ -20,11 +20,15 @@ const runORToolsScheduling = async (existingSessions, newSession) => {
 
         pythonProcess.on("close", () => {
             try {
-                const result = JSON.parse(resultData);
+                // Extract last valid JSON line (ignoring OR-Tools logs)
+                const jsonLines = resultData.trim().split("\n");
+                const lastJsonLine = jsonLines[jsonLines.length - 1];
+
+                const result = JSON.parse(lastJsonLine);
                 if (result.error) {
                     reject(new Error(result.error));
                 } else {
-                    resolve([newSession]); // Return the scheduled session
+                    resolve([newSession]);
                 }
             } catch (err) {
                 reject(new Error("Failed to parse Python response"));

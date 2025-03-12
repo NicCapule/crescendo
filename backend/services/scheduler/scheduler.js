@@ -9,6 +9,9 @@ const optimizeNewSession = async (newSession) => {
             where: { session_date, session_start, session_status: "Scheduled" },
         });
 
+        // 🚀 Debugging: Log fetched data
+        console.log("✅ Fetched Sessions from DB:", JSON.stringify(existingSessions, null, 2));
+
         if (existingSessions.length >= 4) {
             throw new Error("Cannot add session: Time slot is fully booked.");
         }
@@ -22,9 +25,9 @@ const optimizeNewSession = async (newSession) => {
             );
         }
 
-        console.log("New session successfully scheduled.");
+        console.log("🎉 New session successfully scheduled.");
     } catch (error) {
-        console.error("Error optimizing session:", error.message);
+        console.error("❌ Error optimizing session:", error.message);
     }
 };
 
