@@ -3,8 +3,11 @@ import { useEffect, useState } from "react";
 import { DateTime } from "luxon";
 import style from "./Dashboard.module.css";
 import { fetchPendingPayments } from "../../services/studentPaymentServices";
+import { useNavigate } from "react-router-dom";
+
 
 function PendingPayments() {
+  const navigate = useNavigate();
   const [pendingPayments, setPendingPayments] = useState([]);
   //---------------------------------------------------------------------------//
   useEffect(() => {
@@ -35,7 +38,15 @@ function PendingPayments() {
               </div>
 
               <div className={style.paymentItemButtons}>
-                <button>Add Payment</button>
+              <button
+                          onClick={() =>
+                            navigate("/payment/add", {
+                              state: { paymentDetails: payment },
+                            })
+                          }
+                        >
+                          Add Payment
+                        </button>
                 <button>Forfeit Program</button>
                 <button>Notify Student</button>
               </div>
