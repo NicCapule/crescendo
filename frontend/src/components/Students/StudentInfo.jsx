@@ -86,7 +86,7 @@ function StudentInfo() {
                           "MMMM d, yyyy"
                         )}
                       </td>
-                      <td>{enrollment.enrollment_status}</td>
+                      <td>{enrollment.Program.program_status}</td>
                     </tr>
                   ))
                 ) : (

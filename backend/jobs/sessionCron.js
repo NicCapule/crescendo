@@ -1,5 +1,6 @@
 const { Session, TeacherSalary, Program, User, Teacher } = require("../models");
-const { Op, sequelize } = require("sequelize");
+const { Op } = require("sequelize");
+const { sequelize } = require("../models");
 
 const perSessionRate = 400;
 
@@ -34,29 +35,37 @@ const updateExpiredSessions = async () => {
       where: {
         session_status: "Completed",
         [Op.or]: [
-          { session_date: formattedDate }, // Sessions just marked as completed today
+          { session_date: formattedDate },
           {
-            session_date: { [Op.lt]: formattedDate }, // Past completed sessions
-            id: {
+            session_date: { [Op.lt]: formattedDate },
+            "$Program.teacher_id$": {
               [Op.notIn]: sequelize.literal(
-                "(SELECT session_id FROM TeacherSalary)"
+                `(SELECT teacher_id FROM TeacherSalary WHERE TeacherSalary.salary_date = Session.session_date)`
               ),
-            }, // Exclude sessions already processed in TeacherSalary
+            },
           },
         ],
       },
       include: [{ model: Program, attributes: ["teacher_id"] }],
     });
-    //-----------------------------------------------------------------------//
     const teacherSessions = {};
-
+    //-----------------------------------------------------------------------//
     for (const session of updatedSessions) {
-      const teacherId = session.Program.teacher_id;
-      teacherSessions[teacherId] = (teacherSessions[teacherId] || 0) + 1;
+      const teacherId = session.Program?.teacher_id ?? null;
+      const sessionDate = session.session_date;
+
+      if (!teacherSessions[teacherId]) {
+        teacherSessions[teacherId] = {};
+      }
+
+      teacherSessions[teacherId][sessionDate] =
+        (teacherSessions[teacherId][sessionDate] || 0) + 1;
     }
 
-    for (const [teacherId, sessionCount] of Object.entries(teacherSessions)) {
-      await updateTeacherSalary(teacherId, formattedDate, sessionCount);
+    for (const [teacherId, sessions] of Object.entries(teacherSessions)) {
+      for (const [sessionDate, sessionCount] of Object.entries(sessions)) {
+        await updateTeacherSalary(teacherId, sessionDate, sessionCount);
+      }
     }
     //-----------------------------------------------------------------------//
     console.log(

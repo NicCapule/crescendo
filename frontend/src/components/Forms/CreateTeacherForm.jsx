@@ -183,8 +183,8 @@ function CreateTeacherForm() {
                   ))}
                 </div>
               </div>
+              <hr />
             </div>
-            <hr />
 
             {/*----------------------------------------------------------------------------*/}
             <div className={style.formSection}>

@@ -3,11 +3,20 @@ import API_BASE_URL from "../apiConfig";
 
 export const fetchSessions = async () => {
   try {
-    const response = await axios.get(API_BASE_URL + "sessions");
-    // console.log("Data fetched:", JSON.stringify(response.data, null, 2));
+    const response = await axios.get(API_BASE_URL + "sessions/all");
     return response.data;
   } catch (error) {
     console.error("Error fetching sessions:", error);
+    throw error;
+  }
+};
+//----------------------------------------------------------------------------------//
+export const fetchUpcomingSessions = async () => {
+  try {
+    const response = await axios.get(API_BASE_URL + "sessions/upcoming");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching upcoming sessions:", error);
     throw error;
   }
 };

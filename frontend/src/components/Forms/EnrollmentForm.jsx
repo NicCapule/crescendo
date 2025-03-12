@@ -125,14 +125,15 @@ function EnrollmentForm() {
                   <div
                     className={`${style.formSection} ${style.studentSelection}`}
                   >
-                    <h3>Select Student</h3>
+                    <div>
+                      <h3>Select Student</h3>
+                      <ErrorMessage
+                        name="student_id"
+                        component="span"
+                        className={style.errorMessage}
+                      />
+                    </div>
                     <StudentSelection setFieldValue={setFieldValue} />
-
-                    <ErrorMessage
-                      name="student_id"
-                      component="span"
-                      className={style.errorMessage}
-                    />
                   </div>
                 </>
               )}
@@ -398,7 +399,6 @@ function EnrollmentForm() {
                   </p>
                 )}
               </div>
-              {/* <hr /> */}
               <div className={style.paymentRow}>
                 <div className={`${style.formItem} ${style.paymentMethodItem}`}>
                   <div className={style.itemHeader}>

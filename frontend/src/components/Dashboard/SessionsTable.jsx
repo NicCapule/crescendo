@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { fetchSessions } from "../../services/sessionServices";
+import { fetchUpcomingSessions } from "../../services/sessionServices";
 import { getInstrumentColor } from "../../utils/InstrumentColors";
 import {
   mergeConsecutiveSessions,
@@ -8,38 +8,72 @@ import {
 } from "../../utils/CalendarLayout";
 import { DateTime } from "luxon";
 import { PiDotsThreeOutlineVerticalFill } from "react-icons/pi";
-import { BsChevronDoubleRight, BsChevronDoubleLeft } from "react-icons/bs";
+import {
+  MdOutlineArrowForwardIos,
+  MdOutlineArrowBackIos,
+} from "react-icons/md";
 
 import style from "./Dashboard.module.css";
 
 function SessionsTable() {
   const [listOfSessions, setListOfSessions] = useState([]);
-  const [groupedSessions, setGroupedSessions] = useState([]);
+  // const [mergedSessions, setMergedSessions] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(DateTime.now().toISODate());
 
   useEffect(() => {
-    fetchSessions()
+    fetchUpcomingSessions()
       .then((sessions) => {
         setListOfSessions(sessions);
       })
       .catch(() => console.error("Failed to fetch sessions"));
   }, []);
+  //---------------------------------------------------------------------------//
+  const filteredSessions = listOfSessions.filter(
+    (session) =>
+      DateTime.fromISO(session.session_date).toISODate() === selectedDate
+  );
 
   //---------------------------------------------------------------------------//
-  useEffect(() => {
-    if (!listOfSessions.length) return;
+  const mergedSessions = mergeConsecutiveSessions(filteredSessions);
 
-    const merged = mergeConsecutiveSessions(listOfSessions);
-    const grouped = groupSessionsByDate(merged);
-
-    setGroupedSessions(grouped);
-    // console.log("Merged Sessions:", merged);
-  }, [listOfSessions]);
-
-  // console.log("Grouped Sessions:", groupedSessions);
-
+  // console.log("Merged Sessions:", mergedSessions);
+  //=============================================================================================//
   return (
     <>
       <div className="tableContainer">
+        <div className={style.dateNav}>
+          <button
+            className={
+              selectedDate === DateTime.now().toISODate()
+                ? style.disabled
+                : style.calendarArrow
+            }
+            onClick={() =>
+              setSelectedDate(
+                DateTime.fromISO(selectedDate).minus({ days: 1 }).toISODate()
+              )
+            }
+            disabled={selectedDate === DateTime.now().toISODate()}
+          >
+            <MdOutlineArrowBackIos />
+          </button>
+          <div className={style.dateContainer}>
+            <span>
+              {DateTime.fromISO(selectedDate).toFormat("EEEE, MMMM d, yyyy")}
+            </span>
+          </div>
+
+          <button
+            className={style.calendarArrow}
+            onClick={() =>
+              setSelectedDate(
+                DateTime.fromISO(selectedDate).plus({ days: 1 }).toISODate()
+              )
+            }
+          >
+            <MdOutlineArrowForwardIos />
+          </button>
+        </div>
         <table>
           <thead>
             <tr>
@@ -52,61 +86,47 @@ function SessionsTable() {
             </tr>
           </thead>
           <tbody>
-            {groupedSessions.map(({ date, sessions }) => (
-              <React.Fragment key={date}>
-                {/* Row for session date */}
-                <tr className={style.dateRow}>
-                  <td colSpan="6">
-                    <div className={style.dateContainer}>
-                      {DateTime.fromISO(date).toFormat("MMMM d, yyyy")}
-                    </div>
-                  </td>
-                </tr>
-
-                {/* Rows for each session */}
-                {sessions.map((session) => (
-                  <tr key={session.session_id}>
-                    <td>
-                      <div
-                        className={`instContainer ${getInstrumentColor(
-                          session.Program.Instrument.instrument_name
-                        )}`}
-                      >
-                        {session.Program.Instrument.instrument_name}
-                      </div>
-                    </td>
-                    <td>
-                      {session.session_numbers.length === 1
-                        ? `${session.session_numbers[0]} of ${session.Program.no_of_sessions}`
-                        : `${session.session_numbers[0]} - ${
-                            session.session_numbers[
-                              session.session_numbers.length - 1
-                            ]
-                          } of ${session.Program.no_of_sessions}`}
-                    </td>
-                    <td>{`${session.Student.student_first_name} ${session.Student.student_last_name}`}</td>
-                    <td>
-                      {`${session.Program.Teacher.User.user_first_name} ${session.Program.Teacher.User.user_last_name}`}
-                    </td>
-                    <td>
-                      {DateTime.fromFormat(
-                        session.session_start,
-                        "HH:mm:ss"
-                      ).toFormat("h:mma")}{" "}
-                      -{" "}
-                      {DateTime.fromFormat(
-                        session.session_end,
-                        "HH:mm:ss"
-                      ).toFormat("h:mma")}
-                    </td>
-                    <td>
-                      <button>
-                        <PiDotsThreeOutlineVerticalFill />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </React.Fragment>
+            {mergedSessions.map((session, index) => (
+              <tr key={index}>
+                <td>
+                  <div
+                    className={`instContainer ${getInstrumentColor(
+                      session.Program.Instrument.instrument_name
+                    )}`}
+                  >
+                    {session.Program.Instrument.instrument_name}
+                  </div>
+                </td>
+                <td>
+                  {session.session_numbers.length === 1
+                    ? `${session.session_numbers[0]} of ${session.Program.no_of_sessions}`
+                    : `${session.session_numbers[0]} - ${
+                        session.session_numbers[
+                          session.session_numbers.length - 1
+                        ]
+                      } of ${session.Program.no_of_sessions}`}
+                </td>
+                <td>{`${session.Student.student_first_name} ${session.Student.student_last_name}`}</td>
+                <td>
+                  {`${session.Program.Teacher.User.user_first_name} ${session.Program.Teacher.User.user_last_name}`}
+                </td>
+                <td>
+                  {DateTime.fromFormat(
+                    session.session_start,
+                    "HH:mm:ss"
+                  ).toFormat("h:mma")}{" "}
+                  -{" "}
+                  {DateTime.fromFormat(
+                    session.session_end,
+                    "HH:mm:ss"
+                  ).toFormat("h:mma")}
+                </td>
+                <td>
+                  <button>
+                    <PiDotsThreeOutlineVerticalFill />
+                  </button>
+                </td>
+              </tr>
             ))}
           </tbody>
         </table>

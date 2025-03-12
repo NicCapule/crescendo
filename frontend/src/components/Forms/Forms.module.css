@@ -6,18 +6,30 @@
 
 .teacherFormContainer {
   display: flex;
-  gap: 24px;
   flex-wrap: wrap;
   padding: 20px;
   box-sizing: border-box;
+  justify-content: center;
 }
-.teacherFormContainer hr {
+/* .teacherFormContainer hr {
   margin: 0;
-}
-.teacherFormContainer > :first-child {
-  flex: 0 0 30%;
+  align-self: stretch;
+  width: 2px;
+  background-color: white;
+  border: none;
+} */
+
+/* .teacherFormContainer > .formSection:first-child {
+  flex: 1 0 100%;
+  max-width: 50%;
   min-width: 300px;
 }
+
+.teacherFormContainer > .formSection:nth-child(2) {
+  flex: 1 0 100%;
+  max-width: min-content;
+  min-width: 300px;
+} */
 
 .formItem {
   display: flex;
@@ -205,6 +217,12 @@ label {
   min-width: fit-content;
 }
 
+.formSection.studentSelection > div:first-child {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .formSection > .newStudentForm {
   display: flex;
   max-width: 100%;
@@ -297,6 +315,10 @@ label {
 }
 
 /* Session Schedules Form =================================================================================================== */
+.sessionSchedulesTableContainer > table > thead {
+  background-color: transparent;
+  position: relative;
+}
 
 .sessionSchedulesTableContainer tr > th {
   color: white;

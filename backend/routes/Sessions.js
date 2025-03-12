@@ -3,12 +3,7 @@ const router = express.Router();
 
 const sessionController = require("../controllers/sessionController");
 
-router.get("/", sessionController.getAllSessions);
-
-// router.post("/", async (req, res) => {
-//   const session = req.body;
-//   await Session.create(session);
-//   res.json(session);
-// });
+router.get("/all", sessionController.getAllSessions);
+router.get("/upcoming", sessionController.getUpcomingSessions);
 
 module.exports = router;

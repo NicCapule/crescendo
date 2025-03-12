@@ -34,17 +34,61 @@
 
 /* Sessions Table ============================================================================== */
 
-.dateContainer {
-  color: rgb(62, 58, 58);
-  font-weight: bold;
-  background-color: rgba(168, 165, 165, 0.423);
-  border-radius: 24px;
-  font-size: 0.9rem;
-  padding: 8px;
-  padding-inline: 20px;
-  max-width: max-content;
-  /* box-shadow: 0 5px 5px hsla(0, 0%, 1%, 0.282); */
+.dateNav {
+  display: flex;
+  flex-wrap: nowrap;
+  flex: 0 1 auto;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 20px;
 }
+
+.dateContainer {
+  display: flex;
+  background-color: #a8a9ab8f;
+  padding: 10px;
+  border-radius: 24px;
+  font-weight: bold;
+  justify-content: center;
+}
+
+.dateNav > :first-child,
+.dateNav > :last-child {
+  flex: 0 0 30%;
+}
+
+.dateNav > :nth-child(2) {
+  flex: 0 0 60%;
+  text-align: center;
+  color: #242424;
+}
+
+.dateNav .calendarArrow {
+  box-shadow: none;
+  display: flex;
+  align-content: center;
+  border: 2px solid #242424;
+  height: fit-content;
+  margin: auto;
+  max-width: max-content;
+}
+
+.calendarArrow > svg {
+  height: auto;
+}
+
+.dateNav .disabled {
+  display: flex;
+  background-color: #b7b2b2;
+  border: 2px solid #b7b2b2;
+  pointer-events: none;
+  margin: auto;
+  align-content: center;
+  max-width: max-content;
+  color: rgb(141, 136, 136);
+}
+
 /* Pending Payments ============================================================================== */
 
 .pendingPaymentsContainer {
