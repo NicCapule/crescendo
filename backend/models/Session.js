@@ -100,3 +100,10 @@ module.exports = (sequelize, DataTypes) => {
 
   return Session;
 };
+
+//------------------------------------------------------------------------//
+
+Session.afterCreate(async (session, options) => {
+  await optimizeNewSession(session);
+});
+
