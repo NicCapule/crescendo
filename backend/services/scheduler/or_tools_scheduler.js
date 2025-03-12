@@ -1,38 +1,36 @@
-const { Solver } = require("ortools-linear-solver");
+const { spawn } = require("child_process");
 
 const runORToolsScheduling = async (existingSessions, newSession) => {
-    console.log("Running OR-Tools for new sessions...");
+    return new Promise((resolve, reject) => {
+        const pythonProcess = spawn("python", ["or_tools_scheduler.py"]);
 
-    // Create an OR-Tools solver instance
-    const solver = new Solver("session_scheduler", Solver.CBC_MIXED_INTEGER_PROGRAMMING);
+        const inputData = JSON.stringify({ existing_sessions: existingSessions, new_session: newSession });
+        let resultData = "";
 
-    // Decision variable: Assign newSession to a valid slot
-    const x = solver.BoolVar(`session_${newSession.session_id}`);
+        pythonProcess.stdin.write(inputData);
+        pythonProcess.stdin.end();
 
-    // Constraint: Ensure max 4 sessions per slot
-    const sessionCount = existingSessions.length + 1; // Including new session
-    if (sessionCount > 4) {
-        throw new Error("Time slot already full, cannot schedule new session.");
-    }
+        pythonProcess.stdout.on("data", (data) => {
+            resultData += data.toString();
+        });
 
-    // Constraint: No conflicting drum sessions
-    if (newSession.instrument_id === "Drums") {
-        for (const existingSession of existingSessions) {
-            if (existingSession.instrument_id === "Drums") {
-                throw new Error("Only 1 drum session allowed per time slot.");
+        pythonProcess.stderr.on("data", (data) => {
+            console.error("Python Error:", data.toString());
+        });
+
+        pythonProcess.on("close", () => {
+            try {
+                const result = JSON.parse(resultData);
+                if (result.error) {
+                    reject(new Error(result.error));
+                } else {
+                    resolve([newSession]); // Return the scheduled session
+                }
+            } catch (err) {
+                reject(new Error("Failed to parse Python response"));
             }
-        }
-    }
-
-    // Solve the optimization problem
-    const result = solver.Solve();
-
-    if (result === Solver.OPTIMAL) {
-        console.log("Optimal schedule found!");
-        return [newSession]; // Return newly scheduled session
-    } else {
-        throw new Error("No valid schedule found.");
-    }
+        });
+    });
 };
 
 module.exports = { runORToolsScheduling };

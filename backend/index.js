@@ -95,3 +95,18 @@ cron.schedule("0 7 * * *", () => {
   console.log("Running payment reminder job...");
   checkAndSendReminders();
 });
+
+
+
+const { optimizeNewSession } = require("./services/scheduler/scheduler");
+
+const testSession = {
+    session_id: 5,
+    session_date: "2025-03-14",
+    session_start: "10:00 AM",
+    instrument_id: "Piano",
+};
+
+optimizeNewSession(testSession)
+    .then(() => console.log("Test completed"))
+    .catch((err) => console.error("Error:", err));
