@@ -154,28 +154,28 @@ module.exports = {
       },
     ]);
 
-    // await queryInterface.bulkInsert("Room", [
-    //   {
-    //     room_name: "Piano Room 1",
-    //     has_piano: true,
-    //     has_drums: false,
-    //   },
-    //   {
-    //     room_name: "Piano Room 2",
-    //     has_piano: true,
-    //     has_drums: false,
-    //   },
-    //   {
-    //     room_name: "Piano Room 3",
-    //     has_piano: true,
-    //     has_drums: false,
-    //   },
-    //   {
-    //     room_name: "Drums Room",
-    //     has_piano: true,
-    //     has_drums: true,
-    //   },
-    // ]);
+    await queryInterface.bulkInsert("Room", [
+      {
+        room_name: "Piano Room 1",
+        has_piano: true,
+        has_drums: false,
+      },
+      {
+        room_name: "Piano Room 2",
+        has_piano: true,
+        has_drums: false,
+      },
+      {
+        room_name: "Piano Room 3",
+        has_piano: true,
+        has_drums: false,
+      },
+      {
+        room_name: "Drum Room",
+        has_piano: true,
+        has_drums: true,
+      },
+    ]);
 
     await queryInterface.bulkInsert("Program", [
       {
@@ -221,6 +221,7 @@ module.exports = {
       {
         student_id: 1,
         program_id: 1,
+        room_id: 1,
         session_number: 1,
         session_date: "2025-03-10",
         session_start: "08:00:00",
@@ -230,6 +231,7 @@ module.exports = {
       {
         student_id: 1,
         program_id: 1,
+        room_id: 1,
         session_number: 2,
         session_date: "2025-03-11",
         session_start: "08:00:00",
@@ -239,6 +241,7 @@ module.exports = {
       {
         student_id: 1,
         program_id: 1,
+        room_id: 1,
         session_number: 3,
         session_date: "2025-03-12",
         session_start: "08:00:00",
@@ -248,6 +251,7 @@ module.exports = {
       {
         student_id: 1,
         program_id: 1,
+        room_id: 1,
         session_number: 4,
         session_date: "2025-03-13",
         session_start: "08:00:00",
@@ -257,6 +261,7 @@ module.exports = {
       {
         student_id: 1,
         program_id: 1,
+        room_id: 1,
         session_number: 5,
         session_date: "2025-03-14",
         session_start: "08:00:00",
@@ -266,6 +271,7 @@ module.exports = {
       {
         student_id: 1,
         program_id: 1,
+        room_id: 1,
         session_number: 6,
         session_date: "2025-03-15",
         session_start: "08:00:00",
@@ -275,6 +281,7 @@ module.exports = {
       {
         student_id: 1,
         program_id: 1,
+        room_id: 1,
         session_number: 7,
         session_date: "2025-03-16",
         session_start: "08:00:00",
@@ -284,6 +291,7 @@ module.exports = {
       {
         student_id: 1,
         program_id: 1,
+        room_id: 1,
         session_number: 8,
         session_date: "2025-03-17",
         session_start: "08:00:00",
@@ -294,6 +302,7 @@ module.exports = {
       {
         student_id: 2,
         program_id: 2,
+        room_id: 4,
         session_number: 1,
         session_date: "2025-03-10",
         session_start: "11:00:00",
@@ -304,6 +313,7 @@ module.exports = {
       {
         student_id: 2,
         program_id: 2,
+        room_id: 4,
         session_number: 2,
         session_date: "2025-03-10",
         session_start: "12:00:00",
@@ -313,6 +323,7 @@ module.exports = {
       {
         student_id: 2,
         program_id: 2,
+        room_id: 4,
         session_number: 3,
         session_date: "2025-03-11",
         session_start: "11:00:00",
@@ -322,6 +333,7 @@ module.exports = {
       {
         student_id: 2,
         program_id: 2,
+        room_id: 4,
         session_number: 4,
         session_date: "2025-03-11",
         session_start: "12:00:00",
@@ -331,6 +343,7 @@ module.exports = {
       {
         student_id: 2,
         program_id: 2,
+        room_id: 4,
         session_number: 5,
         session_date: "2025-03-12",
         session_start: "11:00:00",
@@ -340,6 +353,7 @@ module.exports = {
       {
         student_id: 2,
         program_id: 2,
+        room_id: 4,
         session_number: 6,
         session_date: "2025-03-12",
         session_start: "12:00:00",
@@ -349,6 +363,7 @@ module.exports = {
       {
         student_id: 2,
         program_id: 2,
+        room_id: 4,
         session_number: 7,
         session_date: "2025-03-13",
         session_start: "11:00:00",
@@ -358,6 +373,7 @@ module.exports = {
       {
         student_id: 2,
         program_id: 2,
+        room_id: 4,
         session_number: 8,
         session_date: "2025-03-13",
         session_start: "12:00:00",
@@ -367,6 +383,7 @@ module.exports = {
       {
         student_id: 2,
         program_id: 2,
+        room_id: 4,
         session_number: 9,
         session_date: "2025-03-14",
         session_start: "11:00:00",
@@ -376,6 +393,7 @@ module.exports = {
       {
         student_id: 2,
         program_id: 2,
+        room_id: 4,
         session_number: 10,
         session_date: "2025-03-14",
         session_start: "12:00:00",
@@ -385,6 +403,7 @@ module.exports = {
       {
         student_id: 2,
         program_id: 2,
+        room_id: 4,
         session_number: 11,
         session_date: "2025-03-15",
         session_start: "11:00:00",
@@ -394,6 +413,7 @@ module.exports = {
       {
         student_id: 2,
         program_id: 2,
+        room_id: 4,
         session_number: 12,
         session_date: "2025-03-15",
         session_start: "12:00:00",
@@ -403,6 +423,7 @@ module.exports = {
       {
         student_id: 2,
         program_id: 2,
+        room_id: 4,
         session_number: 13,
         session_date: "2025-03-16",
         session_start: "11:00:00",
@@ -412,6 +433,7 @@ module.exports = {
       {
         student_id: 2,
         program_id: 2,
+        room_id: 4,
         session_number: 14,
         session_date: "2025-03-16",
         session_start: "12:00:00",
@@ -421,6 +443,7 @@ module.exports = {
       {
         student_id: 2,
         program_id: 2,
+        room_id: 4,
         session_number: 15,
         session_date: "2025-03-17",
         session_start: "11:00:00",
@@ -430,6 +453,7 @@ module.exports = {
       {
         student_id: 2,
         program_id: 2,
+        room_id: 4,
         session_number: 16,
         session_date: "2025-03-17",
         session_start: "12:00:00",

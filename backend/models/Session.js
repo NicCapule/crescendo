@@ -15,6 +15,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
+      room_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
       session_number: { type: DataTypes.INTEGER, allowNull: false },
       session_date: { type: DataTypes.DATEONLY, allowNull: false },
       session_start: { type: DataTypes.TIME, allowNull: false },
@@ -25,9 +29,17 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: "Scheduled",
       },
     },
+
     {
       tableName: "Session",
       timestamps: false,
+      indexes: [
+        {
+          unique: true,
+          fields: ["room_id", "session_date", "session_start", "session_end"],
+          name: "unique_room_schedule",
+        },
+      ],
       hooks: {
         beforeCreate: async (session, options) => {
           await validateSession(session);
@@ -96,6 +108,7 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "program_id",
       onDelete: "CASCADE",
     });
+    Session.belongsTo(models.Room, { foreignKey: "room_id" });
   };
 
   return Session;
