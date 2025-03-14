@@ -11,19 +11,24 @@ import TeacherSelection from "../Teachers/TeacherSelection";
 import ScheduleAvailability from "./ScheduleAvailability";
 import SessionSchedules from "./SessionSchedules";
 import Select from "react-select";
+import EnrollConfirm from "../Confirm/EnrollConfirm";
+import "react-confirm-alert/src/react-confirm-alert.css";
+import { Bounce, Slide, Zoom, toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { customStyles } from "../../utils/SelectCustomStyles";
 import { enrollValidationSchema } from "../validations/enrollValidationSchema";
 import {
   enrollNewStudent,
   enrollExistingStudent,
 } from "../../services/enrollServices";
-
+import { fetchSchedulesForEnrollment } from "../../services/sessionServices";
 function EnrollmentForm() {
   //-----------------------------------------------//
   const [instruments, setInstruments] = useState([]);
   const [selectedStudentID, setSelectedStudentID] = useState(null);
   const [selectedTeacherID, setSelectedTeacherID] = useState(null);
   const [activeTab, setActiveTab] = useState("select");
+  const [scheduleData, setScheduleData] = useState(null);
   //-----------------------------------------------//
   const initialValues = {
     isNewStudent: false,
@@ -47,36 +52,74 @@ function EnrollmentForm() {
     amount_paid: null,
   };
 
-  //-----------------------------------------------//
-  const onSubmit = async (data) => {
+  const enrollStudent = async (data, resetForm) => {
     let requestData = { ...data };
-    if (data.isNewStudent) {
-      // Enrolling a new student
-      delete requestData.student_id;
-      // console.log("New Student Data: ", requestData);
-      await enrollNewStudent(requestData);
-    } else {
-      // Selecting an existing student
-      delete requestData.student_first_name;
-      delete requestData.student_last_name;
-      delete requestData.student_address;
-      delete requestData.student_age;
-      delete requestData.student_email;
-      delete requestData.student_phone;
-      delete requestData.availability;
-      // console.log("Select Data: ", requestData);
-      await enrollExistingStudent(requestData);
+
+    try {
+      if (data.isNewStudent) {
+        console.log("New Student Data: ", requestData);
+        await enrollNewStudent(requestData);
+      } else {
+        const {
+          student_first_name,
+          student_last_name,
+          student_address,
+          student_age,
+          student_email,
+          student_phone,
+          availability,
+          ...filteredData
+        } = requestData;
+
+        console.log("Select Data: ", filteredData);
+        await enrollExistingStudent(filteredData);
+      }
+
+      toast.success("Enrollment successful!", {
+        autoClose: 2000,
+        position: "top-center",
+      });
+
+      resetForm();
+    } catch (error) {
+      toast.error(
+        "Failed to enroll student! " + (error.response?.data?.message || ""),
+        {
+          autoClose: 2000,
+          position: "top-center",
+        }
+      );
     }
+  };
+
+  //-----------------------------------------------//
+  const onSubmit = async (data, { resetForm }) => {
+    EnrollConfirm({
+      title: "Confirm Enrollment",
+      message: "Are you sure you want to enroll",
+      onConfirm: () => enrollStudent(data, resetForm),
+      enrollmentDetails: data,
+    });
   };
   //-----------------------------------------------//
   useEffect(() => {
     fetchInstruments()
       .then(setInstruments)
-      .catch(() => console.error("Failed to fetch instruments"));
+      .catch((error) => console.error("Failed to fetch instruments", error));
   }, []);
+
+  useEffect(() => {
+    if (!selectedTeacherID) return;
+
+    fetchSchedulesForEnrollment(selectedTeacherID)
+      .then((scheduleData) => setScheduleData(scheduleData))
+      .catch((error) => console.error("Failed to fetch schedules:", error));
+  }, [selectedTeacherID]);
+
   //====================================================================================//
   return (
     <div className={style.formParentContainer}>
+      <ToastContainer transition={Bounce} />
       <Formik
         initialValues={initialValues}
         onSubmit={onSubmit}
@@ -133,7 +176,11 @@ function EnrollmentForm() {
                         className={style.errorMessage}
                       />
                     </div>
-                    <StudentSelection setFieldValue={setFieldValue} />
+                    <StudentSelection
+                      setFieldValue={setFieldValue}
+                      isClearable={true}
+                      value={values.student_id}
+                    />
                   </div>
                 </>
               )}
@@ -301,6 +348,7 @@ function EnrollmentForm() {
                             ? null
                             : i.instrument_id;
                         setFieldValue("instrument", selectedInstrument);
+                        setFieldValue("instrument_name", i.instrument_name);
                         setFieldValue("teacher_id", null);
                       }}
                     >
@@ -310,36 +358,39 @@ function EnrollmentForm() {
                 </div>
               </div>
               {/*----------------------------------------------------------------------------*/}
-              <div className={`${style.formItem} ${style.noOfSessionsItem}`}>
-                <div className={style.itemHeader}>
-                  <label>Number of Sessions</label>
-                  <ErrorMessage
-                    name="noOfSessions"
-                    component="span"
-                    className={style.errorMessage}
+              {values.teacher_id && (
+                <div className={`${style.formItem} ${style.noOfSessionsItem}`}>
+                  <div className={style.itemHeader}>
+                    <label>Number of Sessions</label>
+                    <ErrorMessage
+                      name="noOfSessions"
+                      component="span"
+                      className={style.errorMessage}
+                    />
+                  </div>
+                  <Select
+                    isSearchable={false}
+                    styles={customStyles}
+                    placeholder="8 or 16"
+                    options={[
+                      { value: 8, label: "8" },
+                      { value: 16, label: "16" },
+                    ]}
+                    value={
+                      values.noOfSessions
+                        ? {
+                            value: values.noOfSessions,
+                            label: values.noOfSessions.toString(),
+                          }
+                        : null
+                    }
+                    onChange={(selectedOption) =>
+                      setFieldValue("noOfSessions", selectedOption.value)
+                    }
                   />
                 </div>
-                <Select
-                  isSearchable={false}
-                  styles={customStyles}
-                  placeholder="8 or 16"
-                  options={[
-                    { value: 8, label: "8" },
-                    { value: 16, label: "16" },
-                  ]}
-                  value={
-                    values.noOfSessions
-                      ? {
-                          value: values.noOfSessions,
-                          label: values.noOfSessions.toString(),
-                        }
-                      : null
-                  }
-                  onChange={(selectedOption) =>
-                    setFieldValue("noOfSessions", selectedOption.value)
-                  }
-                />
-              </div>
+              )}
+
               {values.instrument && (
                 <div className={`${style.formItem} ${style.teacherItem}`}>
                   <div className={style.itemHeader}>
@@ -351,6 +402,7 @@ function EnrollmentForm() {
                     />
                   </div>
                   <TeacherSelection
+                    setSelectedTeacherID={setSelectedTeacherID}
                     setFieldValue={setFieldValue}
                     selectedInstrument={values.instrument}
                     values={values}
@@ -380,6 +432,10 @@ function EnrollmentForm() {
                     setFieldValue={setFieldValue}
                     errors={errors}
                     touched={touched}
+                    teacherAvailability={scheduleData.teacherAvailability}
+                    teacherSessions={scheduleData.teacherSessions}
+                    allSessions={scheduleData.allSessions}
+                    occupiedDrumSlots={scheduleData.occupiedDrumSlots}
                   />
                 </div>
               </div>

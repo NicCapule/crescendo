@@ -33,10 +33,9 @@ function ScheduleAvailability({ values, setFieldValue, errors, touched }) {
             <th />
           </tr>
         </thead>
-
-        {values.availability.map((_, index) => {
-          return (
-            <tbody>
+        <tbody>
+          {values.availability.map((_, index) => {
+            return (
               <tr key={index}>
                 <td>
                   <div className={style.selectContainer}>
@@ -130,9 +129,9 @@ function ScheduleAvailability({ values, setFieldValue, errors, touched }) {
                   </button>
                 </td>
               </tr>
-            </tbody>
-          );
-        })}
+            );
+          })}
+        </tbody>
       </table>
       <div className={style.buttonRow}>
         <button

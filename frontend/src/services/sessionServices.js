@@ -20,3 +20,15 @@ export const fetchUpcomingSessions = async () => {
     throw error;
   }
 };
+//----------------------------------------------------------------------------------//
+export const fetchSchedulesForEnrollment = async (selectedTeacherID) => {
+  try {
+    const response = await axios.get(API_BASE_URL + "sessions/schedules", {
+      params: { teacherId: selectedTeacherID },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching upcoming sessions:", error);
+    throw error;
+  }
+};
