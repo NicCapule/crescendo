@@ -181,6 +181,7 @@ exports.enrollExistingStudent = async (req, res) => {
     if (amount_paid > 0) {
       const newPayment = await StudentPayment.create({
         enrollment_id: newEnrollment.enrollment_id,
+        student_name: `${student.student_first_name} ${student.student_last_name}`,
         amount_paid,
         payment_method,
       });
