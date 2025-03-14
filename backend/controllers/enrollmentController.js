@@ -95,6 +95,8 @@ exports.enrollNewStudent = async (req, res) => {
         amount_paid,
         payment_method,
       });
+
+      await updateEnrollmentPaymentStatus(newEnrollment.enrollment_id);
     }
     //--------------------------------------------------//
     if (sessionSchedules && sessionSchedules.length > 0) {
@@ -181,10 +183,14 @@ exports.enrollExistingStudent = async (req, res) => {
     if (amount_paid > 0) {
       const newPayment = await StudentPayment.create({
         enrollment_id: newEnrollment.enrollment_id,
+        student_name: `${student.student_first_name} ${student.student_last_name}`,
         amount_paid,
         payment_method,
       });
+
+      await updateEnrollmentPaymentStatus(newEnrollment.enrollment_id);
     }
+
     //--------------------------------------------------//
     if (sessionSchedules && sessionSchedules.length > 0) {
       const sessionRecords = sessionSchedules.map(
@@ -210,4 +216,19 @@ exports.enrollExistingStudent = async (req, res) => {
     console.error("Error enrolling existing student:", error);
     return res.status(500).json({ error: "Failed to enroll existing student" });
   }
+};
+
+// HELPERS ========================================================================================================================//
+const updateEnrollmentPaymentStatus = async (enrollment_id) => {
+  const enrollment = await Enrollment.findByPk(enrollment_id);
+  if (!enrollment) return;
+
+  const totalPayments = await StudentPayment.sum("amount_paid", {
+    where: { enrollment_id },
+  });
+
+  const paymentStatus =
+    totalPayments >= enrollment.total_fee ? "Settled" : "Unsettled";
+
+  await enrollment.update({ payment_status: paymentStatus });
 };

@@ -4,7 +4,12 @@ import { fetchTeacherTable } from "../../services/teacherServices";
 import Select from "react-select";
 import { customStyles } from "../../utils/SelectCustomStyles";
 //=========================================================================================//
-function TeacherSelection({ setFieldValue, selectedInstrument, values }) {
+function TeacherSelection({
+  setFieldValue,
+  selectedInstrument,
+  values,
+  setSelectedTeacherID,
+}) {
   const [teachers, setTeachers] = useState([]);
   const options = teachers.map((teacher) => ({
     value: teacher.teacher_id,
@@ -33,9 +38,16 @@ function TeacherSelection({ setFieldValue, selectedInstrument, values }) {
         value={
           options.find((option) => option.value === values.teacher_id) || null
         }
-        onChange={(selectedOption) =>
-          setFieldValue("teacher_id", selectedOption.value)
-        }
+        onChange={(selectedOption) => {
+          setFieldValue("teacher_id", selectedOption.value);
+          setFieldValue(
+            "teacher_full_name",
+            selectedOption ? selectedOption.label : ""
+          );
+          if (setSelectedTeacherID) {
+            setSelectedTeacherID(selectedOption.value);
+          }
+        }}
       />
     </div>
   );
