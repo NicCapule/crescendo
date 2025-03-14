@@ -347,12 +347,17 @@ label {
   margin: 8px;
   vertical-align: middle;
 }
-
+/* Payment Form =================================================================================================== */
 .paymentParentContainer {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
+  gap: 50px;
+  justify-self: center;
+  width: 100%;
+  padding-inline: 10%;
+  box-sizing: border-box;
 }
 
 .paymentParentContainer hr {
@@ -361,24 +366,58 @@ label {
   width: 2px;
   background-color: white;
   border: none;
+  border-radius: 2px;
+}
+
+.paymentParentContainer > :first-child {
+  flex: 1 0 100%;
+}
+
+.paymentParentContainer > :last-child {
+  flex: 1;
+  min-width: 300px;
+  max-width: 50%;
 }
 
 .programDetails {
-  text-align: left;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 300px;
+  max-width: 50%;
 }
 
-/* .paymentFormSection {
+.programDetails h2 {
+  margin: 0px;
+  margin-bottom: 10px;
+}
+
+.row {
   display: flex;
-  gap: 20px;
-  align-items: top;
-  justify-content: center;
-} */
+  justify-content: space-between;
+  font-size: 1rem;
+  color: white;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.564);
+  margin-block: 10px;
+}
+.row span {
+  text-align: left;
+  min-width: max-content;
+}
+.row b {
+  flex: 1;
+  text-align: right;
+  font-style: italic;
+}
+.paymentFormSection {
+  padding-inline: 0px;
+}
 
 .paymentButtons {
   display: flex;
   gap: 10px;
   align-items: center;
-  justify-content: center;
+  justify-content: end;
 }
 
 .paymentFormSection select {

@@ -3,7 +3,7 @@ const router = express.Router();
 
 const studentPaymentController = require("../controllers/studentPaymentController");
 
-// Student Routes
+// Student Payment Routes
 router.get(
   "/payment-history/:id",
   studentPaymentController.getPaymentsByStudentId

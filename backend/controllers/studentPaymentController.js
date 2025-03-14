@@ -122,6 +122,7 @@ exports.addPayment = async (req, res) => {
 
     const newPayment = await StudentPayment.create({
       enrollment_id,
+      student_name: enrollment.student_name,
       amount_paid,
       payment_method,
     });
@@ -129,6 +130,7 @@ exports.addPayment = async (req, res) => {
     const totalPaid = await StudentPayment.sum("amount_paid", {
       where: { enrollment_id },
     });
+
     newStatus = "Unsettled";
     if (totalPaid >= enrollment.total_fee) {
       newStatus = "Settled";
@@ -140,7 +142,7 @@ exports.addPayment = async (req, res) => {
     );
     res
       .status(201)
-      .json({ message: "Payment recorded", newPayment, newStatus });
+      .json({ message: "Payment recorded!", newPayment, newStatus });
   } catch (error) {
     console.error("Error processing payment:", error);
     return res.status(500).json({ error: "Failed to process payment." });
