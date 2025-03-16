@@ -6,6 +6,7 @@ const {
   Instrument,
   TeacherAvailability,
   User,
+  Enrollment,
 } = require("../models");
 
 const { Op } = require("sequelize");
@@ -90,7 +91,7 @@ exports.getUpcomingSessions = async (req, res) => {
   }
 };
 //----------------------------------------------------------------------------------------//
-exports.getSchedulesForEnrollment = async (req, res) => {
+exports.getSchedulesForValidation = async (req, res) => {
   try {
     const { teacherId } = req.query;
 
@@ -186,6 +187,155 @@ exports.getSchedulesForEnrollment = async (req, res) => {
     });
   } catch (error) {
     console.error("Error fetching schedules for enrollment:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+//----------------------------------------------------------------------------------------//
+exports.getSessionsByProgramId = async (req, res) => {
+  try {
+    const { program_id } = req.query;
+
+    if (!program_id) {
+      return res.status(400).json({ error: "Program ID is required!" });
+    }
+
+    const ProgramSessions = await Session.findAll({
+      where: {
+        program_id: program_id,
+      },
+      attributes: [
+        "session_id",
+        "session_number",
+        "session_date",
+        "session_start",
+        "session_end",
+        "attendance",
+        "session_status",
+      ],
+    });
+
+    res.json({ ProgramSessions });
+  } catch (error) {
+    console.error(
+      `Error fetching sessions of program ${
+        req.query.program_id || "unknown"
+      }:`,
+      error
+    );
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+//----------------------------------------------------------------------------------------//
+exports.getProgramDetailsBySessionId = async (req, res) => {
+  try {
+    const { session_id } = req.query;
+
+    if (!session_id) {
+      return res.status(400).json({ error: "Session ID is required!" });
+    }
+
+    const session = await Session.findByPk(session_id, {
+      attributes: ["program_id"],
+    });
+
+    if (!session) {
+      return res.status(404).json({ error: "Session not found!" });
+    }
+
+    const program_id = session.program_id;
+
+    // Fetch program details
+    const SelectedProgram = await Program.findByPk(program_id, {
+      include: [
+        {
+          model: Teacher,
+          attributes: ["user_id"],
+          include: [
+            {
+              model: User,
+              attributes: ["user_first_name", "user_last_name"],
+            },
+          ],
+        },
+        {
+          model: Instrument,
+          attributes: ["instrument_name"],
+        },
+        {
+          model: Enrollment,
+          attributes: ["enrollment_id", "enroll_date"],
+          include: [
+            {
+              model: Student,
+              attributes: ["student_first_name", "student_last_name"],
+            },
+          ],
+        },
+      ],
+    });
+
+    if (!SelectedProgram) {
+      return res.status(404).json({ error: "Program not found!" });
+    }
+
+    const ProgramSessions = await Session.findAll({
+      where: { program_id },
+      attributes: [
+        "session_id",
+        "session_number",
+        "session_date",
+        "session_start",
+        "session_end",
+        "attendance",
+        "session_status",
+      ],
+      order: [
+        ["session_date", "ASC"], // Order by session_date first
+        ["session_start", "ASC"], // Then order by session_start within the same date
+      ],
+    });
+
+    res.json({ SelectedProgram, ProgramSessions });
+  } catch (error) {
+    console.error(
+      `Error fetching program details for session ${
+        req.query.session_id || "unknown"
+      }:`,
+      error
+    );
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+//----------------------------------------------------------------------------------------//
+exports.rescheduleSession = async (req, res) => {
+  try {
+    const { session_id, new_date, new_start_time, new_end_time } = req.body;
+
+    if (!session_id || !new_date || !new_start_time || !new_end_time) {
+      return res.status(400).json({ error: "All fields are required!" });
+    }
+
+    const session = await Session.findByPk(session_id);
+
+    if (!session) {
+      return res.status(404).json({ error: "Session not found!" });
+    }
+    await Session.update(
+      {
+        session_date: new_date,
+        session_start: new_start_time,
+        session_end: new_end_time,
+        session_status: "Rescheduled",
+      },
+      {
+        where: { session_id },
+      }
+    );
+
+    res.json({ message: "Session rescheduled successfully!", session });
+  } catch (error) {
+    console.error("Error rescheduling session:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };

@@ -18,6 +18,7 @@ function SessionSchedules({
   allSessions,
   occupiedDrumSlots,
 }) {
+  //-------------------------------------------------------------------//
   const timeSlots = Array.from({ length: 12 }, (_, i) => {
     const startTime = DateTime.fromFormat(`${8 + i}`, "H");
     const endTime = startTime.plus({ hours: 1 });
@@ -181,11 +182,18 @@ function SessionSchedules({
                         );
 
                         // Allow only if available, no session conflict, and within max sessions
+                        // isDisabled =
+                        //   !isAvailable ||
+                        //   hasTeacherSession ||
+                        //   !hasSlotAvailability ||
+                        //   hasDrumSession;
+
                         isDisabled =
                           !isAvailable ||
                           hasTeacherSession ||
                           !hasSlotAvailability ||
-                          hasDrumSession;
+                          (values.instrument_name === "Drums" &&
+                            hasDrumSession);
                       }
 
                       return (

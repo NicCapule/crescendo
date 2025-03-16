@@ -12,7 +12,6 @@ import {
   PiMoney,
 } from "react-icons/pi";
 import LogoutConfirm from "../Confirm/LogoutConfirm";
-import style from "./Layout.module.css";
 
 function Sidebar() {
   const { user, logout } = useAuth();
@@ -26,11 +25,11 @@ function Sidebar() {
   };
   //================================================================================//
   return (
-    <div className={style.sideContainer}>
-      <nav className={style.sideNav}>
+    <div className="sideContainer">
+      <nav className="sideNav">
         <NavLink
           to={"/"}
-          className={({ isActive }) => (isActive ? style.active : style.text)}
+          className={({ isActive }) => (isActive ? "active" : "text")}
         >
           <PiSquaresFour size={24} />
           Dashboard
@@ -38,7 +37,7 @@ function Sidebar() {
 
         <NavLink
           to={"/students"}
-          className={({ isActive }) => (isActive ? style.active : style.text)}
+          className={({ isActive }) => (isActive ? "active" : "text")}
         >
           <PiStudent size={24} />
           Students
@@ -47,7 +46,7 @@ function Sidebar() {
         {user?.role === "Admin" && (
           <NavLink
             to={"/teachers"}
-            className={({ isActive }) => (isActive ? style.active : style.text)}
+            className={({ isActive }) => (isActive ? "active" : "text")}
           >
             <PiChalkboardTeacher size={24} />
             Teachers
@@ -56,7 +55,7 @@ function Sidebar() {
 
         <NavLink
           to={"/schedule"}
-          className={({ isActive }) => (isActive ? style.active : style.text)}
+          className={({ isActive }) => (isActive ? "active" : "text")}
         >
           <PiCalendarDots size={24} />
           Schedule
@@ -67,7 +66,7 @@ function Sidebar() {
             <NavLink
               to={"/enrollment"}
               className={({ isActive }) =>
-                isActive ? style.active : style.text
+                isActive ? "active" : "text"
               }
             >
               <PiNotebook size={24} />
@@ -77,7 +76,7 @@ function Sidebar() {
             <NavLink
               to={"/users"}
               className={({ isActive }) =>
-                isActive ? style.active : style.text
+                isActive ? "active" : "text"
               }
             >
               <PiUserCircle size={24} />
@@ -87,7 +86,7 @@ function Sidebar() {
         )} */}
         <NavLink
           to={"/enrollment"}
-          className={({ isActive }) => (isActive ? style.active : style.text)}
+          className={({ isActive }) => (isActive ? "active" : "text")}
         >
           <PiNotebook size={24} />
           Enrollment
@@ -95,7 +94,7 @@ function Sidebar() {
 
         <NavLink
           to={"/users"}
-          className={({ isActive }) => (isActive ? style.active : style.text)}
+          className={({ isActive }) => (isActive ? "active" : "text")}
         >
           <PiUserCircle size={24} />
           Users
@@ -103,13 +102,13 @@ function Sidebar() {
 
         <NavLink
           to={"/payment"}
-          className={({ isActive }) => (isActive ? style.active : style.text)}
+          className={({ isActive }) => (isActive ? "active" : "text")}
         >
           <PiMoney size={24} />
           Payment
         </NavLink>
 
-        <button onClick={handleLogout} className={style.text}>
+        <button onClick={handleLogout} className={"text"}>
           <PiSignOut size={24} />
           Logout
         </button>

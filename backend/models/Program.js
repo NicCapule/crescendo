@@ -40,7 +40,7 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "teacher_id",
       onDelete: "CASCADE",
     });
-    Program.hasMany(models.Enrollment, {
+    Program.hasOne(models.Enrollment, {
       foreignKey: "program_id",
       onDelete: "SET NULL",
     });

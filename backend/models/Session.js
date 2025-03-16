@@ -25,7 +25,12 @@ module.exports = (sequelize, DataTypes) => {
       session_end: { type: DataTypes.TIME, allowNull: false },
       attendance: DataTypes.ENUM("Present", "Absent", "Late"),
       session_status: {
-        type: DataTypes.ENUM("Scheduled", "Completed", "Canceled", "Forfeited"),
+        type: DataTypes.ENUM(
+          "Scheduled",
+          "Completed",
+          "Rescheduled",
+          "Forfeited"
+        ),
         defaultValue: "Scheduled",
       },
     },

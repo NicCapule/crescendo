@@ -21,7 +21,8 @@ import {
   enrollNewStudent,
   enrollExistingStudent,
 } from "../../services/enrollServices";
-import { fetchSchedulesForEnrollment } from "../../services/sessionServices";
+import { fetchSchedulesForValidation } from "../../services/sessionServices";
+// ==============================================================================================//
 function EnrollmentForm() {
   //-----------------------------------------------//
   const [instruments, setInstruments] = useState([]);
@@ -51,7 +52,7 @@ function EnrollmentForm() {
     payment_method: "",
     amount_paid: null,
   };
-
+  //-----------------------------------------------//
   const enrollStudent = async (data, resetForm) => {
     let requestData = { ...data };
 
@@ -91,7 +92,6 @@ function EnrollmentForm() {
       );
     }
   };
-
   //-----------------------------------------------//
   const onSubmit = async (data, { resetForm }) => {
     EnrollConfirm({
@@ -111,7 +111,7 @@ function EnrollmentForm() {
   useEffect(() => {
     if (!selectedTeacherID) return;
 
-    fetchSchedulesForEnrollment(selectedTeacherID)
+    fetchSchedulesForValidation(selectedTeacherID)
       .then((scheduleData) => setScheduleData(scheduleData))
       .catch((error) => console.error("Failed to fetch schedules:", error));
   }, [selectedTeacherID]);

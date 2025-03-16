@@ -17,6 +17,7 @@ import Payment from "./pages/Payment";
 import TeacherInfo from "./components/Teachers/TeacherInfo";
 import StudentInfo from "./components/Students/StudentInfo";
 import AddPaymentForm from "./components/Forms/AddPaymentForm";
+import RescheduleForm from "./components/Forms/RescheduleForm";
 //--------------------------------------------------------------//
 function App() {
   return (
@@ -58,6 +59,7 @@ function App() {
               <Route path="users/create/:role" element={<CreateUser />} />
               <Route path="payment" element={<Payment />} />
               <Route path="payment/add" element={<AddPaymentForm />} />
+              <Route path="reschedule-session" element={<RescheduleForm />} />
               <Route />
             </Route>
           </Route>

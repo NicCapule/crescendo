@@ -4,6 +4,11 @@
   border-radius: 24px;
   padding: 50px;
 }
+
+.confirmContainer h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
 .confirmButtons {
   display: flex;
   justify-content: center;
@@ -35,15 +40,36 @@
   text-align: left;
 }
 
-.enrollConfirm h2 {
-  font-size: 1.5rem;
-  font-weight: bold;
-}
-
 .enrollConfirm h3 {
   font-size: 1.2rem;
   font-weight: normal;
 }
 .enrollConfirm p {
   margin-top: auto;
+}
+
+/* Payment Confirm ================================================================================ */
+
+.paymentConfirm div {
+  text-align: left;
+}
+
+.paymentConfirm h3 {
+  font-size: 1rem;
+  font-weight: bold;
+}
+.paymentConfirm p {
+  margin-top: auto;
+}
+
+/* Reschedule Confirm ================================================================================ */
+
+.reschedConfirm .confirmContent {
+  padding-inline: 50px;
+}
+
+.confirmContent p {
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
 }

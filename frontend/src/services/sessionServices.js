@@ -21,7 +21,7 @@ export const fetchUpcomingSessions = async () => {
   }
 };
 //----------------------------------------------------------------------------------//
-export const fetchSchedulesForEnrollment = async (selectedTeacherID) => {
+export const fetchSchedulesForValidation = async (selectedTeacherID) => {
   try {
     const response = await axios.get(API_BASE_URL + "sessions/schedules", {
       params: { teacherId: selectedTeacherID },
@@ -29,6 +29,31 @@ export const fetchSchedulesForEnrollment = async (selectedTeacherID) => {
     return response.data;
   } catch (error) {
     console.error("Error fetching upcoming sessions:", error);
+    throw error;
+  }
+};
+//----------------------------------------------------------------------------------//
+export const fetchProgramDetailsBySessionId = async (selectedProgramId) => {
+  try {
+    const response = await axios.get(API_BASE_URL + "sessions/program", {
+      params: { session_id: selectedProgramId },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching sessions of program!:", error);
+    throw error;
+  }
+};
+//----------------------------------------------------------------------------------//
+export const rescheduleSession = async (rescheduleData) => {
+  try {
+    const response = await axios.patch(
+      `${API_BASE_URL}sessions/reschedule`,
+      rescheduleData
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error rescheduling session!:", error);
     throw error;
   }
 };

@@ -819,6 +819,12 @@ module.exports = {
         end_time: "12:00:00",
       },
       {
+        teacher_id: 1,
+        day_of_week: "Sunday",
+        start_time: "08:00:00",
+        end_time: "15:00:00",
+      },
+      {
         teacher_id: 2,
         day_of_week: "Monday",
         start_time: "08:00:00",

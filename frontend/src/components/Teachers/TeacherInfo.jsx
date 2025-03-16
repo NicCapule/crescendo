@@ -73,9 +73,9 @@ function TeacherInfo() {
                         </div>
                       </td>
                       <td>
-                        {program.Enrollments[0]?.Student?.student_first_name
-                          ? `${program.Enrollments[0].Student.student_first_name} ${program.Enrollments[0].Student.student_last_name}`
-                          : program.Enrollments[0].Student.student_last_name}
+                        {program.Enrollment.Student.student_first_name
+                          ? `${program.Enrollment.Student.student_first_name} ${program.Enrollment.Student.student_last_name}`
+                          : program.Enrollment.Student.student_last_name}
                       </td>
                       <td>{program.no_of_sessions}</td>
                       <td>{program.status || "Ongoing"}</td>

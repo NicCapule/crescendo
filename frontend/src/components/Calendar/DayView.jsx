@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { fetchSessions } from "../../services/sessionServices";
+import SessionDetailsModal from "../Modal/SessionDetailsModal";
 import style from "./Calendar.module.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -52,12 +53,20 @@ function DayView() {
   const [selectedStudents, setSelectedStudents] = useState([]);
   const [teacherDropdown, setTeacherDropdown] = useState(false);
   const [studentDropdown, setStudentDropdown] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedSessionId, setSelectedSessionId] = useState(null);
   //---------------------------------------------------------------------------//
   useEffect(() => {
     fetchSessions()
       .then(setlistOfSessions)
       .catch(() => console.error("Failed to fetch sessions"));
   }, []);
+  //---------------------------------------------------------------------------//
+  const handleSessionClick = (sessionId) => {
+    setSelectedSessionId(sessionId);
+    setShowModal(true);
+    // console.log(programId);
+  };
   //---------------------------------------------------------------------------//
   // Extract unique teachers & students
   const uniqueTeachers = [
@@ -259,6 +268,7 @@ function DayView() {
                   gridRowEnd: position.gridRowStart + position.gridRowSpan,
                   gridColumnStart: position.gridColumnStart,
                 }}
+                onClick={() => handleSessionClick(session.session_id)}
               >
                 <p>
                   <b>
@@ -292,6 +302,19 @@ function DayView() {
           })}
         </div>
       </div>
+      {/* {showModal && selectedProgramId && (
+        <SessionDetailsModal
+          showModal={showModal}
+          setShowModal={setShowModal}
+          selectedProgramId={selectedProgramId}
+        />
+      )} */}
+
+      <SessionDetailsModal
+        showModal={showModal}
+        setShowModal={setShowModal}
+        selectedSessionId={selectedSessionId}
+      />
     </div>
   );
 }
