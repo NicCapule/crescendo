@@ -10,12 +10,14 @@ const {
   Session,
   TeacherInstrument,
   TeacherAvailability,
+  TeacherSalary,
 } = require("../models");
 //----------------------------------------------------------------------------------------//
 exports.getTeacherTable = async (req, res) => {
   const TeacherTable = await Teacher.findAll({
     attributes: [
       "teacher_id",
+      "user_id",
       "teacher_phone",
       [
         Sequelize.fn("COUNT", Sequelize.col("Programs.program_id")),
@@ -50,7 +52,7 @@ exports.getTeacherInfo = async (req, res) => {
         include: [
           {
             model: Enrollment,
-            attributes: ["enrollment_id"],
+            attributes: ["enrollment_id", "enroll_date"],
             include: [
               {
                 model: Student,
@@ -71,6 +73,10 @@ exports.getTeacherInfo = async (req, res) => {
       {
         model: Instrument,
         attributes: ["instrument_name"],
+      },
+      {
+        model: TeacherSalary,
+        order: [["salary_date", "DESC"]],
       },
     ],
   });

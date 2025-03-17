@@ -2,6 +2,7 @@ import React from "react";
 import style from "./Teachers.module.css";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { DateTime } from "luxon";
 //------------------------------------------//
 import {
   fetchTeacherById,
@@ -10,6 +11,7 @@ import {
 import { getInstrumentColor } from "../../utils/InstrumentColors";
 //------------------------------------------//
 import WeekView from "../Calendar/WeekView";
+import { PiEnvelopeSimpleBold, PiPhoneBold } from "react-icons/pi";
 //===================================================================================//
 function TeacherInfo() {
   const { id } = useParams();
@@ -37,17 +39,45 @@ function TeacherInfo() {
   return (
     <>
       <div className="compContainer">
-        <h1>
-          {teacher.User.user_first_name} {teacher.User.user_last_name}
-        </h1>
-        <p>Email: {teacher.User.email}</p>
-        <p>Phone: {teacher.teacher_phone}</p>
+        <div className={style.infoSection}>
+          <h1>
+            {teacher.User.user_first_name} {teacher.User.user_last_name}
+          </h1>
+          <div className={style.teacherDetails}>
+            <div>
+              <div className={style.contactInfo}>
+                <PiEnvelopeSimpleBold />
+                {teacher.User.email}
+              </div>
+              <div className={style.contactInfo}>
+                <PiPhoneBold />
+                {teacher.teacher_phone}
+              </div>
+            </div>
+            <div>
+              <p>Instruments:</p>
+              <div className={style.teacherInstruments}>
+                {teacher.Instruments.map((instrument, index) => (
+                  <div
+                    key={index}
+                    className={`${style.instContainer} ${getInstrumentColor(
+                      instrument.instrument_name
+                    )}`}
+                  >
+                    {instrument.instrument_name}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className={style.infoSection}>
           <h2>Schedule</h2>
           <WeekView sessions={sessions} hideTeacherFilters={true} />
         </div>
         <div className={style.infoSection}>
-          <h2>Active Programs</h2>
+          <h2>Assigned Programs</h2>
           <div className="tableContainer">
             <table>
               <thead>
@@ -55,6 +85,7 @@ function TeacherInfo() {
                   <th>Instrument</th>
                   <th>Student</th>
                   <th>Sessions</th>
+                  <th>Enrollment Date</th>
                   <th>Status</th>
                   <th />
                 </tr>
@@ -78,12 +109,75 @@ function TeacherInfo() {
                           : program.Enrollment.Student.student_last_name}
                       </td>
                       <td>{program.no_of_sessions}</td>
-                      <td>{program.status || "Ongoing"}</td>
+                      <td>
+                        {DateTime.fromISO(
+                          program.Enrollment.enroll_date
+                        ).toFormat("MMMM d, yyyy ")}
+                      </td>
+
+                      <td
+                        className={` ${
+                          program.program_status === "Active"
+                            ? style.activeStatus
+                            : ""
+                        }${
+                          program.program_status === "Completed"
+                            ? style.completedStatus
+                            : ""
+                        }${
+                          program.program_status === "Forfeited"
+                            ? style.forfeitedStatus
+                            : ""
+                        }`}
+                      >
+                        {program.program_status}
+                      </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="4">No assigned Programs</td>
+                    <td colSpan="5">No assigned Programs</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          {/* ============================================================================================================= */}
+
+          <h2>Salary History</h2>
+          <div className="tableContainer">
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Total Sessions</th>
+                  <th>Salary</th>
+                  <th />
+                </tr>
+              </thead>
+              <tbody>
+                {teacher.TeacherSalaries &&
+                teacher.TeacherSalaries.length > 0 ? (
+                  teacher.TeacherSalaries.map((salary, index) => (
+                    <tr key={index}>
+                      <td>
+                        {DateTime.fromISO(salary.salary_date).toFormat(
+                          "MMMM d, yyyy "
+                        )}
+                      </td>
+                      <td>{salary.total_sessions}</td>
+                      <td>
+                        {new Intl.NumberFormat("en-US", {
+                          style: "currency",
+                          currency: "PHP",
+                        }).format(salary.amount)}
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="5">No salary records</td>
                   </tr>
                 )}
               </tbody>

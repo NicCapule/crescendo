@@ -7,6 +7,7 @@ const {
   Teacher,
   Session,
   User,
+  sequelize,
 } = require("../models");
 //----------------------------------------------------------------------------------------//
 exports.getStudentTable = async (req, res) => {
@@ -41,21 +42,19 @@ exports.getStudentInfo = async (req, res) => {
       include: [
         {
           model: Enrollment,
+          attributes: [
+            "enrollment_id",
+            "program_id",
+            "enroll_date",
+            "teacher_name",
+            "total_fee",
+            "payment_status",
+            "instrument",
+          ],
           include: [
             {
               model: Program,
-              include: [
-                { model: Instrument, attributes: ["instrument_name"] },
-                {
-                  model: Teacher,
-                  include: [
-                    {
-                      model: User,
-                      attributes: ["user_first_name", "user_last_name"],
-                    },
-                  ],
-                },
-              ],
+              attributes: ["program_id", "no_of_sessions", "program_status"],
             },
           ],
         },
@@ -128,40 +127,49 @@ exports.createStudent = async (req, res) => {
 };
 //----------------------------------------------------------------------------------------//
 exports.deleteStudent = async (req, res) => {
+  const transaction = await sequelize.transaction();
   try {
     const { id } = req.params;
-    const student = await Student.findOne({
-      where: { student_id: id },
+    const student = await Student.findByPk(id, {
       attributes: ["student_id", "student_first_name", "student_last_name"],
+      transaction,
     });
 
     if (!student) {
+      await transaction.rollback();
       return res.status(404).json({ error: "Student not found" });
     }
 
-    const activeProgramCount = await Program.count({
+    const activeProgramCount = await Enrollment.count({
+      where: {
+        student_id: student.student_id,
+      },
       include: [
         {
-          model: Enrollment,
-          where: { student_id: student.student_id },
+          model: Program,
+          where: { program_status: "Active" },
         },
       ],
-      where: { program_status: "Active" },
+      transaction,
     });
 
     if (activeProgramCount > 0) {
+      await transaction.rollback();
       return res.status(400).json({
         error: "Cannot delete student!",
         details: `${student.student_first_name} ${student.student_last_name} is currently enrolled in one or more active programs.`,
       });
     }
 
-    await student.destroy();
+    await student.destroy({ transaction });
+
+    await transaction.commit();
 
     res.json({
       message: `Student "${student.student_first_name} ${student.student_last_name}" deleted successfully.`,
     });
   } catch (error) {
+    await transaction.rollback();
     res
       .status(500)
       .json({ error: "Error deleting student", details: error.message });

@@ -1,6 +1,16 @@
 import axios from "axios";
 import API_BASE_URL from "../apiConfig";
 
+export const fetchUserTable = async () => {
+  try {
+    const response = await axios.get(API_BASE_URL + "users/table");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    throw error;
+  }
+};
+//---------------------------------------------------------------------------------//
 export const loginUser = async (userData) => {
   try {
     const response = await axios.post(API_BASE_URL + "login", userData);
@@ -10,7 +20,7 @@ export const loginUser = async (userData) => {
     throw error;
   }
 };
-
+//---------------------------------------------------------------------------------//
 export const createAdmin = async (adminData) => {
   try {
     const response = await axios.post(`${API_BASE_URL}users`, adminData);
@@ -18,5 +28,19 @@ export const createAdmin = async (adminData) => {
   } catch (error) {
     console.error("Error creating admin:", error);
     throw error;
+  }
+};
+//---------------------------------------------------------------------------------//
+export const deleteUser = async (userId) => {
+  try {
+    const response = await axios.delete(`${API_BASE_URL}users/${userId}`);
+    return response.data;
+  } catch (error) {
+    const errorMessage =
+      error.response?.data?.details ||
+      error.response?.data?.error ||
+      "Failed to delete user.";
+    console.log(`Cannot delete user:`, errorMessage);
+    throw new Error(errorMessage);
   }
 };

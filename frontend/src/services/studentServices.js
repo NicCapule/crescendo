@@ -32,6 +32,20 @@ export const fetchStudentSessions = async (id) => {
   }
 };
 //---------------------------------------------------------------------------------//
+export const deleteStudent = async (studentId) => {
+  try {
+    const response = await axios.delete(`${API_BASE_URL}students/${studentId}`);
+    return response.data;
+  } catch (error) {
+    const errorMessage =
+      error.response?.data?.details ||
+      error.response?.data?.error ||
+      "Failed to delete student.";
+    console.log(`Cannot delete student:`, errorMessage);
+    throw new Error(errorMessage);
+  }
+};
+//---------------------------------------------------------------------------------//
 export const fetchStudentCount = async () => {
   try {
     const response = await axios.get(API_BASE_URL + "students/count");

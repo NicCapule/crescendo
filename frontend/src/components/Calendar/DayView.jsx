@@ -65,7 +65,6 @@ function DayView() {
   const handleSessionClick = (sessionId) => {
     setSelectedSessionId(sessionId);
     setShowModal(true);
-    // console.log(programId);
   };
   //---------------------------------------------------------------------------//
   // Extract unique teachers & students
@@ -133,7 +132,7 @@ function DayView() {
   };
   //=============================================================================================//
   return (
-    <div className="compContainer">
+    <div>
       <div className={`${style.calendarHeader} ${style.dayViewHeader}`}>
         <div className={style.dateRow}>
           <div className={style.dateNav}>
@@ -302,13 +301,6 @@ function DayView() {
           })}
         </div>
       </div>
-      {/* {showModal && selectedProgramId && (
-        <SessionDetailsModal
-          showModal={showModal}
-          setShowModal={setShowModal}
-          selectedProgramId={selectedProgramId}
-        />
-      )} */}
 
       <SessionDetailsModal
         showModal={showModal}

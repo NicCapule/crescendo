@@ -30,7 +30,13 @@ const EnrollConfirm = ({ title, message, onConfirm, enrollmentDetails }) => {
             </p>
             <hr />
             <p>
-              Amount: <b>₱{enrollmentDetails.amount_paid}</b>
+              Amount:{" "}
+              <b>
+                {new Intl.NumberFormat("en-US", {
+                  style: "currency",
+                  currency: "PHP",
+                }).format(enrollmentDetails.amount_paid)}
+              </b>
             </p>
             <p>
               Payment Method: <b>{enrollmentDetails.payment_method}</b>

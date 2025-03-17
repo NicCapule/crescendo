@@ -3,7 +3,7 @@
   border-radius: 16px;
   box-shadow: 0 5px 5px hsla(0, 0%, 1%, 0.282);
   background-color: #ffffff;
-  z-index: 999;
+  z-index: 1;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -30,5 +30,64 @@
 
 /* TEACHER INFO =================================================== */
 .infoSection {
-  border-bottom: 2px solid white;
+  padding-block: 20px;
+}
+
+.infoSection h1 {
+  margin-top: 0px;
+}
+
+.infoSection h2 {
+  margin-block: 20px;
+}
+
+.teacherDetails {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+}
+
+.contactInfo {
+  display: flex;
+  font-weight: bold;
+  gap: 10px;
+  align-items: center;
+  margin-block: 10px;
+}
+.contactInfo svg {
+  width: 24px;
+  height: auto;
+}
+
+.teacherDetails > :last-child p {
+  margin-block: 10px;
+  font-weight: bold;
+  text-align: left;
+}
+.teacherInstruments {
+  display: flex;
+  gap: 10px;
+}
+
+.instContainer {
+  padding-inline: 10px;
+  padding-block: 2px;
+  border-radius: 24px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.activeStatus {
+  color: #28a745;
+  font-weight: bold;
+}
+
+.completedStatus {
+  color: #007bff;
+  font-weight: bold;
+}
+
+.forfeitedStatus {
+  color: #dc3545;
+  font-weight: bold;
 }

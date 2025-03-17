@@ -93,7 +93,7 @@ function RescheduleForm() {
   };
   //-----------------------------------------------//
   useEffect(() => {
-    if (!selectedProgram.teacher_id) return;
+    if (!selectedProgram?.teacher_id) return;
 
     fetchSchedulesForValidation(selectedProgram.teacher_id)
       .then((scheduleData) => setScheduleData(scheduleData))

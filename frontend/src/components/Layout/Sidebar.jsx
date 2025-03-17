@@ -61,13 +61,11 @@ function Sidebar() {
           Schedule
         </NavLink>
 
-        {/* {user?.role === "Admin" && (
+        {user?.role === "Admin" && (
           <>
             <NavLink
               to={"/enrollment"}
-              className={({ isActive }) =>
-                isActive ? "active" : "text"
-              }
+              className={({ isActive }) => (isActive ? "active" : "text")}
             >
               <PiNotebook size={24} />
               Enrollment
@@ -75,38 +73,21 @@ function Sidebar() {
 
             <NavLink
               to={"/users"}
-              className={({ isActive }) =>
-                isActive ? "active" : "text"
-              }
+              className={({ isActive }) => (isActive ? "active" : "text")}
             >
               <PiUserCircle size={24} />
               Users
             </NavLink>
+
+            <NavLink
+              to={"/payment"}
+              className={({ isActive }) => (isActive ? "active" : "text")}
+            >
+              <PiMoney size={24} />
+              Payment
+            </NavLink>
           </>
-        )} */}
-        <NavLink
-          to={"/enrollment"}
-          className={({ isActive }) => (isActive ? "active" : "text")}
-        >
-          <PiNotebook size={24} />
-          Enrollment
-        </NavLink>
-
-        <NavLink
-          to={"/users"}
-          className={({ isActive }) => (isActive ? "active" : "text")}
-        >
-          <PiUserCircle size={24} />
-          Users
-        </NavLink>
-
-        <NavLink
-          to={"/payment"}
-          className={({ isActive }) => (isActive ? "active" : "text")}
-        >
-          <PiMoney size={24} />
-          Payment
-        </NavLink>
+        )}
 
         <button onClick={handleLogout} className={"text"}>
           <PiSignOut size={24} />

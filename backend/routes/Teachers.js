@@ -25,6 +25,12 @@ router.get(
   authorizeRole(["Admin", "Teacher"]),
   teacherController.getTeacherCount
 );
+
+router.get(
+  "/salary",
+  authorizeRole(["Admin", "Teacher"]),
+  teacherController.getTeacherCount
+);
 router.post("/", authorizeRole(["Admin"]), teacherController.createTeacher);
 //----------------------------------------------------------------------------------------//
 

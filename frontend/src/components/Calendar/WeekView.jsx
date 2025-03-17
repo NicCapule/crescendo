@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { fetchSessions } from "../../services/sessionServices";
+import SessionDetailsModal from "../Modal/SessionDetailsModal";
 import style from "./Calendar.module.css";
 import {
   MdOutlineArrowForwardIos,
@@ -47,6 +47,13 @@ function WeekView({ sessions, hideTeacherFilters, hideInstrumentFilters }) {
   const [selectedInstruments, setSelectedInstruments] = useState([]);
   const [selectedTeachers, setSelectedTeachers] = useState([]);
   const [teacherDropdown, setTeacherDropdown] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedSessionId, setSelectedSessionId] = useState(null);
+  //---------------------------------------------------------------------------//
+  const handleSessionClick = (sessionId) => {
+    setSelectedSessionId(sessionId);
+    setShowModal(true);
+  };
   //---------------------------------------------------------------------------//
   const startOfWeek = selectedDate.startOf("week");
   const weekDays = Array.from({ length: 7 }, (_, i) =>
@@ -98,7 +105,7 @@ function WeekView({ sessions, hideTeacherFilters, hideInstrumentFilters }) {
   };
   //========================================================================================//
   return (
-    <div className="compContainer">
+    <div>
       <div className={`${style.calendarHeader} ${style.weekViewHeader}`}>
         <div className={style.dateRow}>
           <div className={style.dateNav}>
@@ -196,6 +203,7 @@ function WeekView({ sessions, hideTeacherFilters, hideInstrumentFilters }) {
                 className={`${style.weekSessionBlock} ${getInstrumentColor(
                   session.Program.Instrument.instrument_name
                 )}`}
+                onClick={() => handleSessionClick(session.session_id)}
                 style={{
                   gridRowStart: position.gridRowStart,
                   gridColumnStart: position.gridColumnStart,
@@ -234,6 +242,11 @@ function WeekView({ sessions, hideTeacherFilters, hideInstrumentFilters }) {
           })}
         </div>
       </div>
+      <SessionDetailsModal
+        showModal={showModal}
+        setShowModal={setShowModal}
+        selectedSessionId={selectedSessionId}
+      />
     </div>
   );
 }

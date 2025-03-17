@@ -34,7 +34,7 @@ function Schedule() {
     <>
       <h1 className="pageTitle">Schedule</h1>
       {user.role === "Teacher" && (
-        <div>
+        <div className="compContainer">
           <h2>Your Schedule</h2>
           {!isLoading ? (
             <WeekView sessions={sessions} hideTeacherFilters={true} />
@@ -43,8 +43,11 @@ function Schedule() {
           )}
         </div>
       )}
-      <h2>All Schedules</h2>
-      <DayView />
+      <hr />
+      <div className="compContainer">
+        <h2>All Schedules</h2>
+        <DayView />
+      </div>
     </>
   );
 }

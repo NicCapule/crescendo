@@ -69,29 +69,41 @@ function StudentInfo() {
                         <div
                           key={index}
                           className={`instContainer ${getInstrumentColor(
-                            enrollment.Program.Instrument.instrument_name
+                            enrollment.instrument
                           )}`}
                         >
-                          {enrollment.Program.Instrument.instrument_name}
+                          {enrollment.instrument}
                         </div>
                       </td>
-                      <td>
-                        {enrollment.Program.Teacher.User.user_first_name
-                          ? `${enrollment.Program.Teacher.User.user_first_name} ${enrollment.Program.Teacher.User.user_last_name}`
-                          : `${enrollment.Program.Teacher.User.user_last_name}`}
-                      </td>
+                      <td>{enrollment.teacher_name}</td>
                       <td>{enrollment.Program.no_of_sessions}</td>
                       <td>
                         {DateTime.fromISO(enrollment.enroll_date).toFormat(
                           "MMMM d, yyyy"
                         )}
                       </td>
-                      <td>{enrollment.Program.program_status}</td>
+                      <td
+                        className={` ${
+                          enrollment.Program.program_status === "Active"
+                            ? style.activeStatus
+                            : ""
+                        }${
+                          enrollment.Program.program_status === "Completed"
+                            ? style.completedStatus
+                            : ""
+                        }${
+                          enrollment.Program.program_status === "Forfeited"
+                            ? style.forfeitedStatus
+                            : ""
+                        }`}
+                      >
+                        {enrollment.Program.program_status}
+                      </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="4">No assigned Programs</td>
+                    <td colSpan="5">No assigned Programs</td>
                   </tr>
                 )}
               </tbody>

@@ -40,6 +40,7 @@ export const createTeacher = async (teacherData) => {
     throw error;
   }
 };
+
 //---------------------------------------------------------------------------------//
 export const fetchTeacherCount = async () => {
   try {

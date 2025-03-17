@@ -3,7 +3,7 @@
   border-radius: 16px;
   box-shadow: 0 5px 5px hsla(0, 0%, 1%, 0.282);
   background-color: #ffffff;
-  z-index: 999;
+  z-index: 1;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -32,8 +32,18 @@
 .infoSection {
   border-bottom: 2px solid white;
 }
-/* STUDENT SELECTION =================================================== */
-/* .selectionContainer {
-  width: 100%;
-  background-color: #114ed0;
-} */
+
+.activeStatus {
+  color: #28a745;
+  font-weight: bold;
+}
+
+.completedStatus {
+  color: #007bff;
+  font-weight: bold;
+}
+
+.forfeitedStatus {
+  color: #dc3545;
+  font-weight: bold;
+}

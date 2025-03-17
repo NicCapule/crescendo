@@ -13,8 +13,10 @@ import style from "./Modal.module.css";
 import { DateTime } from "luxon";
 import { getInstrumentColor } from "../../utils/InstrumentColors";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
 
 function SessionDetailsModal({ showModal, setShowModal, selectedSessionId }) {
+  const { user } = useAuth();
   const [programData, setProgramData] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -143,24 +145,26 @@ function SessionDetailsModal({ showModal, setShowModal, selectedSessionId }) {
                         ).toFormat("h:mma")}`}</td>
                           <td>{session.session_status}</td>
                           <td>{session.attendance}</td>
-                          <td>
-                            <div className={style.sessionActions}>
-                              <button
-                                onClick={() =>
-                                  navigate("/reschedule-session", {
-                                    state: {
-                                      programSessions: programSessions,
-                                      selectedProgram: selectedProgram,
-                                      selectedSession: session.session_id,
-                                    },
-                                  })
-                                }
-                              >
-                                Reschedule
-                              </button>
-                              <button>Forfeit</button>
-                            </div>
-                          </td>
+                          {user?.role === "Admin" && ( // Show actions only if user is admin
+                            <td>
+                              <div className={style.sessionActions}>
+                                <button
+                                  onClick={() =>
+                                    navigate("/reschedule-session", {
+                                      state: {
+                                        programSessions: programSessions,
+                                        selectedProgram: selectedProgram,
+                                        selectedSession: session.session_id,
+                                      },
+                                    })
+                                  }
+                                >
+                                  Reschedule
+                                </button>
+                                <button>Forfeit</button>
+                              </div>
+                            </td>
+                          )}
                         </tr>
                       ))}
                     </tbody>

@@ -70,7 +70,12 @@ function PaymentHistory() {
                       )}
                     </td>
                     <td>{payment.student_name}</td>
-                    <td>₱{payment.amount_paid}</td>
+                    <td>
+                      {new Intl.NumberFormat("en-US", {
+                        style: "currency",
+                        currency: "PHP",
+                      }).format(payment.amount_paid)}
+                    </td>
                     <td>{payment.payment_method}</td>
                   </tr>
                 ))}

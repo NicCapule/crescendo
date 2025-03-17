@@ -68,8 +68,109 @@
   padding-inline: 50px;
 }
 
-.confirmContent p {
+.reschedConfirm .confirmContent p {
   display: flex;
   gap: 20px;
   justify-content: space-between;
+}
+
+/* Delete Confirm ================================================================================ */
+.deleteConfirm h2 {
+  color: rgb(134, 54, 54);
+  text-align: center;
+}
+
+.deleteConfirm .confirmContent {
+  padding-inline: 50px;
+  margin-block: 20px;
+}
+
+.deleteConfirm .confirmContent h3 {
+  font-weight: normal;
+  margin: 0px;
+}
+
+.deleteConfirm .confirmIcon svg {
+  width: 100px;
+  height: auto;
+}
+
+.deleteConfirm .confirmButtons {
+  padding-block: 20px;
+}
+
+.deleteConfirm .confirmButtons .yesButton {
+  color: white;
+  font-weight: bold;
+  border: 2px solid rgb(134, 54, 54);
+  background-color: rgb(134, 54, 54);
+}
+
+.deleteConfirm .confirmButtons .noButton {
+  color: rgb(54, 83, 134);
+  font-weight: bold;
+  border: 2px solid rgb(54, 83, 134);
+  background-color: transparent;
+}
+
+.deleteConfirm .confirmButtons .noButton:hover {
+  color: rgb(54, 83, 134);
+  font-weight: bold;
+}
+
+/* Forfeit Confirm ================================================================================ */
+
+.forfeitConfirm h2 {
+  color: rgb(134, 54, 54);
+  text-align: center;
+}
+
+.forfeitConfirm .confirmContent {
+  padding-inline: 50px;
+  margin-block: 20px;
+}
+
+.forfeitConfirm .confirmContent h3 {
+  font-weight: normal;
+  margin: 0px;
+}
+.confirmContent .forfeitDetails {
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+}
+
+.confirmContent .forfeitDetails p {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  text-align: left;
+}
+
+.forfeitConfirm .confirmIcon svg {
+  width: 100px;
+  height: auto;
+}
+
+.forfeitConfirm .confirmButtons {
+  padding-block: 20px;
+}
+
+.forfeitConfirm .confirmButtons .yesButton {
+  color: white;
+  font-weight: bold;
+  border: 2px solid rgb(134, 54, 54);
+  background-color: rgb(134, 54, 54);
+}
+
+.forfeitConfirm .confirmButtons .noButton {
+  color: rgb(54, 83, 134);
+  font-weight: bold;
+  border: 2px solid rgb(54, 83, 134);
+  background-color: transparent;
+}
+
+.forfeitConfirm .confirmButtons .noButton:hover {
+  color: rgb(54, 83, 134);
+  font-weight: bold;
 }

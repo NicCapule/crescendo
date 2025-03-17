@@ -3,19 +3,63 @@ import style from "./Students.module.css";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { PiDotsThreeOutlineVerticalFill } from "react-icons/pi";
-import { fetchStudentTable } from "../../services/studentServices";
-
+import { Bounce, Slide, Zoom, toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import {
+  fetchStudentTable,
+  deleteStudent,
+} from "../../services/studentServices";
+import DeleteConfirm from "../Confirm/DeleteConfirm";
+import useAuth from "../../hooks/useAuth";
+//===============================================================================================//
 function AllStudents() {
+  const { user } = useAuth();
   const [listOfStudents, setListOfStudents] = useState([]);
-  const [dropdownStates, setDropdownStates] = useState({});
+  const [openDropdown, setOpenDropdown] = useState(null);
   const navigate = useNavigate();
   //---------------------------------------------------------------------------//
   const toggleItemDropdown = (studentId) => {
-    setDropdownStates((prevState) => {
-      if (prevState[studentId]) {
-        return {};
+    setOpenDropdown((prev) => (prev === studentId ? null : studentId));
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        !event.target.closest(`.${style.dropdownMenu}`) &&
+        !event.target.closest("button")
+      ) {
+        setOpenDropdown(null);
       }
-      return { [studentId]: true };
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+  //---------------------------------------------------------------------------//
+  const deleteCall = async (studentId) => {
+    try {
+      await deleteStudent(studentId);
+      toast.success("Student deleted successfully!", {
+        autoClose: 2000,
+        position: "top-center",
+      });
+    } catch (error) {
+      toast.error(error.message, {
+        autoClose: 2000,
+        position: "top-center",
+      });
+    }
+  };
+  //---------------------------------------------------------------------------//
+  const handleDelete = async (studentId, studentName) => {
+    DeleteConfirm({
+      title: "Confirm Delete",
+      onConfirm: () => deleteCall(studentId),
+      details: {
+        name: studentName,
+      },
     });
   };
   //---------------------------------------------------------------------------//
@@ -27,6 +71,7 @@ function AllStudents() {
   //---------------------------------------------------------------------------//
   return (
     <>
+      <ToastContainer transition={Bounce} />
       <div className="compContainer">
         <div className="tableContainer">
           <table>
@@ -42,8 +87,8 @@ function AllStudents() {
               </tr>
             </thead>
             <tbody>
-              {listOfStudents.map((student, key) => (
-                <tr key={key}>
+              {listOfStudents.map((student) => (
+                <tr key={student.student_id}>
                   <td>
                     {student.student_last_name}, {student.student_first_name}
                   </td>
@@ -54,11 +99,14 @@ function AllStudents() {
                   <td>{student.total_programs}</td>
                   <td>
                     <button
-                      onClick={() => toggleItemDropdown(student.student_id)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleItemDropdown(student.student_id);
+                      }}
                     >
                       <PiDotsThreeOutlineVerticalFill />
                     </button>
-                    {dropdownStates[student.student_id] && (
+                    {openDropdown === student.student_id && (
                       <div className={style.dropdownMenu}>
                         <button
                           onClick={() =>
@@ -69,7 +117,18 @@ function AllStudents() {
                         >
                           View
                         </button>
-                        <button>Delete</button>
+                        {user?.role === "Admin" && (
+                          <button
+                            onClick={() =>
+                              handleDelete(
+                                student.student_id,
+                                `${student.student_first_name} ${student.student_last_name}`
+                              )
+                            }
+                          >
+                            Delete
+                          </button>
+                        )}
                       </div>
                     )}
                   </td>

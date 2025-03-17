@@ -10,3 +10,15 @@ export const fetchProgramCount = async () => {
     throw error;
   }
 };
+
+export const forfeitProgram = async (programId) => {
+  try {
+    const response = await axios.patch(
+      `${API_BASE_URL}programs/forfeit/${programId}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching program count:", error);
+    throw error;
+  }
+};

@@ -43,6 +43,9 @@ exports.getPendingPayments = async (req, res) => {
       where: { payment_status: "Unsettled" },
       attributes: [
         "enrollment_id",
+        "student_name",
+        "teacher_name",
+        "instrument",
         "total_fee",
         [
           Sequelize.fn(
@@ -104,6 +107,7 @@ exports.getPendingPayments = async (req, res) => {
         "Program.program_id",
       ],
       having: Sequelize.literal("remaining_balance > 0"),
+      order: [[Sequelize.literal("due_date"), "ASC"]],
     });
     res.json(pendingPayments);
   } catch (error) {

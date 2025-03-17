@@ -1,9 +1,18 @@
-const { User, Teacher, Program } = require("../models");
+const { User, Teacher, Program, sequelize } = require("../models");
 const bcrypt = require("bcryptjs");
 //----------------------------------------------------------------------------------------//
-exports.getAllUsers = async (req, res) => {
-  const AllUsers = await User.findAll();
-  res.json(AllUsers);
+exports.getUserTable = async (req, res) => {
+  const UserTable = await User.findAll({
+    attributes: [
+      "user_id",
+      "user_first_name",
+      "user_last_name",
+      "email",
+      "role",
+      "createdAt",
+    ],
+  });
+  res.json(UserTable);
 };
 //----------------------------------------------------------------------------------------//
 exports.createAdmin = async (req, res) => {
@@ -28,41 +37,50 @@ exports.createAdmin = async (req, res) => {
 };
 //----------------------------------------------------------------------------------------//
 exports.deleteUser = async (req, res) => {
+  const transaction = await sequelize.transaction();
   try {
     const { id } = req.params;
-    const user = await User.findOne({
-      where: { user_id: id },
+    const user = await User.findByPk(id, {
       attributes: ["user_id", "user_first_name", "user_last_name", "role"],
+      transaction,
     });
 
     if (!user) {
+      await transaction.rollback();
       return res.status(404).json({ error: "User not found" });
     }
 
     if (user.role === "Teacher") {
-      const teacher = await Teacher.findOne({ where: { user_id: id } });
+      const teacher = await Teacher.findOne({
+        where: { user_id: id },
+        transaction,
+      });
 
       if (teacher) {
         const programCount = await Program.count({
           where: { teacher_id: teacher.teacher_id, program_status: "Active" },
+          transaction,
         });
 
         if (programCount > 0) {
+          await transaction.rollback();
           return res.status(400).json({
-            error: "Cannot delete teacher",
-            details: "Teacher is currently assigned to one or more programs.",
+            error: "Cannot delete teacher!",
+            details: `${user.user_first_name} ${user.user_last_name} is currently assigned to one or more programs.`,
           });
         }
 
-        await teacher.destroy();
+        await teacher.destroy({ transaction });
       }
     }
 
-    await user.destroy();
+    await user.destroy({ transaction });
+    await transaction.commit();
     res.json({
       message: `${user.role} "${user.user_first_name} ${user.user_last_name}" deleted successfully.`,
     });
   } catch (error) {
+    await transaction.rollback();
     res
       .status(500)
       .json({ error: "Error deleting user", details: error.message });

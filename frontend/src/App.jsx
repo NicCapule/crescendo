@@ -21,8 +21,8 @@ import RescheduleForm from "./components/Forms/RescheduleForm";
 //--------------------------------------------------------------//
 function App() {
   return (
-    <AuthProvider>
-      <Router>
+    <Router>
+      <AuthProvider>
         <Routes>
           {/* Public Route */}
           <Route path="login" element={<Login />} />
@@ -37,23 +37,14 @@ function App() {
                 <Route path=":id/:name" element={<StudentInfo />} />
               </Route>
               <Route path="schedule" element={<Schedule />} />
-            </Route>
-          </Route>
-
-          {/* <Route
-            element={<ProtectedRoute allowedRoles={["Admin", "Teacher"]} />}
-          >
-            <Route path="teachers/:id/:name" element={<TeacherInfo />} />
-          </Route> */}
-
-          <Route
-            element={<ProtectedRoute allowedRoles={["Admin", "Teacher"]} />}
-          >
-            <Route path="/" element={<Layout />}>
               <Route path="teachers" element={<Teachers />}>
                 <Route path=":id/:name" element={<TeacherInfo />} />
               </Route>
-
+            </Route>
+          </Route>
+          {/* Admin Only */}
+          <Route element={<ProtectedRoute allowedRoles={["Admin"]} />}>
+            <Route path="/" element={<Layout />}>
               <Route path="enrollment" element={<Enrollment />} />
               <Route path="users" element={<Users />} />
               <Route path="users/create/:role" element={<CreateUser />} />
@@ -64,8 +55,8 @@ function App() {
             </Route>
           </Route>
         </Routes>
-      </Router>
-    </AuthProvider>
+      </AuthProvider>
+    </Router>
   );
 }
 
