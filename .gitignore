@@ -1,1 +1,2 @@
 backend/services/.env
+backend/services/scheduler/.env
