@@ -357,3 +357,26 @@ table tbody tr {
   margin-top: auto;
   font-weight: 500;
 }
+
+/* ================================================================= */
+
+.Toastify button {
+  box-shadow: none;
+}
+
+.Toastify__toast {
+  font-family: Poppins !important;
+  min-width: max-content !important;
+  padding-inline: 30px !important;
+  text-align: left !important;
+  gap: 10px !important;
+  color: #242424 !important;
+}
+
+.Toastify__toast--error {
+  background-color: #f9cccc !important;
+}
+
+.Toastify__toast--success {
+  background-color: #ccf9dd !important;
+}
