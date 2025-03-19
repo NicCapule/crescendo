@@ -34,3 +34,36 @@ export const customStyles = {
     },
   }),
 };
+
+export const customAttendanceStyles = {
+  ...customStyles,
+  control: (base, state) => ({
+    ...base,
+    backgroundColor: state.isDisabled ? "#e0e0e0" : "white",
+    border: state.isFocused ? "2px solid #114ed0" : "none",
+    borderRadius: "12px",
+    textAlign: "left",
+    boxShadow: state.isFocused
+      ? "0 0 8px rgba(17, 78, 208, 0.6)"
+      : "0 3px 3px rgba(0, 0, 0, 0.1)",
+  }),
+  singleValue: (base, state) => ({
+    ...base,
+    color: state.selectProps.value?.color || "#242424",
+    fontWeight: "bold",
+  }),
+  option: (base, state) => ({
+    ...base,
+    backgroundColor: state.isSelected
+      ? "#e3e3e3"
+      : state.isFocused
+      ? "#e8f0fe"
+      : "transparent",
+    color: state.data.color,
+    fontWeight: state.isSelected ? "bold" : "normal",
+    "&:hover": {
+      backgroundColor: "#709dff", // Blue on hover
+      color: "white",
+    },
+  }),
+};

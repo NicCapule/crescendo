@@ -15,7 +15,7 @@ import {
 } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { fetchProgramDetailsBySessionId } from "../../services/sessionServices";
-import SessionDetailsModal from "../Modal/SessionDetailsModal";
+import ProgramDetailsModal from "../Modal/ProgramDetailsModal";
 import style from "./Dashboard.module.css";
 
 function SessionsTable() {
@@ -23,22 +23,33 @@ function SessionsTable() {
   const [listOfSessions, setListOfSessions] = useState([]);
   // const [mergedSessions, setMergedSessions] = useState([]);
   const [selectedDate, setSelectedDate] = useState(DateTime.now().toISODate());
-  const [dropdownStates, setDropdownStates] = useState({});
+  const [openDropdown, setOpenDropdown] = useState(null);
   const [selectedSessionId, setSelectedSessionId] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
   //---------------------------------------------------------------------------//
   const toggleItemDropdown = (sessionId) => {
-    setDropdownStates((prevState) => {
-      if (prevState[sessionId]) {
-        return {};
-      }
-      setSelectedSessionId(sessionId);
-      return { [sessionId]: true };
-    });
+    setOpenDropdown((prev) => (prev === sessionId ? null : sessionId));
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        !event.target.closest(`.${style.dropdownMenu}`) &&
+        !event.target.closest("button")
+      ) {
+        setOpenDropdown(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
   //---------------------------------------------------------------------------//
   const handleViewClick = (sessionId) => {
+    setSelectedSessionId(sessionId);
     setShowModal(true);
   };
   //---------------------------------------------------------------------------//
@@ -169,17 +180,17 @@ function SessionsTable() {
                     >
                       <PiDotsThreeOutlineVerticalFill />
                     </button>
-                    {dropdownStates[session.session_id] && (
+                    {openDropdown === session.session_id && (
                       <div className={style.dropdownMenu}>
                         <button
-                          onClick={() => handleViewClick(selectedSessionId)}
+                          onClick={() => handleViewClick(session.session_id)}
                         >
                           View Program
                         </button>
                         {user?.role === "Admin" && (
                           <button
                             onClick={() =>
-                              handleRescheduleClick(selectedSessionId)
+                              handleRescheduleClick(session.session_id)
                             }
                           >
                             Reschedule
@@ -198,10 +209,11 @@ function SessionsTable() {
           </tbody>
         </table>
       </div>
-      <SessionDetailsModal
+      <ProgramDetailsModal
         showModal={showModal}
         setShowModal={setShowModal}
-        selectedSessionId={selectedSessionId}
+        selectedId={selectedSessionId}
+        type="session"
       />
     </>
   );

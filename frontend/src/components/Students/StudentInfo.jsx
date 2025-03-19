@@ -11,6 +11,7 @@ import {
 import { getInstrumentColor } from "../../utils/InstrumentColors";
 //------------------------------------------//
 import WeekView from "../Calendar/WeekView";
+import { PiEnvelopeSimpleBold, PiPhoneBold } from "react-icons/pi";
 //===================================================================================//
 function StudentInfo() {
   const { id } = useParams();
@@ -38,11 +39,22 @@ function StudentInfo() {
   return (
     <>
       <div className="compContainer">
-        <h1>
-          Name: {student.student_first_name} {student.student_last_name}
-        </h1>
-        <p>Email: {student.student_email}</p>
-        <p>Phone: {student.student_phone}</p>
+        <div className={style.infoSection}>
+          <h1>
+            {student.student_first_name} {student.student_last_name}
+          </h1>
+          <div className={style.studentDetails}>
+            <div className={style.contactInfo}>
+              <PiEnvelopeSimpleBold />
+              {student.student_email}
+            </div>
+            <div className={style.contactInfo}>
+              <PiPhoneBold />
+              {student.student_phone}
+            </div>
+          </div>
+        </div>
+
         <div className={style.infoSection}>
           <h2>Schedule</h2>
           <WeekView sessions={sessions} />

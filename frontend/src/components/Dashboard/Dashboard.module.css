@@ -94,7 +94,7 @@
   border-radius: 16px;
   box-shadow: 0 5px 5px hsla(0, 0%, 1%, 0.282);
   background-color: #ffffff;
-  z-index: 999;
+  z-index: 1;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;

@@ -7,6 +7,7 @@ const {
   TeacherAvailability,
   User,
   Enrollment,
+  sequelize,
 } = require("../models");
 
 const { Op } = require("sequelize");
@@ -336,6 +337,51 @@ exports.rescheduleSession = async (req, res) => {
     res.json({ message: "Session rescheduled successfully!", session });
   } catch (error) {
     console.error("Error rescheduling session:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+//----------------------------------------------------------------------------------------//
+exports.forfeitSession = async (req, res) => {
+  const transaction = await sequelize.transaction();
+  try {
+    const { id } = req.params;
+
+    const session = await Session.findByPk(id, { transaction });
+
+    if (!session) {
+      await transaction.rollback();
+      return res.status(404).json({ message: "Session not found" });
+    }
+
+    await session.destroy({ transaction });
+    await transaction.commit();
+    res.json({ message: "Session forfeited!", session });
+  } catch (error) {
+    await transaction.rollback();
+    console.error("Error forfeiting session:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+//----------------------------------------------------------------------------------------//
+exports.markAttendance = async (req, res) => {
+  const { id } = req.params;
+  const { attendance } = req.body;
+
+  try {
+    const session = await Session.findByPk(id);
+
+    if (!session) {
+      return res.status(404).json({ error: "Session not found" });
+    }
+
+    session.attendance = attendance;
+    await session.save();
+
+    res.json({ message: `Attendance marked as ${attendance}!`, session });
+  } catch (error) {
+    console.error("Error marking attendance:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };

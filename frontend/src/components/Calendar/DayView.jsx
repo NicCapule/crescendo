@@ -1,7 +1,7 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { fetchSessions } from "../../services/sessionServices";
-import SessionDetailsModal from "../Modal/SessionDetailsModal";
+import ProgramDetailsModal from "../Modal/ProgramDetailsModal";
 import style from "./Calendar.module.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -55,6 +55,8 @@ function DayView() {
   const [studentDropdown, setStudentDropdown] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [selectedSessionId, setSelectedSessionId] = useState(null);
+  const teacherDropdownRef = useRef(null);
+  const studentDropdownRef = useRef(null);
   //---------------------------------------------------------------------------//
   useEffect(() => {
     fetchSessions()
@@ -103,8 +105,44 @@ function DayView() {
   //---------------------------------------------------------------------------//
   const mergedSessions = mergeConsecutiveSessions(filteredSessions);
   //---------------------------------------------------------------------------//
-  const toggleTeacherDropdown = () => setTeacherDropdown(!teacherDropdown);
-  const toggleStudentDropdown = () => setStudentDropdown(!studentDropdown);
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (
+        teacherDropdownRef.current &&
+        !teacherDropdownRef.current.contains(event.target) &&
+        !event.target.closest(`.${style.dropdownMenu}`)
+      ) {
+        setTeacherDropdown(false);
+      }
+      if (
+        studentDropdownRef.current &&
+        !studentDropdownRef.current.contains(event.target) &&
+        !event.target.closest(`.${style.dropdownMenu}`)
+      ) {
+        setStudentDropdown(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+  //---------------------------------------------------------------------------//
+  // const toggleTeacherDropdown = () => setTeacherDropdown(!teacherDropdown);
+  // const toggleStudentDropdown = () => setStudentDropdown(!studentDropdown);
+
+  // Toggle teacher dropdown and close the student dropdown
+  const toggleTeacherDropdown = () => {
+    setTeacherDropdown((prev) => !prev);
+    setStudentDropdown(false);
+  };
+
+  // Toggle student dropdown and close the teacher dropdown
+  const toggleStudentDropdown = () => {
+    setStudentDropdown((prev) => !prev);
+    setTeacherDropdown(false);
+  };
   //---------------------------------------------------------------------------//
   const handleTeacherSelection = (teacher) => {
     setSelectedTeachers((prev) =>
@@ -198,6 +236,7 @@ function DayView() {
               <button
                 onClick={toggleTeacherDropdown}
                 className={style.dropdownButton}
+                ref={teacherDropdownRef}
               >
                 Filter Teachers ⬇
               </button>
@@ -222,6 +261,7 @@ function DayView() {
               <button
                 onClick={toggleStudentDropdown}
                 className={style.dropdownButton}
+                ref={studentDropdownRef}
               >
                 Filter Students ⬇
               </button>
@@ -302,10 +342,11 @@ function DayView() {
         </div>
       </div>
 
-      <SessionDetailsModal
+      <ProgramDetailsModal
         showModal={showModal}
         setShowModal={setShowModal}
-        selectedSessionId={selectedSessionId}
+        selectedId={selectedSessionId}
+        type="session"
       />
     </div>
   );

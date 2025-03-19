@@ -18,6 +18,7 @@ import TeacherInfo from "./components/Teachers/TeacherInfo";
 import StudentInfo from "./components/Students/StudentInfo";
 import AddPaymentForm from "./components/Forms/AddPaymentForm";
 import RescheduleForm from "./components/Forms/RescheduleForm";
+import TeacherProfile from "./components/Profile/TeacherProfile";
 //--------------------------------------------------------------//
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
               <Route path="teachers" element={<Teachers />}>
                 <Route path=":id/:name" element={<TeacherInfo />} />
               </Route>
+              <Route path="profile" element={<TeacherProfile />} />
             </Route>
           </Route>
           {/* Admin Only */}

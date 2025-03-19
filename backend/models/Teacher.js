@@ -34,6 +34,10 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "teacher_id",
       onDelete: "CASCADE",
     });
+    Teacher.hasMany(models.TeacherAvailability, {
+      foreignKey: "teacher_id",
+      onDelete: "CASCADE",
+    });
     Teacher.belongsToMany(models.Instrument, {
       through: "TeacherInstrument",
       foreignKey: "teacher_id",

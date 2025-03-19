@@ -52,17 +52,12 @@ exports.getTeacherInfo = async (req, res) => {
         include: [
           {
             model: Enrollment,
-            attributes: ["enrollment_id", "enroll_date"],
-            include: [
-              {
-                model: Student,
-                attributes: ["student_first_name", "student_last_name"],
-              },
+            attributes: [
+              "enrollment_id",
+              "enroll_date",
+              "student_name",
+              "instrument",
             ],
-          },
-          {
-            model: Instrument,
-            attributes: ["instrument_name"],
           },
         ],
       },
@@ -81,6 +76,44 @@ exports.getTeacherInfo = async (req, res) => {
     ],
   });
   res.json(TeacherDetails);
+};
+//----------------------------------------------------------------------------------------//
+exports.getTeacherProfile = async (req, res) => {
+  const { id } = req.params;
+  const TeacherProfile = await Teacher.findByPk(id, {
+    include: [
+      {
+        model: Program,
+        include: [
+          {
+            model: Enrollment,
+            attributes: [
+              "enrollment_id",
+              "enroll_date",
+              "student_name",
+              "instrument",
+            ],
+          },
+        ],
+      },
+      {
+        model: User,
+        attributes: ["user_first_name", "user_last_name", "email"],
+      },
+      {
+        model: Instrument,
+        attributes: ["instrument_id", "instrument_name"],
+      },
+      {
+        model: TeacherAvailability,
+      },
+      {
+        model: TeacherSalary,
+        order: [["salary_date", "DESC"]],
+      },
+    ],
+  });
+  res.json(TeacherProfile);
 };
 //----------------------------------------------------------------------------------------//
 exports.getTeacherSessions = async (req, res) => {
@@ -205,13 +238,10 @@ exports.getTeacherSalaryByDay = async (req, res) => {
         .json({ message: "No sessions found for this date." });
     }
 
-    // Define the per-session rate (adjust as needed)
-    const perSessionRate = 400; // Example rate
+    const perSessionRate = 400;
 
-    // Calculate total salary
     const amountPaid = totalSessions * perSessionRate;
 
-    // Get teacher's name
     const teacher = await Teacher.findByPk(teacher_id, {
       include: [
         { model: User, attributes: ["user_first_name", "user_last_name"] },
@@ -239,5 +269,102 @@ exports.getTeacherSalaryByDay = async (req, res) => {
     return res
       .status(500)
       .json({ error: "Failed to retrieve teacher salary." });
+  }
+};
+//----------------------------------------------------------------------------------------//
+exports.updateInstruments = async (req, res) => {
+  const { id } = req.params;
+  const { instruments } = req.body;
+
+  try {
+    const teacher = await Teacher.findByPk(id);
+    if (!teacher) {
+      return res.status(404).json({ message: "Teacher not found." });
+    }
+
+    if (!instruments || instruments.length === 0) {
+      return res.status(400).json({ message: "No instruments provided." });
+    }
+
+    const validInstruments = await Instrument.findAll({
+      where: { instrument_id: instruments },
+    });
+
+    if (validInstruments.length !== instruments.length) {
+      return res
+        .status(400)
+        .json({ message: "Invalid instrument IDs provided." });
+    }
+
+    await TeacherInstrument.destroy({
+      where: { teacher_id: id },
+    });
+
+    const instrumentRecords = instruments.map((instrument_id) => ({
+      teacher_id: id,
+      instrument_id,
+    }));
+
+    await TeacherInstrument.bulkCreate(instrumentRecords);
+
+    res.status(200).json({ message: "Instruments updated successfully." });
+  } catch (error) {
+    console.error("Error updating instruments:", error);
+    res.status(500).json({ error: "Failed to update instruments." });
+  }
+};
+//----------------------------------------------------------------------------------------//
+exports.updatePhone = async (req, res) => {
+  const { id } = req.params;
+  const { teacher_phone } = req.body;
+
+  try {
+    const teacher = await Teacher.findByPk(id);
+    if (!teacher) {
+      return res.status(404).json({ message: "Teacher not found." });
+    }
+
+    await teacher.update({
+      teacher_phone,
+    });
+
+    res.status(200).json({ message: "Phone number updated successfully." });
+  } catch (error) {
+    console.error("Error updating name:", error);
+    res.status(500).json({ error: "Failed to update name." });
+  }
+};
+//----------------------------------------------------------------------------------------//
+exports.updateAvailability = async (req, res) => {
+  const { id } = req.params;
+  const { availability } = req.body;
+
+  try {
+    const teacher = await Teacher.findByPk(id);
+    if (!teacher) {
+      return res.status(404).json({ message: "Teacher not found." });
+    }
+    if (availability && availability.length > 0) {
+      const updatedAvailability = availability.map(
+        ({ day_of_week, start_time, end_time }) => ({
+          teacher_id: id,
+          day_of_week,
+          start_time,
+          end_time,
+        })
+      );
+
+      await TeacherAvailability.destroy({
+        where: { teacher_id: id },
+      });
+      await TeacherAvailability.bulkCreate(updatedAvailability);
+    }
+
+    res.status(200).json({
+      message: "Availability schedules updated successfully.",
+    });
+  } catch (error) {
+    console.error("Error updating availability schedules:", error);
+    res.status(500).json({ error: "Failed to update availability schedules." });
   }
 };

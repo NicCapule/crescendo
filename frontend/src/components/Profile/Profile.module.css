@@ -1,0 +1,358 @@
+.editButton {
+  padding: unset;
+  box-shadow: unset;
+  border: unset;
+  display: flex;
+  align-items: center;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+}
+
+.editButton svg {
+  width: 20px !important;
+}
+
+.contactInfo:hover .editButton {
+  visibility: visible;
+  opacity: 1;
+}
+
+.generalInfo > h2:hover .editButton {
+  visibility: visible;
+  opacity: 1;
+}
+
+.teacherInstrumentsContainer:hover .editButton {
+  visibility: visible;
+  opacity: 1;
+}
+
+.availability:hover .rowItemHeader > .editButton {
+  visibility: visible;
+  opacity: 1;
+}
+
+.errorMessage {
+  color: white;
+  background-color: rgb(171, 12, 12);
+  padding-inline: 5px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 5px 3px hsla(0, 95%, 43%, 0.282);
+  font-size: 0.8rem;
+  font-weight: normal;
+}
+
+.noRecord td {
+  text-align: center;
+  font-weight: bold;
+  color: #a59f9f;
+  font-style: italic;
+}
+/* General Information ============================================================================================= */
+.generalInfo {
+  display: flex;
+  flex-wrap: wrap;
+  padding-inline: 2%;
+}
+
+.generalInfo > :first-child {
+  /*h2 */
+  flex: 1 0 100%;
+  text-align: left;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-block: 1rem;
+  display: flex;
+  gap: 20px;
+}
+
+.teacherDetails {
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  column-gap: 50px;
+  row-gap: 10px;
+}
+.teacherDetails button {
+  max-width: max-content;
+  align-self: start;
+  font-size: 0.8rem;
+}
+
+.contactInfo {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-block: 10px;
+}
+
+.teacherInstrumentsContainer svg,
+.contactInfo svg {
+  width: 24px;
+  height: auto;
+}
+
+.teacherInstrumentsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  row-gap: 0px;
+  align-self: flex-start;
+  flex: 1;
+}
+
+.teacherInstrumentsContainer > :first-child {
+  flex: 1 0 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-block: 10px;
+}
+
+.teacherInstruments {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  max-width: fit-content;
+  margin-left: 30px;
+}
+
+.instContainer {
+  padding-inline: 10px;
+  padding-block: 2px;
+  border-radius: 24px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.infoRow {
+  display: flex;
+  flex-wrap: wrap;
+  padding-inline: 2%;
+  gap: 20px;
+  justify-content: space-between;
+}
+
+.rowItemHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-block: 10px;
+}
+
+.rowItemHeader svg {
+  width: 24px;
+  height: auto;
+}
+
+.rowItemHeader .editButton {
+  margin-left: auto;
+}
+/* Programs ============================================================================================= */
+.dropdownMenu {
+  position: absolute;
+  border-radius: 16px;
+  box-shadow: 0 5px 5px hsla(0, 0%, 1%, 0.282);
+  background-color: #ffffff;
+  z-index: 1;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: left;
+  overflow: hidden;
+}
+
+.dropdownMenu button {
+  background-color: transparent;
+  width: 100%;
+  padding: 10px;
+  border-radius: 0;
+  margin: 0;
+  transform: none;
+  font-weight: bold;
+  text-align: start;
+}
+
+.dropdownMenu button:hover {
+  background-color: rgb(215, 215, 215);
+  display: block;
+}
+
+.activeStatus {
+  color: #28a745;
+  font-weight: bold;
+}
+
+.completedStatus {
+  color: #007bff;
+  font-weight: bold;
+}
+
+.forfeitedStatus {
+  color: #dc3545;
+  font-weight: bold;
+}
+
+/* Availability ============================================================================================= */
+/* .availability {
+  padding-inline: 2%;
+} */
+
+.availabilityTable table {
+  padding: 0px;
+  margin-left: 20px;
+}
+
+.availabilityTable thead {
+  position: relative;
+  background-color: transparent;
+}
+
+.availabilityTable th {
+  border-bottom: 2px solid white;
+}
+
+.availabilityTable th,
+.availabilityTable td {
+  color: white;
+}
+/* Salary ============================================================================================= */
+.salary {
+  margin-top: 20px;
+  padding-inline: 2%;
+  gap: 20px;
+}
+
+/* Update Fields ============================================================================================= */
+
+.updateItem input {
+  background-color: white;
+  height: 40px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  /* width: 100%; */
+  box-shadow: 0 5px 5px hsla(0, 0%, 1%, 0.282);
+  border: none;
+  padding: 10px;
+  font-family: Poppins;
+  cursor: pointer;
+}
+
+.updateItem .nameItem,
+.updateItem .emailItem,
+.updateItem .phoneItem {
+  display: flex;
+  gap: 10px;
+}
+
+.inputGroup {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.inputGroup > div:first-child {
+  display: flex;
+  gap: 10px;
+}
+
+.inputGroup svg {
+  width: 24px;
+  height: auto;
+}
+
+.nameItem .inputGroup {
+  display: flex;
+  gap: 10px;
+  align-items: start;
+}
+
+.nameItem .inputGroup > div {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.emailItem .inputGroup > div:first-child,
+.phoneItem .inputGroup > div:first-child {
+  margin-block: 8px;
+  align-self: start;
+}
+
+.emailItem .inputGroup > div:nth-child(2),
+.phoneItem .inputGroup > div:nth-child(2) {
+  display: flex;
+  flex-direction: column;
+  align-self: start;
+  gap: 10px;
+}
+
+.instrumentsItem .inputGroup {
+  display: flex;
+  flex-direction: column;
+  align-self: start;
+  gap: 10px;
+}
+
+.instrumentsItem .inputGroup > div:nth-child(2) {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.updateButtons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-block: 8px;
+  align-self: start;
+}
+
+.updateButtons button {
+  font-size: 0.7rem;
+  padding-block: 0px;
+  align-self: center;
+}
+
+.availability .availabilityForm table th,
+.availability .availabilityForm table td {
+  color: #242424;
+}
+
+.availability .availabilityForm table td {
+  vertical-align: top;
+}
+
+.availability .availabilityForm table td > div {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 100%;
+  max-width: max-content;
+}
+
+.availability select {
+  font-family: "Poppins";
+  align-self: flex-start;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  border: none;
+  padding: 10px;
+  padding-right: 30px;
+  cursor: pointer;
+  background-color: white;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black"><path d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 5px center;
+  background-size: 24px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+select::-ms-expand {
+  display: none;
+}

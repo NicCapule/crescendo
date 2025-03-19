@@ -60,10 +60,11 @@ function RescheduleForm() {
     try {
       const requestData = { session_id: selectedSession, ...data };
       await rescheduleSession(requestData);
-      //   console.log(requestData);
+
       toast.success("Session rescheduled successfully!", {
         autoClose: 2000,
         position: "top-center",
+        onClose: () => navigate(-1),
       });
       resetForm();
     } catch (error) {
@@ -363,7 +364,14 @@ function RescheduleForm() {
             </thead>
             <tbody>
               {programSessions.map((session, index) => (
-                <tr key={index}>
+                <tr
+                  key={index}
+                  className={` ${
+                    session.session_id === selectedSession
+                      ? style.selectedSession
+                      : ""
+                  }`}
+                >
                   <td>{session.session_number}</td>
                   <td>
                     {DateTime.fromISO(session.session_date).toFormat(

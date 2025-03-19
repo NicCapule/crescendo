@@ -33,10 +33,10 @@ export const fetchSchedulesForValidation = async (selectedTeacherID) => {
   }
 };
 //----------------------------------------------------------------------------------//
-export const fetchProgramDetailsBySessionId = async (selectedProgramId) => {
+export const fetchProgramDetailsBySessionId = async (selectedSessionId) => {
   try {
     const response = await axios.get(API_BASE_URL + "sessions/program", {
-      params: { session_id: selectedProgramId },
+      params: { session_id: selectedSessionId },
     });
     return response.data;
   } catch (error) {
@@ -56,4 +56,24 @@ export const rescheduleSession = async (rescheduleData) => {
     console.error("Error rescheduling session!:", error);
     throw error;
   }
+};
+//----------------------------------------------------------------------------------//
+export const forfeitSession = async (sessionId) => {
+  try {
+    const response = await axios.delete(
+      `${API_BASE_URL}sessions/forfeit/${sessionId}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching program count:", error);
+    throw error;
+  }
+};
+//----------------------------------------------------------------------------------//
+export const markAttendance = async (sessionId, attendance) => {
+  const response = await axios.patch(
+    `${API_BASE_URL}sessions/${sessionId}/attendance`,
+    { attendance }
+  );
+  return response.data;
 };

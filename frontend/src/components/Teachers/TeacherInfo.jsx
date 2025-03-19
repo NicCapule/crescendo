@@ -97,17 +97,13 @@ function TeacherInfo() {
                       <td>
                         <div
                           className={`instContainer ${getInstrumentColor(
-                            program.Instrument.instrument_name
+                            program.Enrollment.instrument
                           )}`}
                         >
-                          {program.Instrument.instrument_name}
+                          {program.Enrollment.instrument}
                         </div>
                       </td>
-                      <td>
-                        {program.Enrollment.Student.student_first_name
-                          ? `${program.Enrollment.Student.student_first_name} ${program.Enrollment.Student.student_last_name}`
-                          : program.Enrollment.Student.student_last_name}
-                      </td>
+                      <td>{program.Enrollment.student_name}</td>
                       <td>{program.no_of_sessions}</td>
                       <td>
                         {DateTime.fromISO(

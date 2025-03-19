@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import SessionDetailsModal from "../Modal/SessionDetailsModal";
+import ProgramDetailsModal from "../Modal/ProgramDetailsModal";
 import style from "./Calendar.module.css";
 import {
   MdOutlineArrowForwardIos,
@@ -242,10 +242,11 @@ function WeekView({ sessions, hideTeacherFilters, hideInstrumentFilters }) {
           })}
         </div>
       </div>
-      <SessionDetailsModal
+      <ProgramDetailsModal
         showModal={showModal}
         setShowModal={setShowModal}
-        selectedSessionId={selectedSessionId}
+        selectedId={selectedSessionId}
+        type="session"
       />
     </div>
   );

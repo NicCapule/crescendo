@@ -1,7 +1,6 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import style from "./Forms.module.css";
-import * as Yup from "yup";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { DateTime } from "luxon";
 import { getInstrumentColor } from "../../utils/InstrumentColors";
@@ -10,6 +9,10 @@ import { fetchInstruments } from "../../services/instrumentServices";
 import { mergeAvailabilities } from "../../utils/TeacherCreationUtils";
 import ScheduleAvailability from "./ScheduleAvailability";
 import { teacherValidationSchema } from "../validations/teacherValidationSchema";
+import { Bounce, Slide, Zoom, toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import CreateUserConfirm from "../Confirm/CreateUserConfirm";
+import { useNavigate } from "react-router-dom";
 //===================================================================================//
 function CreateTeacherForm() {
   const times = [
@@ -28,6 +31,7 @@ function CreateTeacherForm() {
     "8PM",
   ];
   const [instruments, setInstruments] = useState([]);
+  const navigate = useNavigate();
   //-----------------------------------------------//
   const initialValues = {
     user_first_name: "",
@@ -39,18 +43,35 @@ function CreateTeacherForm() {
     availability: [],
   };
   //-----------------------------------------------//
-  const onSubmit = async (data) => {
-    // try {
-    const mergedAvailability = mergeAvailabilities(data.availability);
-    const processedData = { ...data, availability: mergedAvailability };
-    // console.log("Data: ", data.availability);
-    // console.log("Merged: ", processedData);
-    await createTeacher(processedData); // Ensure API call is awaited
-    alert("Teacher created successfully!"); // Handle success feedback
-    // } catch (error) {
-    //   console.error("Error creating teacher:", error);
-    //   alert("Failed to create teacher. Please try again.");
-    // }
+  const createUser = async (data, resetForm) => {
+    try {
+      const mergedAvailability = mergeAvailabilities(data.availability);
+      const processedData = { ...data, availability: mergedAvailability };
+      await createTeacher(processedData);
+      toast.success("Teacher registered successfully!", {
+        autoClose: 2000,
+        position: "top-center",
+      });
+      resetForm();
+    } catch (error) {
+      toast.error(
+        "Failed to create teacher account. " +
+          (error.response?.data?.message || ""),
+        {
+          autoClose: 2000,
+          position: "top-center",
+        }
+      );
+    }
+  };
+  //-----------------------------------------------//
+  const onSubmit = async (data, { resetForm }) => {
+    CreateUserConfirm({
+      title: "Confirm Registration",
+      message: "Are you sure you want to register Teacher",
+      onConfirm: () => createUser(data, resetForm),
+      createDetails: data,
+    });
   };
   //-----------------------------------------------//
   useEffect(() => {
@@ -61,13 +82,14 @@ function CreateTeacherForm() {
   //====================================================================================//
   return (
     <div className={style.formParentContainer}>
+      <ToastContainer transition={Bounce} />
       <h1>Create a Teacher Account</h1>
       <Formik
         initialValues={initialValues}
         onSubmit={onSubmit}
         validationSchema={teacherValidationSchema}
       >
-        {({ values, setFieldValue, errors, touched }) => (
+        {({ values, setFieldValue, errors, touched, resetForm }) => (
           <Form className={style.teacherFormContainer}>
             <div className={style.formSection}>
               <div className={style.formItem}>
@@ -207,7 +229,18 @@ function CreateTeacherForm() {
                 />
               </div>
               {/*----------------------------------------------------------------------------*/}
-              <button type="submit">Add Teacher</button>
+              <div className={style.createUserButtons}>
+                <button type="submit">Add Teacher</button>
+                <button
+                  type="reset"
+                  onClick={() => {
+                    resetForm();
+                    navigate(-1);
+                  }}
+                >
+                  Cancel
+                </button>
+              </div>
             </div>
           </Form>
         )}

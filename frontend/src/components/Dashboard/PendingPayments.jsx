@@ -52,7 +52,6 @@ function PendingPayments() {
         dueDate: dueDate,
       },
     });
-    console.log(programId);
   };
   //---------------------------------------------------------------------------//
   useEffect(() => {

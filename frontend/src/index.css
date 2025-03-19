@@ -299,12 +299,22 @@ table tbody tr {
 .userDisplay > p {
   margin: 0px;
 }
-.userDisplay > p:first-of-type {
+
+.userDisplay > :first-child {
   color: #242424;
   font-weight: bold;
   font-size: 1rem;
 }
-.userDisplay > p:nth-of-type(2),
+.userDisplay > a {
+  color: rgba(192, 90, 12, 1) !important;
+  transition: color 0.3s ease, transform 0.2s ease-in-out;
+}
+
+.userDisplay > a:hover {
+  color: #5c26ce !important;
+}
+
+.userDisplay > p:nth-child(2),
 .userDisplay > p:last-of-type {
   color: #24242488;
   font-size: 0.8rem;
@@ -312,7 +322,7 @@ table tbody tr {
 /* ================================================================= */
 
 .text {
-  color: rgb(0, 0, 0);
+  color: #242424;
   font-size: 16px;
   display: flex;
   align-items: center;
@@ -326,12 +336,11 @@ table tbody tr {
 }
 
 .text:focus {
-  color: #e8a92d;
   transform: scale(0.95);
 }
 
 .active {
-  color: #5b4035;
+  color: rgba(192, 90, 12, 1);
   font-size: 16px;
   display: flex;
   align-items: center;
@@ -340,7 +349,7 @@ table tbody tr {
 }
 
 .active:hover {
-  color: #5b4035;
+  color: #5c26ce;
   transform: scale(1.05);
 }
 

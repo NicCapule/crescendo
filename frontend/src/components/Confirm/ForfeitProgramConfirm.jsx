@@ -6,7 +6,7 @@ import style from "./Confirm.module.css";
 import { getInstrumentColor } from "../../utils/InstrumentColors";
 import { PiWarningCircleFill } from "react-icons/pi";
 
-function ForfeitConfirm({ title, onConfirm, details }) {
+function ForfeitConfirm({ title, onConfirm, details, type }) {
   confirmAlert({
     customUI: ({ onClose }) => {
       return (
@@ -19,47 +19,79 @@ function ForfeitConfirm({ title, onConfirm, details }) {
           </div>
           <div className={style.confirmContent}>
             <h3>
-              <i>Are you sure you want to forfeit this program?</i>
+              <i>
+                Are you sure you want to forfeit this{" "}
+                {type === "session" ? "session" : "program"}?
+              </i>
             </h3>
-            <div className={style.forfeitDetails}>
-              <div>
+            <hr />
+            {type === "session" ? (
+              <div className={style.forfeitDetails}>
                 <p>
-                  <b>Student: </b>
-                  {details.studentName}
+                  <b>Session: </b>
+                  {details.sessionNumber}
                 </p>
+                <hr />
                 <p>
-                  <b>Teacher: </b>
-                  {details.teacherName}
+                  <b>Date: </b>
+                  {DateTime.fromISO(details.sessionDate).toFormat(
+                    "MMMM d, yyyy"
+                  )}
                 </p>
+                <hr />
                 <p>
-                  <b>Instrument: </b>
-                  <span
-                    className={`instContainer ${getInstrumentColor(
-                      details.instrument
-                    )}`}
-                  >
-                    {details.instrument}
-                  </span>
-                </p>
-              </div>
-              <div>
-                <p>
-                  <b>Sessions: </b>
-                  {details.noOfSessions}
-                </p>
-                <p>
-                  <b>Balance: </b>
-                  {new Intl.NumberFormat("en-US", {
-                    style: "currency",
-                    currency: "PHP",
-                  }).format(details.remainingBalance)}
-                </p>
-                <p>
-                  <b>Due: </b>
-                  {DateTime.fromISO(details.dueDate).toFormat("MMMM d, yyyy")}
+                  <b>Time: </b>
+                  {`${DateTime.fromFormat(
+                    details.sessionStart,
+                    "HH:mm:ss"
+                  ).toFormat("h:mma")} - ${DateTime.fromFormat(
+                    details.sessionEnd,
+                    "HH:mm:ss"
+                  ).toFormat("h:mma")}`}
                 </p>
               </div>
-            </div>
+            ) : (
+              <div className={style.forfeitDetails}>
+                <div>
+                  <p>
+                    <b>Student: </b>
+                    {details.studentName}
+                  </p>
+                  <p>
+                    <b>Teacher: </b>
+                    {details.teacherName}
+                  </p>
+                  <p>
+                    <b>Instrument: </b>
+                    <span
+                      className={`instContainer ${getInstrumentColor(
+                        details.instrument
+                      )}`}
+                    >
+                      {details.instrument}
+                    </span>
+                  </p>
+                </div>
+                <div>
+                  <p>
+                    <b>Sessions: </b>
+                    {details.noOfSessions}
+                  </p>
+                  <p>
+                    <b>Balance: </b>
+                    {new Intl.NumberFormat("en-US", {
+                      style: "currency",
+                      currency: "PHP",
+                    }).format(details.remainingBalance)}
+                  </p>
+                  <p>
+                    <b>Due: </b>
+                    {DateTime.fromISO(details.dueDate).toFormat("MMMM d, yyyy")}
+                  </p>
+                </div>
+              </div>
+            )}
+            <hr />
           </div>
 
           <div className={style.confirmButtons}>

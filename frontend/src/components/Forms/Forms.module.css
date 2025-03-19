@@ -544,6 +544,17 @@ label {
   padding-inline: 100px;
 }
 
+.selectedSession {
+  font-weight: bold;
+  background-color: rgba(149, 152, 152, 0.525);
+}
+
 .react-datepicker-popper {
   z-index: 9999 !important;
+}
+/* Create User From =================================================================================================== */
+.createUserButtons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
 }

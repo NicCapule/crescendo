@@ -1,13 +1,21 @@
+import { DateTime } from "luxon";
+
 export const mergeAvailabilities = (availability) => {
   if (!availability.length) return [];
-  const sortedAvailability = [...availability].sort((a, b) => {
-    if (a.day !== b.day) return a.day.localeCompare(b.day);
-    return (
-      //   DateTime.fromFormat(a.start_time, "h:mma") -
-      //   DateTime.fromFormat(b.start_time, "h:mma")
-      a.start_time - b.start_time
-    );
-  });
+
+  const sortedAvailability = availability
+    .map((slot) => ({
+      ...slot,
+    }))
+    .sort((a, b) => {
+      if (a.day_of_week !== b.day_of_week) {
+        return a.day_of_week.localeCompare(b.day_of_week);
+      }
+      return (
+        DateTime.fromFormat(a.start_time, "HH:mm:ss") -
+        DateTime.fromFormat(b.start_time, "HH:mm:ss")
+      );
+    });
 
   const mergedAvailability = [];
   let prev = sortedAvailability[0];
@@ -15,7 +23,10 @@ export const mergeAvailabilities = (availability) => {
   for (let i = 1; i < sortedAvailability.length; i++) {
     const curr = sortedAvailability[i];
 
-    if (prev.day === curr.day && prev.end_time === curr.start_time) {
+    if (
+      prev.day_of_week === curr.day_of_week &&
+      prev.end_time === curr.start_time
+    ) {
       // Extend the previous availability
       prev.end_time = curr.end_time;
     } else {
