@@ -17,7 +17,16 @@
     "node-cron": "^3.0.3",
     "nodemailer": "^6.10.0",
     "nodemon": "^3.1.9",
-    "openai": "^4.87.3",
+    "openai": "^4.88.0",
+    "punycode": "^2.3.1",
     "sequelize": "^6.37.6"
-  }
+  },
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "description": ""
 }

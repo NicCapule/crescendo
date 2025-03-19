@@ -35,7 +35,7 @@ const ChatButton = ({ formValues }) => {
       // Get student ID from form values if available
       const studentId = formValues?.student_id || (formValues?.isNewStudent ? "new" : null);
       
-      const response = await axios.post("http://127.0.0.1:8000/chat", {
+      const response = await axios.post("http://localhost:5173/chat", {
         prompt: input,
         student_id: studentId,
         // Include additional context from the form to help the AI
