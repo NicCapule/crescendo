@@ -548,10 +548,41 @@ label {
   font-weight: bold;
   background-color: rgba(149, 152, 152, 0.525);
 }
-
+/* 
 .react-datepicker-popper {
   z-index: 9999 !important;
+} */
+
+.completedStatus {
+  color: #28a745;
+  font-weight: bold;
 }
+
+.scheduledStatus {
+  color: #0051ffc7;
+  font-weight: bold;
+}
+
+.recheduledStatus {
+  color: #ff7300;
+  font-weight: bold;
+}
+
+.forfeitedStatus {
+  color: #ff0019;
+  font-weight: bold;
+}
+
+.presentText {
+  color: #28a745;
+}
+.absentText {
+  color: #dc3545;
+}
+.lateText {
+  color: #ffa600;
+}
+
 /* Create User From =================================================================================================== */
 .createUserButtons {
   display: flex;

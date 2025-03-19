@@ -80,9 +80,7 @@ export const updatePassword = async (userId, oldPassword, newPassword) => {
     return response.data;
   } catch (error) {
     const errorMessage =
-      error.response?.data?.details ||
-      error.response?.data?.error ||
-      "Failed to update password.";
+      error.response?.data?.details || "Failed to update password.";
     console.log(`Cannot update password:`, errorMessage);
     throw new Error(errorMessage);
   }

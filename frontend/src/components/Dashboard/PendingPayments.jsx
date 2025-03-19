@@ -6,13 +6,14 @@ import { Bounce, Slide, Zoom, toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { fetchPendingPayments } from "../../services/studentPaymentServices";
 import { forfeitProgram } from "../../services/programServices";
-import ForfeitConfirm from "../Confirm/ForfeitProgramConfirm";
+import ForfeitConfirm from "../Confirm/ForfeitConfirm";
 import { useNavigate } from "react-router-dom";
 
 //===============================================================================================//
 function PendingPayments() {
   const navigate = useNavigate();
   const [pendingPayments, setPendingPayments] = useState([]);
+  const today = DateTime.now();
   //---------------------------------------------------------------------------//
   const forfeitCall = async (programId) => {
     try {
@@ -51,6 +52,7 @@ function PendingPayments() {
         remainingBalance: remainingBalance,
         dueDate: dueDate,
       },
+      type: "program",
     });
   };
   //---------------------------------------------------------------------------//
@@ -61,7 +63,6 @@ function PendingPayments() {
   }, []);
   return (
     <>
-      <ToastContainer transition={Bounce} />
       <div className={style.pendingPaymentsContainer}>
         {pendingPayments.map((payment, key) => (
           <div className={style.pendingPaymentItem} key={key}>
@@ -83,9 +84,19 @@ function PendingPayments() {
               }).format(payment.total_fee)}`}</p>
             </div>
             <div>
-              <div className={style.dueDateContainer}>
+              <div
+                className={`${style.dueDateContainer} ${
+                  DateTime.fromISO(payment.due_date) > today
+                    ? ""
+                    : style.overdue
+                }`}
+              >
                 <p>
-                  {`Due: ${DateTime.fromISO(payment.due_date).toFormat(
+                  {`${
+                    DateTime.fromISO(payment.due_date) > today
+                      ? "Due"
+                      : "Overdue"
+                  }: ${DateTime.fromISO(payment.due_date).toFormat(
                     "MMMM d, yyyy "
                   )}`}
                 </p>

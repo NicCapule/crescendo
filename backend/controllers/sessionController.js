@@ -12,16 +12,22 @@ const {
 
 const { Op } = require("sequelize");
 //----------------------------------------------------------------------------------------//
-exports.getAllSessions = async (req, res) => {
+exports.getScheduledSessions = async (req, res) => {
   try {
     const AllSession = await Session.findAll({
+      where: { session_status: "Scheduled" },
       include: [
-        Student,
+        {
+          model: Student,
+          attributes: ["student_id", "student_first_name", "student_last_name"],
+        },
         {
           model: Program,
+          attributes: ["program_id"],
           include: [
             {
               model: Teacher,
+              attributes: ["teacher_id"],
               include: [
                 {
                   model: User,
@@ -51,6 +57,7 @@ exports.getUpcomingSessions = async (req, res) => {
 
     const upcomingSessions = await Session.findAll({
       where: {
+        session_status: "Scheduled",
         [Op.or]: [
           { session_date: { [Op.gte]: formattedDate } },
           {
@@ -104,15 +111,16 @@ exports.getSchedulesForValidation = async (req, res) => {
     const formattedDate = now.toISOString().split("T")[0];
     const formattedTime = now.toTimeString().split(" ")[0];
 
-    // 1️⃣ Get Teacher's Availability
+    // Get Teacher's Availability
     const teacherAvailability = await TeacherAvailability.findAll({
       where: { teacher_id: teacherId },
       attributes: ["day_of_week", "start_time", "end_time"],
     });
 
-    // 2️⃣ Get Scheduled Sessions for Selected Teacher
+    // Get Scheduled Sessions for Selected Teacher
     const teacherSessions = await Session.findAll({
       where: {
+        session_status: "Scheduled",
         [Op.or]: [
           { session_date: { [Op.gt]: formattedDate } },
           {
@@ -125,13 +133,15 @@ exports.getSchedulesForValidation = async (req, res) => {
         {
           model: Program,
           where: { teacher_id: teacherId },
+          required: true,
         },
       ],
     });
 
-    // 3️⃣ Get All Sessions to Enforce Max 4 Sessions Per Time Slot
+    // Get All Sessions to Enforce Max 4 Sessions Per Time Slot
     const allSessions = await Session.findAll({
       where: {
+        session_status: "Scheduled",
         [Op.or]: [
           { session_date: { [Op.gt]: formattedDate } },
           {
@@ -143,7 +153,7 @@ exports.getSchedulesForValidation = async (req, res) => {
       attributes: ["session_date", "session_start"],
     });
 
-    // 4️⃣ Get Time Slots That Already Have a Drum Session
+    // Get Time Slots That Already Have a Drum Session
     const drumSessions = await Session.findAll({
       attributes: ["session_date", "session_start"],
       include: [
@@ -162,6 +172,7 @@ exports.getSchedulesForValidation = async (req, res) => {
         },
       ],
       where: {
+        session_status: "Scheduled",
         [Op.or]: [
           { session_date: { [Op.gt]: formattedDate } },
           {
@@ -310,6 +321,7 @@ exports.getProgramDetailsBySessionId = async (req, res) => {
 };
 //----------------------------------------------------------------------------------------//
 exports.rescheduleSession = async (req, res) => {
+  const transaction = await sequelize.transaction();
   try {
     const { session_id, new_date, new_start_time, new_end_time } = req.body;
 
@@ -317,25 +329,35 @@ exports.rescheduleSession = async (req, res) => {
       return res.status(400).json({ error: "All fields are required!" });
     }
 
-    const session = await Session.findByPk(session_id);
+    const session = await Session.findByPk(session_id, { transaction });
 
     if (!session) {
+      await transaction.rollback();
       return res.status(404).json({ error: "Session not found!" });
     }
-    await Session.update(
+    await session.update({ session_status: "Rescheduled" }, { transaction });
+
+    const newSession = await Session.create(
       {
+        student_id: session.student_id,
+        program_id: session.program_id,
+        session_number: session.session_number,
         session_date: new_date,
         session_start: new_start_time,
         session_end: new_end_time,
-        session_status: "Rescheduled",
+        session_status: "Scheduled",
       },
-      {
-        where: { session_id },
-      }
+      { transaction }
     );
 
-    res.json({ message: "Session rescheduled successfully!", session });
+    await transaction.commit();
+    res.json({
+      message: "Session rescheduled successfully!",
+      originalSession: session,
+      newSession,
+    });
   } catch (error) {
+    await transaction.rollback();
     console.error("Error rescheduling session:", error);
     res.status(500).json({ error: "Internal server error" });
   }
@@ -354,7 +376,8 @@ exports.forfeitSession = async (req, res) => {
       return res.status(404).json({ message: "Session not found" });
     }
 
-    await session.destroy({ transaction });
+    await session.update({ session_status: "Forfeited" }, { transaction });
+
     await transaction.commit();
     res.json({ message: "Session forfeited!", session });
   } catch (error) {
@@ -366,21 +389,30 @@ exports.forfeitSession = async (req, res) => {
 
 //----------------------------------------------------------------------------------------//
 exports.markAttendance = async (req, res) => {
+  const transaction = await sequelize.transaction();
   const { id } = req.params;
   const { attendance } = req.body;
 
   try {
-    const session = await Session.findByPk(id);
+    const session = await Session.findByPk(id, { transaction });
 
     if (!session) {
+      await transaction.rollback();
       return res.status(404).json({ error: "Session not found" });
     }
 
-    session.attendance = attendance;
-    await session.save();
+    await session.update({ attendance: attendance || null }, { transaction });
+    await transaction.commit();
 
-    res.json({ message: `Attendance marked as ${attendance}!`, session });
+    res.json({
+      message:
+        attendance === null
+          ? "Attendance cleared!"
+          : `Attendance marked as ${attendance}!`,
+      session,
+    });
   } catch (error) {
+    await transaction.rollback();
     console.error("Error marking attendance:", error);
     res.status(500).json({ error: "Internal server error" });
   }

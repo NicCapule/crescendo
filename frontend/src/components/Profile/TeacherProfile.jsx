@@ -163,7 +163,6 @@ function TeacherProfile() {
   //==============================================================================//
   return (
     <div className="compContainer">
-      <ToastContainer transition={Bounce} />
       <h1 className="pageTitle">User Profile</h1>
       <hr />
       <div className={style.generalInfo}>

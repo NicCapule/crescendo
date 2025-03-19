@@ -47,7 +47,7 @@ export const fetchProgramDetailsBySessionId = async (selectedSessionId) => {
 //----------------------------------------------------------------------------------//
 export const rescheduleSession = async (rescheduleData) => {
   try {
-    const response = await axios.patch(
+    const response = await axios.post(
       `${API_BASE_URL}sessions/reschedule`,
       rescheduleData
     );

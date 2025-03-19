@@ -49,7 +49,6 @@ function CreateAdminForm() {
   //===================================================================================//
   return (
     <div className={style.formParentContainer}>
-      <ToastContainer transition={Bounce} />
       <h1>Create an Administrator Account</h1>
       <Formik
         initialValues={initialValues}

@@ -19,7 +19,7 @@ router.get(
 //-----------------------------------//
 router.get(
   "/profile/:id",
-  authorizeRole(["Admin", "Teacher"]),
+  authorizeRole(["Teacher"]),
   teacherController.getTeacherProfile
 );
 //-----------------------------------//

@@ -91,3 +91,10 @@
   color: #dc3545;
   font-weight: bold;
 }
+
+.noRecord td {
+  text-align: center;
+  font-weight: bold;
+  color: #a59f9f;
+  font-style: italic;
+}

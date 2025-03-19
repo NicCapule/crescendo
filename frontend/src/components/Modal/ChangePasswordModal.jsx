@@ -7,7 +7,7 @@ import { DateTime } from "luxon";
 import { getInstrumentColor } from "../../utils/InstrumentColors";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
-import ForfeitConfirm from "../Confirm/ForfeitProgramConfirm";
+import ForfeitConfirm from "../Confirm/ForfeitConfirm";
 import { Bounce, Slide, Zoom, toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Field, Formik, Form, ErrorMessage } from "formik";
@@ -34,18 +34,18 @@ function ChangePasswordModal({ showPasswordModal, setShowPasswordModal }) {
   const handlePasswordChange = async (values) => {
     setLoading(true);
     try {
-      await updatePassword(
+      const response = await updatePassword(
         user.user_id,
         values.oldPassword,
         values.newPassword
       );
-      toast.success("Password updated successfully!", {
+      toast.success(response.message, {
         autoClose: 2000,
         position: "top-center",
       });
       setShowPasswordModal(false);
     } catch (error) {
-      toast.error(error.response?.data?.error || "Failed to change password", {
+      toast.error(error.message || "Failed to change password", {
         autoClose: 2000,
         position: "top-center",
       });
@@ -53,43 +53,43 @@ function ChangePasswordModal({ showPasswordModal, setShowPasswordModal }) {
     setLoading(false);
   };
 
-  //---------------------------------------------------------------------------//
-  const forfeitCall = async (sessionId) => {
-    try {
-      await forfeitSession(sessionId);
-      toast.success("Program forfeited!", {
-        autoClose: 2000,
-        position: "top-center",
-      });
-      setShowPasswordModal(false);
-    } catch (error) {
-      toast.error(error.message, {
-        autoClose: 2000,
-        position: "top-center",
-      });
-    }
-  };
-  //---------------------------------------------------------------------------//
-  const handleForfeit = async (
-    sessionId,
-    sessionDate,
-    sessionStart,
-    sessionEnd,
-    sessionNumber
-  ) => {
-    ForfeitConfirm({
-      title: "Confirm Forfeit",
-      type: "session",
-      onConfirm: () => forfeitCall(sessionId),
-      details: {
-        sessionId: sessionId,
-        sessionDate: sessionDate,
-        sessionStart: sessionStart,
-        sessionEnd: sessionEnd,
-        sessionNumber: sessionNumber,
-      },
-    });
-  };
+  // //---------------------------------------------------------------------------//
+  // const forfeitCall = async (sessionId) => {
+  //   try {
+  //     await forfeitSession(sessionId);
+  //     toast.success("Program forfeited!", {
+  //       autoClose: 2000,
+  //       position: "top-center",
+  //     });
+  //     setShowPasswordModal(false);
+  //   } catch (error) {
+  //     toast.error(error.message, {
+  //       autoClose: 2000,
+  //       position: "top-center",
+  //     });
+  //   }
+  // };
+  // //---------------------------------------------------------------------------//
+  // const handleForfeit = async (
+  //   sessionId,
+  //   sessionDate,
+  //   sessionStart,
+  //   sessionEnd,
+  //   sessionNumber
+  // ) => {
+  //   ForfeitConfirm({
+  //     title: "Confirm Forfeit",
+  //     type: "session",
+  //     onConfirm: () => forfeitCall(sessionId),
+  //     details: {
+  //       sessionId: sessionId,
+  //       sessionDate: sessionDate,
+  //       sessionStart: sessionStart,
+  //       sessionEnd: sessionEnd,
+  //       sessionNumber: sessionNumber,
+  //     },
+  //   });
+  // };
   //--------------------------------------//
   const closeModal = () => {
     setShowPasswordModal(false);
@@ -99,7 +99,6 @@ function ChangePasswordModal({ showPasswordModal, setShowPasswordModal }) {
   //=========================================================================================================//
   return (
     <>
-      <ToastContainer transition={Bounce} />
       {showPasswordModal && (
         <div className={style.modalOverlay}>
           <div className={style.modal}>

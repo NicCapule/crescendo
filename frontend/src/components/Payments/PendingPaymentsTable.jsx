@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { PiDotsThreeOutlineVerticalFill } from "react-icons/pi";
 import { fetchPendingPayments } from "../../services/studentPaymentServices";
 import style from "./Payments.module.css";
-import ForfeitConfirm from "../Confirm/ForfeitProgramConfirm";
+import ForfeitConfirm from "../Confirm/ForfeitConfirm";
 import { forfeitProgram } from "../../services/programServices";
 import { Bounce, Slide, Zoom, toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -85,7 +85,6 @@ function PendingPaymentsTable() {
   //---------------------------------------------------------------------------//
   return (
     <>
-      <ToastContainer transition={Bounce} />
       <div className="compContainer">
         <div className={style.pendingPaymentsHeader}>
           <h2>Pending Payments</h2>

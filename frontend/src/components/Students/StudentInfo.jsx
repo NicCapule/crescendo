@@ -114,7 +114,7 @@ function StudentInfo() {
                     </tr>
                   ))
                 ) : (
-                  <tr>
+                  <tr className={style.noRecord}>
                     <td colSpan="5">No assigned Programs</td>
                   </tr>
                 )}

@@ -66,19 +66,30 @@ function Dashboard() {
             <PendingPayments />
           </div>
         ) : null}
-
-        <div className={style.quickActions}>
-          <h2>Quick actions</h2>
-          <div className={style.quickActionsButtons}>
-            <button onClick={() => navigate("/enrollment")}>
-              Enroll Student
-            </button>
-            <button onClick={() => navigate("/users/create/teacher")}>
-              Add Teacher
-            </button>
-            {/* <button>Notify Student</button> */}
+        {user?.role === "Admin" ? (
+          <div className={style.quickActions}>
+            <h2>Quick actions</h2>
+            <div className={style.quickActionsButtons}>
+              <button onClick={() => navigate("/enrollment")}>
+                Enroll Student
+              </button>
+              <button onClick={() => navigate("/users/create/teacher")}>
+                Add Teacher
+              </button>
+              {/* <button>Notify Student</button> */}
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className={style.quickActions}>
+            <h2>Quick actions</h2>
+            <div className={style.quickActionsButtons}>
+              <button onClick={() => navigate("/schedule")}>
+                View Schedule
+              </button>
+              <button onClick={() => navigate("/profile")}>View Profile</button>
+            </div>
+          </div>
+        )}
         {user?.role === "Admin" ? (
           <div className={style.upcomingSessions}>
             <h2>Upcoming Sessions</h2>

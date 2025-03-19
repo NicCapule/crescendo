@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { AuthProvider } from "./context/AuthContext";
+import "react-datepicker/dist/react-datepicker.css";
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -25,10 +26,9 @@ function App() {
     <Router>
       <AuthProvider>
         <Routes>
-          {/* Public Route */}
+          {/* Public Route ==========================================================*/}
           <Route path="login" element={<Login />} />
-
-          {/* Protected Routes */}
+          {/* Protected Routes ==========================================================*/}
           <Route
             element={<ProtectedRoute allowedRoles={["Admin", "Teacher"]} />}
           >
@@ -44,7 +44,14 @@ function App() {
               <Route path="profile" element={<TeacherProfile />} />
             </Route>
           </Route>
-          {/* Admin Only */}
+          {/* Teacher Only ==========================================================*/}
+          <Route element={<ProtectedRoute allowedRoles={["Teacher"]} />}>
+            <Route path="/" element={<Layout />}>
+              <Route index element={<Dashboard />} />
+              <Route path="profile" element={<TeacherProfile />} />
+            </Route>
+          </Route>
+          {/* Admin Only ==========================================================*/}
           <Route element={<ProtectedRoute allowedRoles={["Admin"]} />}>
             <Route path="/" element={<Layout />}>
               <Route path="enrollment" element={<Enrollment />} />

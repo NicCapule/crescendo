@@ -147,13 +147,13 @@ exports.changePassword = async (req, res) => {
 
     // Check if user exists
     if (!user) {
-      return res.status(404).json({ message: "User not found." });
+      return res.status(404).json({ details: "User not found." });
     }
 
     // Verify old password
     const isMatch = await bcrypt.compare(oldPassword, user.password);
     if (!isMatch) {
-      return res.status(400).json({ message: "Incorrect current password." });
+      return res.status(400).json({ details: "Incorrect current password." });
     }
 
     // Hash new password
@@ -162,9 +162,8 @@ exports.changePassword = async (req, res) => {
     // Update user's password
     await user.update({ password: hashedPassword });
 
-    res.status(200).json({ message: "Password updated successfully." });
+    res.status(200).json({ message: "Password updated successfully!" });
   } catch (error) {
-    console.error("Error changing password:", error);
     res
       .status(500)
       .json({ error: "Failed to update password.", details: error.message });

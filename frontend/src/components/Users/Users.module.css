@@ -1,7 +1,18 @@
+.userPageHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.userPageHeader > h1 {
+  margin: 0px;
+  padding: unset;
+}
 .userButtons {
   display: flex;
   gap: 20px;
-  margin-bottom: 20px;
+
   justify-content: end;
 }
 

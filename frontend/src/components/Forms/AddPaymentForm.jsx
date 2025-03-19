@@ -33,7 +33,7 @@ function AddPaymentForm() {
         autoClose: 2000,
         position: "top-center",
       });
-
+      navigate(-1);
       resetForm();
     } catch (error) {
       toast.error(
@@ -57,7 +57,6 @@ function AddPaymentForm() {
   //===================================================================================//
   return (
     <>
-      <ToastContainer transition={Bounce} />
       <div
         className={`${style.formParentContainer} ${style.paymentParentContainer}`}
       >

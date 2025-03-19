@@ -20,9 +20,8 @@ import { getInstrumentColor } from "../../utils/InstrumentColors";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import { fetchProgramDetailsByProgramId } from "../../services/programServices";
-import ForfeitConfirm from "../Confirm/ForfeitProgramConfirm";
-import { Bounce, Slide, Zoom, toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import ForfeitConfirm from "../Confirm/ForfeitConfirm";
+import { toast } from "react-toastify";
 import {
   customStyles,
   customAttendanceStyles,
@@ -54,7 +53,7 @@ function ProgramDetailsModal({
   const forfeitCall = async (sessionId) => {
     try {
       await forfeitSession(sessionId);
-      toast.success("Program forfeited!", {
+      toast.success("Session forfeited!", {
         autoClose: 2000,
         position: "top-center",
       });
@@ -67,7 +66,7 @@ function ProgramDetailsModal({
     }
   };
   //---------------------------------------------------------------------------//
-  const handleForfeit = async (
+  const handleForfeitSession = async (
     sessionId,
     sessionDate,
     sessionStart,
@@ -76,7 +75,6 @@ function ProgramDetailsModal({
   ) => {
     ForfeitConfirm({
       title: "Confirm Forfeit",
-      type: "session",
       onConfirm: () => forfeitCall(sessionId),
       details: {
         sessionId: sessionId,
@@ -85,27 +83,22 @@ function ProgramDetailsModal({
         sessionEnd: sessionEnd,
         sessionNumber: sessionNumber,
       },
+      type: "session",
     });
   };
   //---------------------------------------------------------------------------//
   const handleChange = async (selectedOption, sessionId) => {
-    setLoadingSession(sessionId); // Start loading
+    setLoadingSession(sessionId);
 
     const attendance = selectedOption ? selectedOption.value : null;
 
-    if (!attendance) {
-      toast.error("Please select a valid attendance status.");
-      return;
-    }
-
     try {
-      await markAttendance(sessionId, attendance);
-      toast.success(`Attendance marked as ${attendance}`, {
+      const response = await markAttendance(sessionId, attendance);
+      toast.success(response.message, {
         autoClose: 2000,
         position: "top-center",
       });
 
-      // Update local attendance
       const updatedSessions = programSessions.map((session) =>
         session.session_id === sessionId ? { ...session, attendance } : session
       );
@@ -174,7 +167,6 @@ function ProgramDetailsModal({
   Modal.setAppElement("#root");
   return (
     <>
-      <ToastContainer transition={Bounce} />
       {showModal && (
         <div className={style.modalOverlay}>
           <div className={style.modal}>
@@ -250,7 +242,16 @@ function ProgramDetailsModal({
                     </thead>
                     <tbody>
                       {programSessions.map((session, index) => (
-                        <tr key={index}>
+                        <tr
+                          key={index}
+                          className={
+                            session.session_status === "Completed"
+                              ? style.completedRow
+                              : session.session_status !== "Scheduled"
+                              ? style.disabledRow
+                              : ""
+                          }
+                        >
                           <td>{session.session_number}</td>
                           <td>
                             {DateTime.fromISO(session.session_date).toFormat(
@@ -265,60 +266,114 @@ function ProgramDetailsModal({
                           session.session_end,
                           "HH:mm:ss"
                         ).toFormat("h:mma")}`}</td>
-                          <td>{session.session_status}</td>
-                          <td>
-                            <Select
-                              className="reactSelect"
-                              placeholder="Mark Attendance"
-                              options={options}
-                              styles={customAttendanceStyles}
-                              onChange={(selectedOption) =>
-                                handleChange(selectedOption, session.session_id)
-                              }
-                              isDisabled={loadingSession === session.session_id}
-                              value={
-                                options.find(
-                                  (option) =>
-                                    option.value === session.attendance
-                                ) || null
-                              }
-                            />
+                          <td
+                            className={` ${
+                              session.session_status === "Scheduled"
+                                ? style.scheduledStatus
+                                : ""
+                            }${
+                              session.session_status === "Completed"
+                                ? style.completedStatus
+                                : ""
+                            }${
+                              session.session_status === "Rescheduled"
+                                ? style.recheduledStatus
+                                : ""
+                            }${
+                              session.session_status === "Forfeited"
+                                ? style.forfeitedStatus
+                                : ""
+                            }`}
+                          >
+                            {session.session_status}
+                          </td>
+                          <td
+                            className={`${
+                              session.attendance === "Present"
+                                ? style.presentText
+                                : ""
+                            }${
+                              session.attendance === "Absent"
+                                ? style.absentText
+                                : ""
+                            }${
+                              session.attendance === "Late"
+                                ? style.lateText
+                                : ""
+                            }`}
+                          >
+                            {session.session_status === "Completed" ||
+                            session.session_status === "Scheduled" ? (
+                              <Select
+                                className="reactSelect"
+                                placeholder="Mark Attendance"
+                                options={options}
+                                styles={customAttendanceStyles}
+                                isClearable={
+                                  session.session_status === "Scheduled"
+                                }
+                                onChange={(selectedOption) =>
+                                  handleChange(
+                                    selectedOption,
+                                    session.session_id
+                                  )
+                                }
+                                isDisabled={
+                                  loadingSession === session.session_id
+                                }
+                                value={
+                                  options.find(
+                                    (option) =>
+                                      option.value === session.attendance
+                                  ) || null
+                                }
+                              />
+                            ) : session.session_status === "Forfeited" ? (
+                              <span>{session.attendance || "N/A"}</span>
+                            ) : (
+                              "-"
+                            )}
                           </td>
 
-                          {user?.role === "Admin" && (
-                            <td>
-                              <div className={style.sessionActions}>
-                                <button
-                                  onClick={() =>
-                                    navigate("/reschedule-session", {
-                                      state: {
-                                        programSessions: programSessions,
-                                        selectedProgram: selectedProgram,
-                                        selectedSession: session.session_id,
-                                      },
-                                    })
-                                  }
-                                >
-                                  Reschedule
-                                </button>
-                                {session.session_status !== "Forfeited" && (
-                                  <button
-                                    onClick={() =>
-                                      handleForfeit(
-                                        session.session_id,
-                                        session.session_date,
-                                        session.session_start,
-                                        session.session_end,
-                                        session.session_number
-                                      )
-                                    }
-                                  >
-                                    Forfeit
-                                  </button>
-                                )}
-                              </div>
-                            </td>
-                          )}
+                          <td>
+                            {user?.role === "Admin" &&
+                              session.session_status !== "Forfeited" &&
+                              session.session_status !== "Rescheduled" && (
+                                <div className={style.sessionActions}>
+                                  {session.session_status !== "Completed" && (
+                                    <button
+                                      onClick={() =>
+                                        navigate("/reschedule-session", {
+                                          state: {
+                                            programSessions: programSessions,
+                                            selectedProgram: selectedProgram,
+                                            selectedSession: session.session_id,
+                                          },
+                                        })
+                                      }
+                                    >
+                                      Reschedule
+                                    </button>
+                                  )}
+                                  {session.session_status === "Completed" &&
+                                    session.attendance === "Absent" && (
+                                      <button
+                                        onClick={() =>
+                                          handleForfeitSession(
+                                            session.session_id,
+                                            session.session_date,
+                                            session.session_start,
+                                            session.session_end,
+                                            session.session_number
+                                          )
+                                        }
+                                      >
+                                        Forfeit
+                                      </button>
+                                    )}
+                                </div>
+                              )}
+                          </td>
                         </tr>
                       ))}
                     </tbody>

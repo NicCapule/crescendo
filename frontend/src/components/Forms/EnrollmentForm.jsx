@@ -119,7 +119,6 @@ function EnrollmentForm() {
   //====================================================================================//
   return (
     <div className={style.formParentContainer}>
-      <ToastContainer transition={Bounce} />
       <Formik
         initialValues={initialValues}
         onSubmit={onSubmit}

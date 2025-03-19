@@ -82,7 +82,6 @@ function CreateTeacherForm() {
   //====================================================================================//
   return (
     <div className={style.formParentContainer}>
-      <ToastContainer transition={Bounce} />
       <h1>Create a Teacher Account</h1>
       <Formik
         initialValues={initialValues}

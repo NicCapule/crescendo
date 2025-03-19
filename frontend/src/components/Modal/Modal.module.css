@@ -83,6 +83,51 @@
   padding-top: 0px;
 }
 
+.programSessions table .disabledRow,
+.programSessions table .completedRow {
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.5) inset;
+  background-color: #d1d2d2;
+}
+
+.programSessions table .disabledRow {
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+.programSessions table .disabledRow:hover {
+  cursor: not-allowed;
+}
+
+.completedStatus {
+  color: #28a745;
+  font-weight: bold;
+}
+
+.scheduledStatus {
+  color: #0051ffc7;
+  font-weight: bold;
+}
+
+.recheduledStatus {
+  color: #ff7300;
+  font-weight: bold;
+}
+
+.forfeitedStatus {
+  color: #ff0019;
+  font-weight: bold;
+}
+
+.presentText {
+  color: #28a745;
+}
+.absentText {
+  color: #dc3545;
+}
+.lateText {
+  color: #ffa600;
+}
+
 .sessionActions {
   display: flex;
   flex-direction: column;

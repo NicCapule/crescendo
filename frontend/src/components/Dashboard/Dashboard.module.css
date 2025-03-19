@@ -164,6 +164,10 @@
   margin-bottom: 10px;
 }
 
+.pendingPaymentItem .overdue {
+  background-color: rgb(204, 32, 32);
+}
+
 .pendingPaymentItem > div:last-child p {
   font-size: 0.8rem;
 }

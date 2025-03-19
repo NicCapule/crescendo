@@ -2,7 +2,7 @@ import React from "react";
 import { Field, ErrorMessage } from "formik";
 import DatePicker from "react-datepicker";
 import { DateTime } from "luxon";
-import "react-datepicker/dist/react-datepicker.css";
+// import "react-datepicker/dist/react-datepicker.css";
 import { PiCalendarPlusFill } from "react-icons/pi";
 import { PiTrashFill } from "react-icons/pi";
 import style from "./Forms.module.css";

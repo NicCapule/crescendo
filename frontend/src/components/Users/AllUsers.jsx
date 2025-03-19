@@ -76,15 +76,17 @@ function AllUsers() {
 
   return (
     <>
-      <ToastContainer transition={Bounce} />
       <div className="compContainer">
-        <div className={style.userButtons}>
-          <button onClick={() => navigate("/users/create/teacher")}>
-            Add Teacher
-          </button>
-          <button onClick={() => navigate("/users/create/admin")}>
-            Add Administrator
-          </button>
+        <div className={style.userPageHeader}>
+          <h1 className="pageTitle">User Accounts</h1>
+          <div className={style.userButtons}>
+            <button onClick={() => navigate("/users/create/teacher")}>
+              Add Teacher
+            </button>
+            <button onClick={() => navigate("/users/create/admin")}>
+              Add Administrator
+            </button>
+          </div>
         </div>
 
         <div className="tableContainer">

@@ -97,8 +97,8 @@ function ForfeitConfirm({ title, onConfirm, details, type }) {
           <div className={style.confirmButtons}>
             <button
               className={style.yesButton}
-              onClick={() => {
-                onConfirm();
+              onClick={async () => {
+                await onConfirm();
                 onClose();
               }}
             >

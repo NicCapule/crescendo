@@ -45,6 +45,8 @@ function AllStudents() {
         autoClose: 2000,
         position: "top-center",
       });
+      const newList = await fetchStudentTable();
+      setListOfStudents(newList);
     } catch (error) {
       toast.error(error.message, {
         autoClose: 2000,
@@ -71,7 +73,6 @@ function AllStudents() {
   //---------------------------------------------------------------------------//
   return (
     <>
-      <ToastContainer transition={Bounce} />
       <div className="compContainer">
         <div className="tableContainer">
           <table>

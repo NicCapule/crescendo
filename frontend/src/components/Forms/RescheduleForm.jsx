@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { DateTime } from "luxon";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+// import "react-datepicker/dist/react-datepicker.css";
 import { Bounce, Slide, Zoom, toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
@@ -105,7 +105,6 @@ function RescheduleForm() {
     <div
       className={`${style.formParentContainer} ${style.rescheduleParentSection}`}
     >
-      <ToastContainer transition={Bounce} />
       <h1 className="pageTitle">Reschedule</h1>
       <div className={style.formHeader}>
         <div>
@@ -386,8 +385,36 @@ function RescheduleForm() {
                                     session.session_end,
                                     "HH:mm:ss"
                                   ).toFormat("h:mma")}`}</td>
-                  <td>{session.session_status}</td>
-                  <td>{session.attendance}</td>
+                  <td
+                    className={` ${
+                      session.session_status === "Scheduled"
+                        ? style.scheduledStatus
+                        : ""
+                    }${
+                      session.session_status === "Completed"
+                        ? style.completedStatus
+                        : ""
+                    }${
+                      session.session_status === "Rescheduled"
+                        ? style.recheduledStatus
+                        : ""
+                    }${
+                      session.session_status === "Forfeited"
+                        ? style.forfeitedStatus
+                        : ""
+                    }`}
+                  >
+                    {session.session_status}
+                  </td>
+                  <td
+                    className={`${
+                      session.attendance === "Present" ? style.presentText : ""
+                    }${
+                      session.attendance === "Absent" ? style.absentText : ""
+                    }${session.attendance === "Late" ? style.lateText : ""}`}
+                  >
+                    {session.attendance}
+                  </td>
                 </tr>
               ))}
             </tbody>

@@ -73,7 +73,6 @@ function AllTeachers() {
   //---------------------------------------------------------------------------//
   return (
     <>
-      <ToastContainer transition={Bounce} />
       <div className="compContainer">
         <div className="tableContainer">
           <table>

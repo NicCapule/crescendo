@@ -20,6 +20,7 @@ export const customStyles = {
     borderRadius: "12px",
     overflow: "hidden",
     textAlign: "left",
+    zIndex: 9999,
   }),
   menuList: (base) => ({
     ...base,
@@ -46,11 +47,16 @@ export const customAttendanceStyles = {
     boxShadow: state.isFocused
       ? "0 0 8px rgba(17, 78, 208, 0.6)"
       : "0 3px 3px rgba(0, 0, 0, 0.1)",
+    zIndex: 0,
   }),
   singleValue: (base, state) => ({
     ...base,
     color: state.selectProps.value?.color || "#242424",
     fontWeight: "bold",
+  }),
+  menu: (base) => ({
+    ...base,
+    zIndex: 9999,
   }),
   option: (base, state) => ({
     ...base,

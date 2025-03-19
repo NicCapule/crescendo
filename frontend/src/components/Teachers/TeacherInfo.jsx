@@ -131,7 +131,7 @@ function TeacherInfo() {
                     </tr>
                   ))
                 ) : (
-                  <tr>
+                  <tr className={style.noRecord}>
                     <td colSpan="5">No assigned Programs</td>
                   </tr>
                 )}
@@ -172,8 +172,8 @@ function TeacherInfo() {
                     </tr>
                   ))
                 ) : (
-                  <tr>
-                    <td colSpan="5">No salary records</td>
+                  <tr className={style.noRecord}>
+                    <td colSpan="3">No salary records</td>
                   </tr>
                 )}
               </tbody>

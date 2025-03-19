@@ -4,7 +4,7 @@ import { fetchSessions } from "../../services/sessionServices";
 import ProgramDetailsModal from "../Modal/ProgramDetailsModal";
 import style from "./Calendar.module.css";
 import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+
 //---------------------------------------------------------------------------//
 import { DateTime } from "luxon";
 import ordinal from "ordinal-js";
