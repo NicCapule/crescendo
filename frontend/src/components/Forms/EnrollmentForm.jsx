@@ -108,13 +108,7 @@ function EnrollmentForm() {
       .catch((error) => console.error("Failed to fetch instruments", error));
   }, []);
 
-  useEffect(() => {
-    if (!selectedTeacherID) return;
 
-    fetchSchedulesForValidation(selectedTeacherID)
-      .then((scheduleData) => setScheduleData(scheduleData))
-      .catch((error) => console.error("Failed to fetch schedules:", error));
-  }, [selectedTeacherID]);
 
   //====================================================================================//
   return (
