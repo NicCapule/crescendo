@@ -348,3 +348,7 @@ table tbody tr {
   margin-top: auto;
   font-weight: 500;
 }
+
+button.suggestion-button {
+  color: #242424;
+}

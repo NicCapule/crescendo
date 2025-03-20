@@ -14,7 +14,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 openai.api_key = ""
-
 # Update DATABASE_URL with the correct MySQL host and credentials
 DATABASE_URL = "mysql://avnadmin:AVNS_usW6GsGWX_qbc6xq9zJ@crescendo-service-crescendo-admin-portal.l.aivencloud.com:24922/defaultdb?ssl_mode=REQUIRED"
 database = Database(DATABASE_URL)
