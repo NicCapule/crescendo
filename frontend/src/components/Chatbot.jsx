@@ -7,7 +7,7 @@ const handleSend = async () => {
     }
 
     try {
-        const response = await axios.post("http://127.0.0.1:8000/chat", {
+        const response = await axios.post("http://localhost:5173/chat", {
             prompt: input,
             student_id: studentId
         });        
