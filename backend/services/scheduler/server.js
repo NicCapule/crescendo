@@ -1,70 +1,42 @@
 require("dotenv").config();
-
 const express = require("express");
 const cors = require("cors");
-const { Sequelize, DataTypes } = require("sequelize");
 const { OpenAI } = require("openai");
 
 const app = express();
 app.use(express.json());
 
 const corsOptions = {
-    origin: "http://localhost:5173", // Allow frontend URL
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS", // Ensure OPTIONS is included
-    allowedHeaders: ["Content-Type", "Authorization"], // Explicitly allow headers
-    credentials: true, // Allow cookies & authentication
+    origin: "http://localhost:5173",
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
 };
 
 app.use(cors(corsOptions));
-
-// Manually handle preflight requests
 app.options("*", cors(corsOptions));
 
-
-// Database Connection
-const sequelize = new Sequelize(process.env.DATABASE_URL, {
-    dialect: "mysql",
-    dialectOptions: {
-        ssl: {
-            require: true
-        }
-    }
+const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
 });
 
 app.post("/chat", async (req, res) => {
     try {
-        console.log("Received request:", req.body); // Log input data
+        console.log("Received request:", req.body);
+        const { prompt } = req.body;
 
-        const { prompt, student_id } = req.body;
-        if (!prompt || !student_id) {
-            return res.status(400).json({ error: "Missing prompt or student_id" });
+        if (!prompt) {
+            return res.status(400).json({ error: "Missing prompt" });
         }
-
-        const student_avail = await StudentAvailability.findAll({ where: { student_id } });
-        console.log("Student availability:", student_avail);
-
-        const enrollment = await Enrollment.findOne({ where: { student_id } });
-        console.log("Enrollment:", enrollment);
-
-        if (!enrollment) {
-            return res.status(404).json({ error: "Student is not enrolled" });
-        }
-
-        const teacher_id = enrollment.teacher_id;
-        const teacher_avail = await TeacherAvailability.findAll({ where: { teacher_id } });
-        console.log("Teacher availability:", teacher_avail);
-
-        const existing_sessions = await Session.findAll({ where: { student_id } });
-        console.log("Existing sessions:", existing_sessions);
 
         const response = await openai.chat.completions.create({
             model: "gpt-4o-mini",
             messages: [
-                { role: "system", content: "You are an AI scheduling assistant." },
-                { role: "user", content: `Find a schedule for the student based on availability.\n\nStudent: ${student_avail}\n\nTeacher: ${teacher_avail}\n\nSessions: ${existing_sessions}` }
+                { role: "system", content: "You are a helpful AI assistant." },
+                { role: "user", content: prompt }
             ],
-            temperature: 0.2,
-            max_tokens: 1000
+            temperature: 0.7,
+            max_tokens: 500
         });
 
         console.log("OpenAI response:", response);
@@ -76,4 +48,4 @@ app.post("/chat", async (req, res) => {
     }
 });
 
-
+app.listen(5000, () => console.log("Server running on port 5000"));

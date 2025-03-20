@@ -14,7 +14,7 @@ function Enrollment() {
     <>
       <h1 className="pageTitle">Enrollment</h1>
       <EnrollmentForm onFormValuesChange={updateFormValues} />
-      <ChatButton formValues={formValues} />
+      <ChatButton/>
     </>
   );
 }
